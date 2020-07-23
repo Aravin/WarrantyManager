@@ -69,7 +69,6 @@ class _HomeState extends State<Home> {
             Container(
               margin: appEdgeInsets,
               height: 100.0,
-              color: Colors.white,
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -188,10 +187,8 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            Container(
-              child: SizedBox(
-                height: 7.0,
-              ),
+            SizedBox(
+              height: 7.0,
             ),
             Container(
               padding: EdgeInsets.all(7.5),
@@ -372,17 +369,11 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                           <PopupMenuEntry<List<String>>>[
                         PopupMenuItem<List<String>>(
                           value: ['edit', widget.product.id.toString()],
-                          child: Text(
-                            'Edit',
-                            style: TextStyle(color: Colors.black),
-                          ),
+                          child: Text('Edit'),
                         ),
                         PopupMenuItem<List<String>>(
                           value: ['delete', widget.product.id.toString()],
-                          child: Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.black),
-                          ),
+                          child: Text('Delete'),
                         ),
                       ],
                     ),

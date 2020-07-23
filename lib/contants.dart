@@ -18,3 +18,6 @@ var warrantyPeriods = [
   '9 Year',
   '10 Year'
 ];
+
+const primaryColor = Color(0xFFFC3259);
+const secondaryCOlor = Color(0xFF6E4BD9);

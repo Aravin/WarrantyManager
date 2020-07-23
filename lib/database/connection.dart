@@ -8,7 +8,7 @@ final Future<Database> database = getDatabasesPath().then((String path) {
     // When the database is first created, create a table to store
     onCreate: (db, version) async {
       return db.execute(
-        "CREATE TABLE product(id INTEGER PRIMARY KEY, name TEXT, price REAL, purchaseDate TEXT, warrantyPeriod TEXT, warrantyEndDate TEXT, purchasedAt TEXT, brand TEXT, salesPerson TEXT, phone TEXT, email TEXT, notes TEXT )",
+        "CREATE TABLE product(id INTEGER PRIMARY KEY, name TEXT, price REAL, purchaseDate TEXT, warrantyPeriod TEXT, warrantyEndDate TEXT, purchasedAt TEXT, company TEXT, salesPerson TEXT, phone TEXT, email TEXT, notes TEXT )",
       );
     },
     version: 1,

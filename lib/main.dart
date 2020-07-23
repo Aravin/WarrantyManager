@@ -11,7 +11,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData().copyWith(
+      theme: ThemeData(
         // primarySwatch: Colors.black,
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and

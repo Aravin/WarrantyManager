@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warranty_manager/contants.dart';
 import 'package:warranty_manager/screens/home.dart';
 
 import 'package:flutter/widgets.dart';
@@ -19,15 +20,15 @@ class Main extends StatelessWidget {
         // visualDensity: VisualDensity.adaptivePlatformDensity,
         // Define the default brightness and colors.
         brightness: Brightness.light,
-        primaryColor: Colors.lightBlue[800],
-        accentColor: Colors.cyan[600],
-        scaffoldBackgroundColor: Color(0xFFFFFFFF),
-        highlightColor: Color(0xFF6E4BD9),
+        primaryColor: primaryColor,
+        secondaryHeaderColor: secondaryCOlor,
+        accentColor: secondaryCOlor,
         textTheme: TextTheme(
           bodyText2: TextStyle(color: Colors.black),
         ),
       ),
       home: Home(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

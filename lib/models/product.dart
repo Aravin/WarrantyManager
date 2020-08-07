@@ -155,6 +155,30 @@ class Product {
       notes: this.notes,
     );
 
+    // TODO: remove duplicate code
+    if (productToUpdate.warrantyPeriod.toLowerCase().indexOf('month') > 0) {
+      var monthToAdd = int.parse(
+          productToUpdate.warrantyPeriod.replaceAll(new RegExp(r'[^0-9]'), ''));
+      var tempDate = productToUpdate.purchaseDate;
+      productToUpdate.warrantyEndDate = new DateTime(
+        tempDate.year,
+        tempDate.month + monthToAdd,
+        tempDate.day,
+        tempDate.hour,
+      );
+    } else if (productToUpdate.warrantyPeriod.toLowerCase().indexOf('year') >
+        0) {
+      var yearToAdd = int.parse(
+          productToUpdate.warrantyPeriod.replaceAll(new RegExp(r'[^0-9]'), ''));
+      var tempDate = productToUpdate.purchaseDate;
+      productToUpdate.warrantyEndDate = new DateTime(
+        tempDate.year + yearToAdd,
+        tempDate.month,
+        tempDate.day,
+        tempDate.hour,
+      );
+    }
+
     // Update the given Dog.
     await db.update(
       'product',

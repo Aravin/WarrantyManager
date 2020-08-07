@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "758575428733",
+    "firebase_url": "https://warranty-manager-epix.firebaseio.com",
+    "project_id": "warranty-manager-epix",
+    "storage_bucket": "warranty-manager-epix.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758575428733:android:77953c2d70271d01c32d14",
+        "android_client_info": {
+          "package_name": "io.epix.warranty_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758575428733-481oj822q3pf42c4tnsic63m7aut3brk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCB4blTW52Nl5bANOAuK2_-hm28jtVEaeY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758575428733-481oj822q3pf42c4tnsic63m7aut3brk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

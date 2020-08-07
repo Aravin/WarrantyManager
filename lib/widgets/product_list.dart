@@ -6,17 +6,14 @@ import 'package:warranty_manager/screens/add.dart';
 
 import '../contants.dart';
 
-class ProductListItemWidget extends StatefulWidget {
+class ProductListItemWidget extends StatelessWidget {
   final Product product;
   final Function actionCallback;
 
   ProductListItemWidget({this.product, this.actionCallback});
 
-  @override
-  _ProductListItemWidgetState createState() => _ProductListItemWidgetState();
-}
+  // ProductListItemWidget({this.product, this.actionCallback});
 
-class _ProductListItemWidgetState extends State<ProductListItemWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,14 +39,14 @@ class _ProductListItemWidgetState extends State<ProductListItemWidget> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Text(
-                          widget.product.name,
+                          product.name,
                           style: TextStyle(
                             fontSize: 17.5,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          widget.product.company,
+                          product.company,
                           style: TextStyle(
                             fontSize: 17.5,
                             fontWeight: FontWeight.bold,
@@ -78,15 +75,13 @@ class _ProductListItemWidgetState extends State<ProductListItemWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          DateFormat.yMMMd()
-                              .format(widget.product.purchaseDate),
+                          DateFormat.yMMMd().format(product.purchaseDate),
                           style: TextStyle(
                             fontSize: 15,
                           ),
                         ),
                         Text(
-                          DateFormat.yMMMd()
-                              .format(widget.product.warrantyEndDate),
+                          DateFormat.yMMMd().format(product.warrantyEndDate),
                           style: TextStyle(
                             fontSize: 15,
                           ),
@@ -103,31 +98,29 @@ class _ProductListItemWidgetState extends State<ProductListItemWidget> {
                     child: PopupMenuButton<List<String>>(
                       onSelected: (List<String> result) {
                         if (result[0] == 'delete') {
-                          widget.product
+                          product
                               .deleteProduct(int.parse(result[1], radix: 10));
-                          widget.actionCallback(true);
+                          actionCallback(true);
                           Toast.show("Product Deleted Successfully!", context,
                               duration: Toast.LENGTH_LONG,
                               gravity: Toast.BOTTOM);
                         } else if (result[0] == 'edit') {
-                          print(widget.product.name);
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                                  builder: (context) => AddItem(
-                                        product: widget.product,
-                                        isUpdate: true,
-                                      )))
-                              .then((value) => setState(() => {}));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AddItem(
+                                    product: product,
+                                    isUpdate: true,
+                                    actionCallback: this.actionCallback,
+                                  )));
                         }
                       },
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<List<String>>>[
                         PopupMenuItem<List<String>>(
-                          value: ['edit', widget.product.id.toString()],
+                          value: ['edit', product.id.toString()],
                           child: Text('Edit'),
                         ),
                         PopupMenuItem<List<String>>(
-                          value: ['delete', widget.product.id.toString()],
+                          value: ['delete', product.id.toString()],
                           child: Text('Delete'),
                         ),
                       ],

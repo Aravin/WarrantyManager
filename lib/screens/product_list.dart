@@ -7,6 +7,12 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
+  actionCallback(bool rebuild) {
+    if (rebuild) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +23,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ),
       ),
       body: Column(
-        children: <Widget>[ProductListWidget()],
+        children: <Widget>[ProductListWidget(actionCallback: actionCallback)],
       ),
     );
   }

@@ -41,6 +41,12 @@ class _HomeState extends State<Home> {
     }
   }
 
+  actionCallback(bool rebuild) {
+    if (rebuild) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,33 +65,16 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Menu', style: TextStyle(color: Colors.white)),
+              child: Text('Menu',
+                  style: TextStyle(color: Colors.white, fontSize: 25)),
               decoration: BoxDecoration(
                 color: primaryColor,
               ),
             ),
             ListTile(
-              title: RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.bodyText1,
-                  children: [
-                    WidgetSpan(
-                      child:
-                          Icon(Icons.security, size: 20, color: primaryColor),
-                    ),
-                    TextSpan(text: ' Saved Items')
-                  ],
-                ),
-              ),
+              title: Text('Saved Items'),
+              leading: Icon(Icons.security),
               onTap: () {
-                // setState(
-                //   () {
-                //     Navigator.of(context)
-                //         .push(MaterialPageRoute(
-                //             builder: (context) => ProductListScreen()))
-                //         .then((value) => setState(() => {}));
-                //   },
-                // );
                 Navigator.pop(context);
                 Navigator.push(
                   context,
@@ -94,18 +83,8 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.bodyText1,
-                  children: [
-                    WidgetSpan(
-                      child: Icon(Icons.description,
-                          size: 20, color: primaryColor),
-                    ),
-                    TextSpan(text: ' Privacy Policy')
-                  ],
-                ),
-              ),
+              title: Text('Privacy Policy'),
+              leading: Icon(Icons.description),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -115,18 +94,8 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.bodyText1,
-                  children: [
-                    WidgetSpan(
-                      child:
-                          Icon(Icons.thumb_up, size: 20, color: primaryColor),
-                    ),
-                    TextSpan(text: ' Credits')
-                  ],
-                ),
-              ),
+              title: Text('Credits'),
+              leading: Icon(Icons.thumb_up),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -136,17 +105,8 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.bodyText1,
-                  children: [
-                    WidgetSpan(
-                      child: Icon(Icons.info, size: 20, color: primaryColor),
-                    ),
-                    TextSpan(text: ' About')
-                  ],
-                ),
-              ),
+              title: Text('About'),
+              leading: Icon(Icons.info),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -156,18 +116,8 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.bodyText1,
-                  children: [
-                    WidgetSpan(
-                      child: Icon(Icons.thumbs_up_down,
-                          size: 20, color: primaryColor),
-                    ),
-                    TextSpan(text: ' Rate Us')
-                  ],
-                ),
-              ),
+              title: Text('Rate Us'),
+              leading: Icon(Icons.thumbs_up_down),
               onTap: () {
                 Navigator.pop(context);
                 _launchInBrowser(
@@ -225,11 +175,11 @@ class _HomeState extends State<Home> {
           //     ],
           //   ),
           // ),
-          ProductHighlightWidget(),
+          ProductHighlightWidget(actionCallback: actionCallback),
           SizedBox(
             height: 7.0,
           ),
-          ProductListWidget(),
+          ProductListWidget(actionCallback: actionCallback),
         ],
       ),
     );

@@ -4,6 +4,10 @@ import 'package:warranty_manager/models/product.dart';
 
 class ProductHighlightWidget extends StatelessWidget {
   final product = new Product();
+  final Function actionCallback;
+
+  ProductHighlightWidget({this.actionCallback});
+
   Future<List<Product>> _products() async {
     return product.getProducts();
   }

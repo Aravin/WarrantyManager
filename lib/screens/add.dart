@@ -13,8 +13,9 @@ class AddItem extends StatefulWidget {
 
   final Product product;
   final bool isUpdate;
+  final Function actionCallback;
 
-  AddItem({this.product, this.isUpdate});
+  AddItem({this.product, this.isUpdate, this.actionCallback});
 }
 
 class _AddItemState extends State<AddItem> {
@@ -251,6 +252,7 @@ class _AddItemState extends State<AddItem> {
                                 ),
                               ],
                             ),
+                            // todo implement image upload
                             // ListView(
                             //   children: <Widget>[
                             //     FormBuilderImagePicker(
@@ -387,6 +389,7 @@ class _AddItemState extends State<AddItem> {
                             // print(await product.getProducts());
                             setState(() {
                               Navigator.pop(context, true);
+                              widget.actionCallback(true);
                             });
                           }
                         },

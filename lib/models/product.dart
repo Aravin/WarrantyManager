@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:sqflite/sqflite.dart';
 import 'package:warranty_manager/database/connection.dart';
 
@@ -16,6 +17,9 @@ class Product {
     this.phone,
     this.email,
     this.notes,
+    this.purchaseCopy,
+    this.warrantyCopy,
+    this.additionalImage,
   }) {
     if (this.warrantyEndDate == null && this.warrantyPeriod != null) {
       if (this.warrantyPeriod.toLowerCase().indexOf('month') > 0) {
@@ -57,6 +61,11 @@ class Product {
   // calculated field
   DateTime warrantyEndDate;
 
+  // images
+  Uint8List purchaseCopy;
+  Uint8List warrantyCopy;
+  Uint8List additionalImage;
+
   // Convert a Dog into a Map. The keys must correspond to the names of the
   // columns in the database.
   Map<String, dynamic> toMap() {
@@ -72,7 +81,10 @@ class Product {
       'salesPerson': salesPerson,
       'phone': phone,
       'email': email,
-      'notes': notes
+      'notes': notes,
+      'purchaseCopy': purchaseCopy,
+      'warrantyCopy': warrantyCopy,
+      'additionalImage': additionalImage,
     };
   }
 
@@ -99,6 +111,9 @@ class Product {
         phone: maps[i]['phone'],
         email: maps[i]['email'],
         notes: maps[i]['notes'],
+        purchaseCopy: maps[i]['purchaseCopy'],
+        warrantyCopy: maps[i]['warrantyCopy'],
+        additionalImage: maps[i]['additionalImage'],
       );
     });
   }
@@ -126,6 +141,9 @@ class Product {
       phone: this.phone,
       email: this.email,
       notes: this.notes,
+      purchaseCopy: this.purchaseCopy,
+      warrantyCopy: this.warrantyCopy,
+      additionalImage: this.additionalImage,
     );
     // In this case, replace any previous data.
     await db.insert(
@@ -153,6 +171,9 @@ class Product {
       phone: this.phone,
       email: this.email,
       notes: this.notes,
+      purchaseCopy: this.purchaseCopy,
+      warrantyCopy: this.warrantyCopy,
+      additionalImage: this.additionalImage,
     );
 
     // TODO: remove duplicate code

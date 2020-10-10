@@ -32,6 +32,26 @@ class _AddItemState extends State<AddItem> {
   final FocusNode emailFocus = FocusNode();
   final FocusNode notesFocus = FocusNode();
 
+  // steps
+  int currentStep = 0;
+  bool complete = false;
+
+  next() {
+    currentStep + 1 != 3
+        ? goTo(currentStep + 1)
+        : setState(() => complete = true);
+  }
+
+  cancel() {
+    if (currentStep > 0) {
+      goTo(currentStep - 1);
+    }
+  }
+
+  goTo(int step) {
+    setState(() => currentStep = step);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -69,336 +89,302 @@ class _AddItemState extends State<AddItem> {
                 'notes': widget.isUpdate ? widget.product?.notes : '',
               },
               autovalidate: false,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: DefaultTabController(
-                      length: 2,
-                      child: Scaffold(
-                        appBar: TabBar(
-                          indicatorColor: secondaryCOlor,
-                          labelColor: primaryColor,
-                          tabs: [
-                            Tab(text: 'Required'),
-                            Tab(text: 'Optional'),
-                            // Tab(text: 'Images'),
-                          ],
+              child: Stepper(
+                type: StepperType.horizontal,
+                currentStep: currentStep ?? 0,
+                onStepContinue: next,
+                onStepTapped: (step) => goTo(step),
+                onStepCancel: cancel,
+                steps: [
+                  Step(
+                    isActive: currentStep == 0 ? true : false,
+                    title: Text('Required*'),
+                    content: Column(
+                      children: [
+                        FormBuilderDateTimePicker(
+                          attribute: "purchaseDate",
+                          textInputAction: TextInputAction.next,
+                          validators: [FormBuilderValidators.required()],
+                          inputType: InputType.date,
+                          format: DateFormat("EEE, MMMM d, yyyy"),
+                          decoration: InputDecoration(
+                            labelText: "Purchase Date",
+                            prefixIcon: Icon(Icons.calendar_today),
+                          ),
+                          onEditingComplete: () => FocusScope.of(context)
+                              .requestFocus(warrantyFocus),
                         ),
-                        body: TabBarView(
-                          children: [
-                            ListView(
-                              padding: appEdgeInsets,
-                              children: <Widget>[
-                                FormBuilderDateTimePicker(
-                                  attribute: "purchaseDate",
-                                  textInputAction: TextInputAction.next,
-                                  validators: [
-                                    FormBuilderValidators.required()
-                                  ],
-                                  inputType: InputType.date,
-                                  format: DateFormat("EEE, MMMM d, yyyy"),
-                                  decoration: InputDecoration(
-                                    labelText: "Purchase Date",
-                                    prefixIcon: Icon(Icons.calendar_today),
-                                  ),
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(priceFocus),
-                                ),
-                                FormBuilderDropdown(
-                                  attribute: "warranty",
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.timer),
-                                    labelText: "Warranty Period",
-                                  ),
-                                  // initialValue: 'Male',
-                                  hint: Text('Select Warranty Period'),
-                                  validators: [
-                                    FormBuilderValidators.required()
-                                  ],
-                                  items: warrantyPeriods
-                                      .map((period) => DropdownMenuItem(
-                                          value: period,
-                                          child: Text("$period")))
-                                      .toList(),
-                                ),
-                                FormBuilderTextField(
-                                  attribute: 'product',
-                                  focusNode: productFocus,
-                                  validators: [
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.minLength(3),
-                                    FormBuilderValidators.maxLength(24)
-                                  ],
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.shopping_basket),
-                                    hintText: 'Product/Service Name ?',
-                                    labelText: 'Product/Service Name *',
-                                  ),
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(priceFocus),
-                                ),
-                                FormBuilderTextField(
-                                  attribute: 'price',
-                                  focusNode: priceFocus,
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.next,
-                                  validators: [
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.min(1),
-                                    FormBuilderValidators.max(9999999)
-                                  ],
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.monetization_on),
-                                    hintText: 'Total Bill Amount ?',
-                                    labelText: 'Price *',
-                                  ),
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(companyFocus),
-                                ),
-                                FormBuilderTextField(
-                                  attribute: 'company',
-                                  focusNode: companyFocus,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.branding_watermark),
-                                    hintText: 'Company or Brand Name?',
-                                    labelText: 'Brand/Company',
-                                  ),
-                                  validators: [
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.minLength(3),
-                                    FormBuilderValidators.maxLength(24)
-                                  ],
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(purchasedAtFocus),
-                                ),
-                              ],
-                            ),
-                            ListView(
-                              padding: appEdgeInsets,
-                              children: <Widget>[
-                                FormBuilderTextField(
-                                  attribute: 'purchasedAt',
-                                  focusNode: purchasedAtFocus,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.add_location),
-                                    hintText: 'Where did you purchase?',
-                                    labelText: 'Purchased At',
-                                  ),
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(salesPersonFocus),
-                                ),
-                                FormBuilderTextField(
-                                  attribute: 'salesPerson',
-                                  focusNode: salesPersonFocus,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.people),
-                                    hintText:
-                                        'Do you remember sales person name?',
-                                    labelText: 'Sales Person Name',
-                                  ),
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(phoneFocus),
-                                ),
-                                FormBuilderTextField(
-                                  attribute: 'phone',
-                                  keyboardType: TextInputType.number,
-                                  focusNode: phoneFocus,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.phone),
-                                    hintText:
-                                        'Contact number, i.e customer care number',
-                                    labelText: 'Phone number',
-                                  ),
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(emailFocus),
-                                ),
-                                FormBuilderTextField(
-                                  attribute: 'email',
-                                  focusNode: emailFocus,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.email),
-                                    hintText: 'Customer Service E-Mail Address',
-                                    labelText: 'Email Addresss',
-                                  ),
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(notesFocus),
-                                ),
-                                FormBuilderTextField(
-                                  focusNode: notesFocus,
-                                  maxLines: null,
-                                  keyboardType: TextInputType.multiline,
-                                  attribute: 'notes',
-                                  textInputAction: TextInputAction.done,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.note_add),
-                                    hintText:
-                                        'Any other additional information',
-                                    labelText: 'Quick Note',
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // todo implement image upload
-                            // ListView(
-                            //   children: <Widget>[
-                            //     FormBuilderImagePicker(
-                            //       attribute: 'imgBill',
-                            //       decoration: const InputDecoration(
-                            //         labelText: 'Purchased Bill/Receipt',
-                            //       ),
-                            //     ),
-                            //     FormBuilderImagePicker(
-                            //       attribute: 'imgWarranty',
-                            //       decoration: const InputDecoration(
-                            //         hintText: 'Where did you purchase?',
-                            //         labelText: 'Warraty Copy',
-                            //       ),
-                            //     ),
-                            //     FormBuilderImagePicker(
-                            //       attribute: 'imgAdditional',
-                            //       decoration: const InputDecoration(
-                            //         hintText: 'Where did you purchase?',
-                            //         labelText:
-                            //             'Any Other Additional Information',
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                          ],
+                        FormBuilderDropdown(
+                          attribute: "warranty",
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.timer),
+                            labelText: "Warranty Period",
+                          ),
+                          // initialValue: 'Male',
+                          hint: Text('Select Warranty Period'),
+                          validators: [FormBuilderValidators.required()],
+                          items: warrantyPeriods
+                              .map((period) => DropdownMenuItem(
+                                  value: period, child: Text("$period")))
+                              .toList(),
                         ),
-                      ),
+                        FormBuilderTextField(
+                          attribute: 'product',
+                          focusNode: productFocus,
+                          validators: [
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.minLength(3),
+                            FormBuilderValidators.maxLength(24)
+                          ],
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.shopping_basket),
+                            hintText: 'Product/Service Name ?',
+                            labelText: 'Product/Service Name *',
+                          ),
+                          onEditingComplete: () =>
+                              FocusScope.of(context).requestFocus(priceFocus),
+                        ),
+                        FormBuilderTextField(
+                          attribute: 'price',
+                          focusNode: priceFocus,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          validators: [
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.min(1),
+                            FormBuilderValidators.max(9999999)
+                          ],
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.monetization_on),
+                            hintText: 'Total Bill Amount ?',
+                            labelText: 'Price *',
+                          ),
+                          onEditingComplete: () =>
+                              FocusScope.of(context).requestFocus(companyFocus),
+                        ),
+                        FormBuilderTextField(
+                          attribute: 'company',
+                          focusNode: companyFocus,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.branding_watermark),
+                            hintText: 'Company or Brand Name?',
+                            labelText: 'Brand/Company',
+                          ),
+                          validators: [
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.minLength(2),
+                            FormBuilderValidators.maxLength(24)
+                          ],
+                          onEditingComplete: () => FocusScope.of(context)
+                              .requestFocus(purchasedAtFocus),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 20.0,
+                  Step(
+                    isActive: currentStep == 1 ? true : false,
+                    title: Text('Optional'),
+                    content: Column(
+                      children: <Widget>[
+                        FormBuilderTextField(
+                          attribute: 'purchasedAt',
+                          focusNode: purchasedAtFocus,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.add_location),
+                            hintText: 'Where did you purchase?',
+                            labelText: 'Purchased At',
+                          ),
+                          onEditingComplete: () => FocusScope.of(context)
+                              .requestFocus(salesPersonFocus),
+                        ),
+                        FormBuilderTextField(
+                          attribute: 'salesPerson',
+                          focusNode: salesPersonFocus,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.people),
+                            hintText: 'Do you remember sales person name?',
+                            labelText: 'Sales Person Name',
+                          ),
+                          onEditingComplete: () =>
+                              FocusScope.of(context).requestFocus(phoneFocus),
+                        ),
+                        FormBuilderTextField(
+                          attribute: 'phone',
+                          keyboardType: TextInputType.number,
+                          focusNode: phoneFocus,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.phone),
+                            hintText:
+                                'Contact number, i.e customer care number',
+                            labelText: 'Phone number',
+                          ),
+                          onEditingComplete: () =>
+                              FocusScope.of(context).requestFocus(emailFocus),
+                        ),
+                        FormBuilderTextField(
+                          attribute: 'email',
+                          focusNode: emailFocus,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.email),
+                            hintText: 'Customer Service E-Mail Address',
+                            labelText: 'Email Addresss',
+                          ),
+                          onEditingComplete: () =>
+                              FocusScope.of(context).requestFocus(notesFocus),
+                        ),
+                        FormBuilderTextField(
+                          focusNode: notesFocus,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
+                          attribute: 'notes',
+                          textInputAction: TextInputAction.done,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.note_add),
+                            hintText: 'Any other additional information',
+                            labelText: 'Quick Note',
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      MaterialButton(
-                        color: primaryColor,
-                        textColor: Colors.white,
-                        child: Text("Reset"),
-                        onPressed: () {
-                          _fbKey.currentState.reset();
-                        },
-                      ),
-                      MaterialButton(
-                        color: secondaryCOlor,
-                        textColor: Colors.white,
-                        child: Text("Submit"),
-                        onPressed: () async {
-                          if (_fbKey.currentState.saveAndValidate()) {
-                            // product.customQuery1();
-                            // product.customQuery2();
-                            if (widget.isUpdate == true) {
-                              widget.product.name = _fbKey
-                                  .currentState.value['product']
-                                  .toString()
-                                  .trim();
-                              widget.product.price = double.parse(
-                                  _fbKey.currentState.value['price']);
-                              widget.product.purchaseDate =
-                                  _fbKey.currentState.value['purchaseDate'];
-                              widget.product.warrantyPeriod = _fbKey
-                                  .currentState.value['warranty']
-                                  .toString()
-                                  .trim();
-                              widget.product.purchasedAt = _fbKey
-                                  .currentState.value['purchasedAt']
-                                  .toString()
-                                  .trim();
-                              widget.product.company = _fbKey
-                                  .currentState.value['company']
-                                  .toString()
-                                  .trim();
-                              widget.product.salesPerson = _fbKey
-                                  .currentState.value['salesPerson']
-                                  .toString()
-                                  .trim();
-                              widget.product.phone = _fbKey
-                                  .currentState.value['phone']
-                                  .toString()
-                                  .trim();
-                              widget.product.email = _fbKey
-                                  .currentState.value['email']
-                                  .toString()
-                                  .trim();
-                              widget.product.notes =
-                                  _fbKey.currentState.value['notes'];
-                              widget.product.updateProduct();
-                              Toast.show(
-                                  "Updated Product Successfully!", context,
-                                  duration: Toast.LENGTH_LONG,
-                                  gravity: Toast.BOTTOM);
-                            } else {
-                              Product newProduct = Product();
-                              newProduct.name = _fbKey
-                                  .currentState.value['product']
-                                  .toString()
-                                  .trim();
-                              newProduct.price = double.parse(
-                                  _fbKey.currentState.value['price']);
-                              newProduct.purchaseDate =
-                                  _fbKey.currentState.value['purchaseDate'];
-                              newProduct.warrantyPeriod = _fbKey
-                                  .currentState.value['warranty']
-                                  .toString()
-                                  .trim();
-                              newProduct.purchasedAt = _fbKey
-                                  .currentState.value['purchasedAt']
-                                  .toString()
-                                  .trim();
-                              newProduct.company = _fbKey
-                                  .currentState.value['company']
-                                  .toString()
-                                  .trim();
-                              newProduct.salesPerson = _fbKey
-                                  .currentState.value['salesPerson']
-                                  .toString()
-                                  .trim();
-                              newProduct.phone = _fbKey
-                                  .currentState.value['phone']
-                                  .toString()
-                                  .trim();
-                              newProduct.email = _fbKey
-                                  .currentState.value['email']
-                                  .toString()
-                                  .trim();
-                              newProduct.notes =
-                                  _fbKey.currentState.value['notes'];
-                              newProduct.insertProduct();
-                              Toast.show("Saved Product Successfully!", context,
-                                  duration: Toast.LENGTH_LONG,
-                                  gravity: Toast.BOTTOM);
-                            }
-                            // print(await product.getProducts());
-                            setState(() {
-                              Navigator.pop(context, true);
-                              widget.actionCallback(true);
-                            });
-                          }
-                        },
-                      ),
-                    ],
+                  Step(
+                    isActive: currentStep == 2 ? true : false,
+                    title: Text('Attachments'),
+                    content: Column(
+                      children: [
+                        FormBuilderImagePicker(
+                          attribute: 'imgBill',
+                          decoration: const InputDecoration(
+                            labelText: 'Purchased Bill/Receipt',
+                          ),
+                          maxImages: 1,
+                        ),
+                        FormBuilderImagePicker(
+                          attribute: 'imgWarranty',
+                          decoration: const InputDecoration(
+                            hintText: 'Where did you purchase?',
+                            labelText: 'Warraty Copy',
+                          ),
+                          maxImages: 1,
+                        ),
+                        FormBuilderImagePicker(
+                          attribute: 'imgAdditional',
+                          decoration: const InputDecoration(
+                            hintText: 'Where did you purchase?',
+                            labelText: 'Any Other Additional Information',
+                          ),
+                          maxImages: 1,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              MaterialButton(
+                color: primaryColor,
+                textColor: Colors.white,
+                child: Text("Reset"),
+                onPressed: () {
+                  _fbKey.currentState.reset();
+                },
+              ),
+              MaterialButton(
+                color: secondaryCOlor,
+                textColor: Colors.white,
+                child: Text("Submit"),
+                onPressed: () async {
+                  if (_fbKey.currentState.saveAndValidate()) {
+                    print(_fbKey.currentState.value['imgBill']);
+                    // product.customQuery1();
+                    // product.customQuery2();
+                    if (widget.isUpdate == true) {
+                      widget.product.name = _fbKey.currentState.value['product']
+                          .toString()
+                          .trim();
+                      widget.product.price =
+                          double.parse(_fbKey.currentState.value['price']);
+                      widget.product.purchaseDate =
+                          _fbKey.currentState.value['purchaseDate'];
+                      widget.product.warrantyPeriod = _fbKey
+                          .currentState.value['warranty']
+                          .toString()
+                          .trim();
+                      widget.product.purchasedAt = _fbKey
+                          .currentState.value['purchasedAt']
+                          .toString()
+                          .trim();
+                      widget.product.company = _fbKey
+                          .currentState.value['company']
+                          .toString()
+                          .trim();
+                      widget.product.salesPerson = _fbKey
+                          .currentState.value['salesPerson']
+                          .toString()
+                          .trim();
+                      widget.product.phone =
+                          _fbKey.currentState.value['phone'].toString().trim();
+                      widget.product.email =
+                          _fbKey.currentState.value['email'].toString().trim();
+                      widget.product.notes = _fbKey.currentState.value['notes'];
+                      widget.product.updateProduct();
+                      Toast.show("Updated Product Successfully!", context,
+                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                    } else {
+                      Product newProduct = Product();
+                      newProduct.name = _fbKey.currentState.value['product']
+                          .toString()
+                          .trim();
+                      newProduct.price =
+                          double.parse(_fbKey.currentState.value['price']);
+                      newProduct.purchaseDate =
+                          _fbKey.currentState.value['purchaseDate'];
+                      newProduct.warrantyPeriod = _fbKey
+                          .currentState.value['warranty']
+                          .toString()
+                          .trim();
+                      newProduct.purchasedAt = _fbKey
+                          .currentState.value['purchasedAt']
+                          .toString()
+                          .trim();
+                      newProduct.company = _fbKey.currentState.value['company']
+                          .toString()
+                          .trim();
+                      newProduct.salesPerson = _fbKey
+                          .currentState.value['salesPerson']
+                          .toString()
+                          .trim();
+                      newProduct.phone =
+                          _fbKey.currentState.value['phone'].toString().trim();
+                      newProduct.email =
+                          _fbKey.currentState.value['email'].toString().trim();
+                      newProduct.notes = _fbKey.currentState.value['notes'];
+                      newProduct.insertProduct();
+                      Toast.show("Saved Product Successfully!", context,
+                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                    }
+                    // print(await product.getProducts());
+                    setState(() {
+                      Navigator.pop(context, true);
+                      widget.actionCallback(true);
+                    });
+                  }
+                },
+              ),
+            ],
           ),
         ],
       ),

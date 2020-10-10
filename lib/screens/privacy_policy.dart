@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:warranty_manager/contants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -32,7 +31,6 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
             onWebViewCreated: (WebViewController webViewController) {
               _controller.complete(webViewController);
             },
-            // TODO(iskakaushik): Remove this when collection literals makes it to stable.
             // ignore: prefer_collection_literals
             javascriptChannels: <JavascriptChannel>[
               _toasterJavascriptChannel(context),

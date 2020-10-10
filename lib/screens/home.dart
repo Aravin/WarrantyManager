@@ -17,17 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-
-  void _openDrawer() {
-    _drawerKey.currentState.openDrawer();
-  }
-
   final product = new Product();
-
-  Future<List<Product>> _products() async {
-    return product.getProducts();
-  }
 
   Future<void> _launchInBrowser(String url) async {
     if (await canLaunch(url)) {

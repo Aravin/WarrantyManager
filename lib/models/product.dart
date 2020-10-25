@@ -17,6 +17,7 @@ class Product {
     this.phone,
     this.email,
     this.notes,
+    this.productImage,
     this.purchaseCopy,
     this.warrantyCopy,
     this.additionalImage,
@@ -62,6 +63,7 @@ class Product {
   DateTime warrantyEndDate;
 
   // images
+  Uint8List productImage;
   Uint8List purchaseCopy;
   Uint8List warrantyCopy;
   Uint8List additionalImage;
@@ -82,6 +84,7 @@ class Product {
       'phone': phone,
       'email': email,
       'notes': notes,
+      'productImage': productImage,
       'purchaseCopy': purchaseCopy,
       'warrantyCopy': warrantyCopy,
       'additionalImage': additionalImage,
@@ -111,6 +114,7 @@ class Product {
         phone: maps[i]['phone'],
         email: maps[i]['email'],
         notes: maps[i]['notes'],
+        productImage: maps[i]['productImage'],
         purchaseCopy: maps[i]['purchaseCopy'],
         warrantyCopy: maps[i]['warrantyCopy'],
         additionalImage: maps[i]['additionalImage'],
@@ -141,6 +145,7 @@ class Product {
       phone: this.phone,
       email: this.email,
       notes: this.notes,
+      productImage: this.productImage,
       purchaseCopy: this.purchaseCopy,
       warrantyCopy: this.warrantyCopy,
       additionalImage: this.additionalImage,
@@ -171,6 +176,7 @@ class Product {
       phone: this.phone,
       email: this.email,
       notes: this.notes,
+      productImage: this.productImage,
       purchaseCopy: this.purchaseCopy,
       warrantyCopy: this.warrantyCopy,
       additionalImage: this.additionalImage,
@@ -234,12 +240,13 @@ class Product {
     );
   }
 
-  Future<void> customQuery2() async {
-    // Get a reference to the database.
-    final db = await database;
+  // unused
+  // Future<void> customQuery2() async {
+  //   // Get a reference to the database.
+  //   final db = await database;
 
-    db.execute(
-      "CREATE TABLE product(id INTEGER PRIMARY KEY, name TEXT, price REAL, purchaseDate TEXT, warrantyPeriod TEXT, warrantyEndDate TEXT, purchasedAt TEXT, company TEXT, salesPerson TEXT, phone TEXT, email TEXT, notes TEXT )",
-    );
-  }
+  //   db.execute(
+  //     "CREATE TABLE product(id INTEGER PRIMARY KEY, name TEXT, price REAL, purchaseDate TEXT, warrantyPeriod TEXT, warrantyEndDate TEXT, purchasedAt TEXT, company TEXT, salesPerson TEXT, phone TEXT, email TEXT, notes TEXT )",
+  //   );
+  // }
 }

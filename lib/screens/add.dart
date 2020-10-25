@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 import 'package:warranty_manager/models/product.dart';
+import 'package:warranty_manager/screens/image_viewer.dart';
+import 'package:warranty_manager/widgets/product_image_preview.dart';
 
 import '../contants.dart';
 
@@ -15,15 +20,27 @@ class AddItem extends StatefulWidget {
   final bool isUpdate;
   final Function actionCallback;
 
-  AddItem({this.product, this.isUpdate, this.actionCallback});
+  AddItem({this.product, this.isUpdate, this.actionCallback})
+      : super(key: Key('AddItem'));
 }
 
 class _AddItemState extends State<AddItem> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
+  final Key purchaseDateKey = GlobalKey<FormBuilderTextFieldState>();
+  final Key warrantyPeriodKey = GlobalKey<FormBuilderTextFieldState>();
+  final Key productKey = GlobalKey<FormBuilderTextFieldState>();
+  final Key priceKey = GlobalKey();
+  final Key companyKey = GlobalKey();
+
+  final Key purchasedAtKey = GlobalKey();
+  final Key salesPersonKey = GlobalKey();
+  final Key phoneKey = GlobalKey();
+  final Key emailKey = GlobalKey();
+  final Key notesKey = GlobalKey();
+
   final FocusNode productFocus = FocusNode();
   final FocusNode priceFocus = FocusNode();
-  final FocusNode purchasedAt = FocusNode();
   final FocusNode warrantyFocus = FocusNode();
   final FocusNode purchasedAtFocus = FocusNode();
   final FocusNode companyFocus = FocusNode();
@@ -39,7 +56,9 @@ class _AddItemState extends State<AddItem> {
   next() {
     currentStep + 1 != 3
         ? goTo(currentStep + 1)
-        : setState(() => complete = true);
+        : setState(() {
+            complete = true;
+          });
   }
 
   cancel() {
@@ -49,12 +68,11 @@ class _AddItemState extends State<AddItem> {
   }
 
   goTo(int step) {
-    setState(() => currentStep = step);
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    if (_fbKey.currentState.saveAndValidate()) {
+      setState(() {
+        currentStep = step;
+      });
+    }
   }
 
   @override
@@ -63,7 +81,7 @@ class _AddItemState extends State<AddItem> {
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
-          'Add or Edit Item',
+          widget.isUpdate ? 'Edit Product' : 'Add Product',
         ),
       ),
       body: Column(
@@ -74,21 +92,60 @@ class _AddItemState extends State<AddItem> {
               initialValue: {
                 'purchaseDate': widget.isUpdate
                     ? widget.product.purchaseDate
-                    : new DateTime.now(),
-                'warranty':
-                    widget.isUpdate ? widget.product.warrantyPeriod : null,
-                'product': widget.isUpdate ? widget.product?.name : '',
-                'price': widget.isUpdate ? widget.product.price.toString() : '',
-                'purchasedAt':
-                    widget.isUpdate ? widget.product?.purchasedAt : '',
-                'company': widget.isUpdate ? widget.product?.company : '',
-                'salesPerson':
-                    widget.isUpdate ? widget.product?.salesPerson : '',
-                'phone': widget.isUpdate ? widget.product?.phone : '',
-                'email': widget.isUpdate ? widget.product?.email : '',
-                'notes': widget.isUpdate ? widget.product?.notes : '',
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['purchaseDate']
+                        : new DateTime.now(),
+                'warranty': widget.isUpdate
+                    ? widget.product.warrantyPeriod
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['warranty']
+                        : null,
+                'product': widget.isUpdate
+                    ? widget.product?.name
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['product']
+                        : '',
+                'price': widget.isUpdate
+                    ? widget.product.price.toString()
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['price']
+                        : '',
+                'company': widget.isUpdate
+                    ? widget.product?.company
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['company']
+                        : '',
+                'purchasedAt': widget.isUpdate
+                    ? widget.product?.purchasedAt
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['purchasedAt']
+                        : '',
+                'salesPerson': widget.isUpdate
+                    ? widget.product?.salesPerson
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['salesPerson']
+                        : '',
+                'phone': widget.isUpdate
+                    ? widget.product?.phone
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['phone']
+                        : '',
+                'email': widget.isUpdate
+                    ? widget.product?.email
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['email']
+                        : '',
+                'notes': widget.isUpdate
+                    ? widget.product?.notes
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['notes']
+                        : '',
+                'productImage': [],
+                'imgBill': [],
+                'imgWarranty': [],
+                'imgAdditional': [],
               },
-              autovalidate: false,
+              // autovalidate: false,
               child: Stepper(
                 type: StepperType.horizontal,
                 currentStep: currentStep ?? 0,
@@ -100,6 +157,7 @@ class _AddItemState extends State<AddItem> {
                     isActive: currentStep == 0 ? true : false,
                     title: Text('Required*'),
                     content: Column(
+                      key: UniqueKey(),
                       children: [
                         FormBuilderDateTimePicker(
                           attribute: "purchaseDate",
@@ -137,7 +195,7 @@ class _AddItemState extends State<AddItem> {
                             FormBuilderValidators.maxLength(24)
                           ],
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.shopping_basket),
                             hintText: 'Product/Service Name ?',
                             labelText: 'Product/Service Name *',
@@ -155,7 +213,7 @@ class _AddItemState extends State<AddItem> {
                             FormBuilderValidators.min(1),
                             FormBuilderValidators.max(9999999)
                           ],
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.monetization_on),
                             hintText: 'Total Bill Amount ?',
                             labelText: 'Price *',
@@ -167,7 +225,7 @@ class _AddItemState extends State<AddItem> {
                           attribute: 'company',
                           focusNode: companyFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.branding_watermark),
                             hintText: 'Company or Brand Name?',
                             labelText: 'Brand/Company',
@@ -187,12 +245,13 @@ class _AddItemState extends State<AddItem> {
                     isActive: currentStep == 1 ? true : false,
                     title: Text('Optional'),
                     content: Column(
+                      key: UniqueKey(),
                       children: <Widget>[
                         FormBuilderTextField(
                           attribute: 'purchasedAt',
                           focusNode: purchasedAtFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.add_location),
                             hintText: 'Where did you purchase?',
                             labelText: 'Purchased At',
@@ -204,7 +263,7 @@ class _AddItemState extends State<AddItem> {
                           attribute: 'salesPerson',
                           focusNode: salesPersonFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.people),
                             hintText: 'Do you remember sales person name?',
                             labelText: 'Sales Person Name',
@@ -217,7 +276,7 @@ class _AddItemState extends State<AddItem> {
                           keyboardType: TextInputType.number,
                           focusNode: phoneFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.phone),
                             hintText:
                                 'Contact number, i.e customer care number',
@@ -230,7 +289,7 @@ class _AddItemState extends State<AddItem> {
                           attribute: 'email',
                           focusNode: emailFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.email),
                             hintText: 'Customer Service E-Mail Address',
                             labelText: 'Email Addresss',
@@ -244,7 +303,7 @@ class _AddItemState extends State<AddItem> {
                           keyboardType: TextInputType.multiline,
                           attribute: 'notes',
                           textInputAction: TextInputAction.done,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Icon(Icons.note_add),
                             hintText: 'Any other additional information',
                             labelText: 'Quick Note',
@@ -257,27 +316,91 @@ class _AddItemState extends State<AddItem> {
                     isActive: currentStep == 2 ? true : false,
                     title: Text('Attachments'),
                     content: Column(
+                      key: UniqueKey(),
                       children: [
+                        Row(
+                          children: [
+                            (widget.isUpdate == true &&
+                                    widget.product.productImage != null)
+                                ? ProductImagePreview(
+                                    image: widget.product.productImage,
+                                    previewTitle:
+                                        'Existing Product Image Preview',
+                                    imageTitle: 'Purchase Image',
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
                         FormBuilderImagePicker(
-                          attribute: 'imgBill',
-                          decoration: const InputDecoration(
-                            labelText: 'Purchased Bill/Receipt',
+                          attribute: 'productImage',
+                          decoration: InputDecoration(
+                            labelText: 'Upload Product Image',
                           ),
                           maxImages: 1,
+                          imageQuality: 50,
+                          maxHeight: 720,
+                          maxWidth: 720,
+                        ),
+                        Row(
+                          children: [
+                            (widget.isUpdate == true &&
+                                    widget.product.purchaseCopy != null)
+                                ? ProductImagePreview(
+                                    image: widget.product.purchaseCopy,
+                                    previewTitle:
+                                        'Existing Purchase Bill/Receipt Preview',
+                                    imageTitle: 'Purchase Copy',
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
+                        FormBuilderImagePicker(
+                          attribute: 'imgBill',
+                          decoration: InputDecoration(
+                            labelText: 'Upload Purchased Bill/Receipt',
+                          ),
+                          maxImages: 1,
+                          imageQuality: 50,
+                          maxHeight: 720,
+                          maxWidth: 720,
+                        ),
+                        Row(
+                          children: [
+                            (widget.isUpdate == true &&
+                                    widget.product.warrantyCopy != null)
+                                ? ProductImagePreview(
+                                    image: widget.product.warrantyCopy,
+                                    previewTitle:
+                                        'Existing Warranty Copy Preview',
+                                    imageTitle: 'Warranty Copy',
+                                  )
+                                : SizedBox(),
+                          ],
                         ),
                         FormBuilderImagePicker(
                           attribute: 'imgWarranty',
-                          decoration: const InputDecoration(
-                            hintText: 'Where did you purchase?',
-                            labelText: 'Warraty Copy',
+                          decoration: InputDecoration(
+                            labelText: 'Upload Warraty Copy',
                           ),
                           maxImages: 1,
                         ),
+                        Row(
+                          children: [
+                            (widget.isUpdate == true &&
+                                    widget.product.additionalImage != null)
+                                ? ProductImagePreview(
+                                    image: widget.product.additionalImage,
+                                    previewTitle:
+                                        'Existing Additional Image Preview',
+                                    imageTitle: 'Additional Image',
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
                         FormBuilderImagePicker(
                           attribute: 'imgAdditional',
-                          decoration: const InputDecoration(
-                            hintText: 'Where did you purchase?',
-                            labelText: 'Any Other Additional Information',
+                          decoration: InputDecoration(
+                            labelText: 'Upload Any Other Additional Image',
                           ),
                           maxImages: 1,
                         ),
@@ -308,9 +431,6 @@ class _AddItemState extends State<AddItem> {
                 child: Text("Submit"),
                 onPressed: () async {
                   if (_fbKey.currentState.saveAndValidate()) {
-                    print(_fbKey.currentState.value['imgBill']);
-                    // product.customQuery1();
-                    // product.customQuery2();
                     if (widget.isUpdate == true) {
                       widget.product.name = _fbKey.currentState.value['product']
                           .toString()
@@ -340,6 +460,34 @@ class _AddItemState extends State<AddItem> {
                       widget.product.email =
                           _fbKey.currentState.value['email'].toString().trim();
                       widget.product.notes = _fbKey.currentState.value['notes'];
+                      widget.product.productImage =
+                          _fbKey.currentState.value['productImage'].length > 0
+                              ? _fileToBlob(
+                                  _fbKey.currentState.value['productImage'][0])
+                              : widget.product?.productImage != null
+                                  ? widget.product.productImage
+                                  : null;
+                      widget.product.purchaseCopy = _fbKey
+                                  .currentState.value['imgBill'].length >
+                              0
+                          ? _fileToBlob(_fbKey.currentState.value['imgBill'][0])
+                          : widget.product?.purchaseCopy != null
+                              ? widget.product.purchaseCopy
+                              : null;
+                      widget.product?.warrantyCopy =
+                          _fbKey.currentState.value['imgWarranty'].length > 0
+                              ? _fileToBlob(
+                                  _fbKey.currentState.value['imgWarranty'][0])
+                              : widget.product?.warrantyCopy != null
+                                  ? widget.product.warrantyCopy
+                                  : null;
+                      widget.product?.additionalImage =
+                          _fbKey.currentState.value['imgAdditional'].length > 0
+                              ? _fileToBlob(
+                                  _fbKey.currentState.value['imgAdditional'][0])
+                              : widget.product?.additionalImage != null
+                                  ? widget.product.additionalImage
+                                  : null;
                       widget.product.updateProduct();
                       Toast.show("Updated Product Successfully!", context,
                           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -372,11 +520,31 @@ class _AddItemState extends State<AddItem> {
                       newProduct.email =
                           _fbKey.currentState.value['email'].toString().trim();
                       newProduct.notes = _fbKey.currentState.value['notes'];
+                      newProduct.productImage =
+                          _fbKey.currentState.value['productImage'].length > 0
+                              ? _fileToBlob(
+                                  _fbKey.currentState.value['productImage'][0])
+                              : null;
+                      newProduct.purchaseCopy = _fbKey
+                                  .currentState.value['imgBill'].length >
+                              0
+                          ? _fileToBlob(_fbKey.currentState.value['imgBill'][0])
+                          : null;
+                      newProduct.warrantyCopy =
+                          _fbKey.currentState.value['imgWarranty'].length > 0
+                              ? _fileToBlob(
+                                  _fbKey.currentState.value['imgWarranty'][0])
+                              : null;
+                      newProduct.additionalImage =
+                          _fbKey.currentState.value['imgAdditional'].length > 0
+                              ? _fileToBlob(
+                                  _fbKey.currentState.value['imgAdditional'][0])
+                              : null;
                       newProduct.insertProduct();
                       Toast.show("Saved Product Successfully!", context,
                           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                     }
-                    // print(await product.getProducts());
+
                     setState(() {
                       Navigator.pop(context, true);
                       widget.actionCallback(true);
@@ -390,4 +558,19 @@ class _AddItemState extends State<AddItem> {
       ),
     );
   }
+
+  Uint8List _fileToBlob(File file) {
+    if (file != null) {
+      return file.readAsBytesSync();
+    }
+    return null;
+  }
+
+  // File _blobToFile(Uint8List byteData) {
+  //   print(byteData);
+  //   if (byteData.length > 0) {
+  //     return File.fromRawPath(byteData);
+  //   }
+  //   return null;
+  // }
 }

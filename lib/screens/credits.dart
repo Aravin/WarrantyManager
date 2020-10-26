@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:warranty_manager/contants.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CreditsScreen extends StatelessWidget {

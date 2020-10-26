@@ -3,8 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/add.dart';
+import 'package:warranty_manager/screens/product_details.dart';
 
-import '../contants.dart';
+import '../shared/contants.dart';
 
 class ProductListItemWidget extends StatelessWidget {
   final Product product;
@@ -105,16 +106,32 @@ class ProductListItemWidget extends StatelessWidget {
                               duration: Toast.LENGTH_LONG,
                               gravity: Toast.BOTTOM);
                         } else if (result[0] == 'edit') {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
                               builder: (context) => AddItem(
-                                    product: product,
-                                    isUpdate: true,
-                                    actionCallback: this.actionCallback,
-                                  )));
+                                product: product,
+                                isUpdate: true,
+                                actionCallback: this.actionCallback,
+                              ),
+                            ),
+                          );
+                        } else if (result[0] == 'view') {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen(
+                                product: product,
+                                actionCallback: this.actionCallback,
+                              ),
+                            ),
+                          );
                         }
                       },
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<List<String>>>[
+                        PopupMenuItem<List<String>>(
+                          value: ['view', product.id.toString()],
+                          child: Text('View'),
+                        ),
                         PopupMenuItem<List<String>>(
                           value: ['edit', product.id.toString()],
                           child: Text('Edit'),

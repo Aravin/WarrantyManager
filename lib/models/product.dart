@@ -21,6 +21,7 @@ class Product {
     this.purchaseCopy,
     this.warrantyCopy,
     this.additionalImage,
+    this.category,
   }) {
     if (this.warrantyEndDate == null && this.warrantyPeriod != null) {
       if (this.warrantyPeriod.toLowerCase().indexOf('month') > 0) {
@@ -68,6 +69,9 @@ class Product {
   Uint8List warrantyCopy;
   Uint8List additionalImage;
 
+  // added later
+  String category;
+
   // Convert a Dog into a Map. The keys must correspond to the names of the
   // columns in the database.
   Map<String, dynamic> toMap() {
@@ -88,6 +92,7 @@ class Product {
       'purchaseCopy': purchaseCopy,
       'warrantyCopy': warrantyCopy,
       'additionalImage': additionalImage,
+      'category': category,
     };
   }
 
@@ -118,6 +123,7 @@ class Product {
         purchaseCopy: maps[i]['purchaseCopy'],
         warrantyCopy: maps[i]['warrantyCopy'],
         additionalImage: maps[i]['additionalImage'],
+        category: maps[i]['category'],
       );
     });
   }
@@ -149,6 +155,7 @@ class Product {
       purchaseCopy: this.purchaseCopy,
       warrantyCopy: this.warrantyCopy,
       additionalImage: this.additionalImage,
+      category: this.category,
     );
     // In this case, replace any previous data.
     await db.insert(
@@ -180,6 +187,7 @@ class Product {
       purchaseCopy: this.purchaseCopy,
       warrantyCopy: this.warrantyCopy,
       additionalImage: this.additionalImage,
+      category: this.category,
     );
 
     // TODO: remove duplicate code

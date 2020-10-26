@@ -7,10 +7,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 import 'package:warranty_manager/models/product.dart';
-import 'package:warranty_manager/screens/image_viewer.dart';
 import 'package:warranty_manager/widgets/product_image_preview.dart';
+import 'package:warranty_manager/shared/category.dart';
 
-import '../contants.dart';
+import '../shared/contants.dart';
 
 class AddItem extends StatefulWidget {
   @override
@@ -27,21 +27,13 @@ class AddItem extends StatefulWidget {
 class _AddItemState extends State<AddItem> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
-  final Key purchaseDateKey = GlobalKey<FormBuilderTextFieldState>();
-  final Key warrantyPeriodKey = GlobalKey<FormBuilderTextFieldState>();
-  final Key productKey = GlobalKey<FormBuilderTextFieldState>();
-  final Key priceKey = GlobalKey();
-  final Key companyKey = GlobalKey();
-
-  final Key purchasedAtKey = GlobalKey();
-  final Key salesPersonKey = GlobalKey();
-  final Key phoneKey = GlobalKey();
-  final Key emailKey = GlobalKey();
-  final Key notesKey = GlobalKey();
-
+  // mandatory
   final FocusNode productFocus = FocusNode();
   final FocusNode priceFocus = FocusNode();
   final FocusNode warrantyFocus = FocusNode();
+
+  // optional
+  final FocusNode categoryFocus = FocusNode();
   final FocusNode purchasedAtFocus = FocusNode();
   final FocusNode companyFocus = FocusNode();
   final FocusNode salesPersonFocus = FocusNode();
@@ -144,6 +136,11 @@ class _AddItemState extends State<AddItem> {
                 'imgBill': [],
                 'imgWarranty': [],
                 'imgAdditional': [],
+                'category': widget.isUpdate
+                    ? (widget.product?.category ?? 'Other')
+                    : _fbKey.currentState != null
+                        ? _fbKey.currentState.value['category']
+                        : 'Other'
               },
               // autovalidate: false,
               child: Stepper(
@@ -236,7 +233,7 @@ class _AddItemState extends State<AddItem> {
                             FormBuilderValidators.maxLength(24)
                           ],
                           onEditingComplete: () => FocusScope.of(context)
-                              .requestFocus(purchasedAtFocus),
+                              .requestFocus(categoryFocus),
                         ),
                       ],
                     ),
@@ -247,6 +244,19 @@ class _AddItemState extends State<AddItem> {
                     content: Column(
                       key: UniqueKey(),
                       children: <Widget>[
+                        FormBuilderDropdown(
+                          attribute: 'category',
+                          focusNode: categoryFocus,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.category),
+                            hintText: 'Product Category',
+                            labelText: 'Category',
+                          ),
+                          items: categoryList
+                              .map((category) => DropdownMenuItem(
+                                  value: category, child: Text("$category")))
+                              .toList(),
+                        ),
                         FormBuilderTextField(
                           attribute: 'purchasedAt',
                           focusNode: purchasedAtFocus,
@@ -316,21 +326,43 @@ class _AddItemState extends State<AddItem> {
                     isActive: currentStep == 2 ? true : false,
                     title: Text('Attachments'),
                     content: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
                       key: UniqueKey(),
                       children: [
-                        Row(
-                          children: [
-                            (widget.isUpdate == true &&
-                                    widget.product.productImage != null)
-                                ? ProductImagePreview(
+                        (widget.isUpdate == true &&
+                                widget.product.productImage != null)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ProductImagePreview(
                                     image: widget.product.productImage,
                                     previewTitle:
                                         'Existing Product Image Preview',
                                     imageTitle: 'Purchase Image',
+                                  ),
+                                  IconButton(
+                                    iconSize: 32,
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        widget.product.productImage = null;
+                                        Toast.show(
+                                          "Image Removed.",
+                                          context,
+                                          duration: Toast.LENGTH_LONG,
+                                          gravity: Toast.BOTTOM,
+                                        );
+                                      })
+                                    },
                                   )
-                                : SizedBox(),
-                          ],
-                        ),
+                                ],
+                              )
+                            : SizedBox(),
                         FormBuilderImagePicker(
                           attribute: 'productImage',
                           decoration: InputDecoration(
@@ -341,19 +373,39 @@ class _AddItemState extends State<AddItem> {
                           maxHeight: 720,
                           maxWidth: 720,
                         ),
-                        Row(
-                          children: [
-                            (widget.isUpdate == true &&
-                                    widget.product.purchaseCopy != null)
-                                ? ProductImagePreview(
+                        (widget.isUpdate == true &&
+                                widget.product.purchaseCopy != null)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ProductImagePreview(
                                     image: widget.product.purchaseCopy,
                                     previewTitle:
                                         'Existing Purchase Bill/Receipt Preview',
                                     imageTitle: 'Purchase Copy',
+                                  ),
+                                  IconButton(
+                                    iconSize: 32,
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        widget.product.purchaseCopy = null;
+                                        Toast.show(
+                                          "Image Removed.",
+                                          context,
+                                          duration: Toast.LENGTH_LONG,
+                                          gravity: Toast.BOTTOM,
+                                        );
+                                      })
+                                    },
                                   )
-                                : SizedBox(),
-                          ],
-                        ),
+                                ],
+                              )
+                            : SizedBox(),
                         FormBuilderImagePicker(
                           attribute: 'imgBill',
                           decoration: InputDecoration(
@@ -364,19 +416,39 @@ class _AddItemState extends State<AddItem> {
                           maxHeight: 720,
                           maxWidth: 720,
                         ),
-                        Row(
-                          children: [
-                            (widget.isUpdate == true &&
-                                    widget.product.warrantyCopy != null)
-                                ? ProductImagePreview(
+                        (widget.isUpdate == true &&
+                                widget.product.warrantyCopy != null)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ProductImagePreview(
                                     image: widget.product.warrantyCopy,
                                     previewTitle:
                                         'Existing Warranty Copy Preview',
                                     imageTitle: 'Warranty Copy',
+                                  ),
+                                  IconButton(
+                                    iconSize: 32,
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        widget.product.warrantyCopy = null;
+                                        Toast.show(
+                                          "Image Removed.",
+                                          context,
+                                          duration: Toast.LENGTH_LONG,
+                                          gravity: Toast.BOTTOM,
+                                        );
+                                      })
+                                    },
                                   )
-                                : SizedBox(),
-                          ],
-                        ),
+                                ],
+                              )
+                            : SizedBox(),
                         FormBuilderImagePicker(
                           attribute: 'imgWarranty',
                           decoration: InputDecoration(
@@ -384,19 +456,39 @@ class _AddItemState extends State<AddItem> {
                           ),
                           maxImages: 1,
                         ),
-                        Row(
-                          children: [
-                            (widget.isUpdate == true &&
-                                    widget.product.additionalImage != null)
-                                ? ProductImagePreview(
+                        (widget.isUpdate == true &&
+                                widget.product.additionalImage != null)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ProductImagePreview(
                                     image: widget.product.additionalImage,
                                     previewTitle:
                                         'Existing Additional Image Preview',
                                     imageTitle: 'Additional Image',
+                                  ),
+                                  IconButton(
+                                    iconSize: 32,
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        widget.product.additionalImage = null;
+                                        Toast.show(
+                                          "Image Removed.",
+                                          context,
+                                          duration: Toast.LENGTH_LONG,
+                                          gravity: Toast.BOTTOM,
+                                        );
+                                      })
+                                    },
                                   )
-                                : SizedBox(),
-                          ],
-                        ),
+                                ],
+                              )
+                            : SizedBox(),
                         FormBuilderImagePicker(
                           attribute: 'imgAdditional',
                           decoration: InputDecoration(
@@ -488,6 +580,10 @@ class _AddItemState extends State<AddItem> {
                               : widget.product?.additionalImage != null
                                   ? widget.product.additionalImage
                                   : null;
+                      widget.product.category = _fbKey
+                          .currentState.value['category']
+                          .toString()
+                          .trim();
                       widget.product.updateProduct();
                       Toast.show("Updated Product Successfully!", context,
                           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -540,6 +636,10 @@ class _AddItemState extends State<AddItem> {
                               ? _fileToBlob(
                                   _fbKey.currentState.value['imgAdditional'][0])
                               : null;
+                      newProduct.category = _fbKey
+                          .currentState.value['category']
+                          .toString()
+                          .trim();
                       newProduct.insertProduct();
                       Toast.show("Saved Product Successfully!", context,
                           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);

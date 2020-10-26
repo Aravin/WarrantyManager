@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/about.dart';
 import 'package:warranty_manager/screens/add.dart';
@@ -8,8 +7,8 @@ import 'package:warranty_manager/screens/privacy_policy.dart';
 import 'package:warranty_manager/screens/product_list.dart';
 import 'package:warranty_manager/widgets/product_highlight.dart';
 import 'package:warranty_manager/widgets/product_page.dart';
-
-import '../contants.dart';
+import 'package:in_app_review/in_app_review.dart';
+import '../shared/contants.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,18 +17,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final product = new Product();
-
-  Future<void> _launchInBrowser(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: false,
-        forceWebView: false,
-      );
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   actionCallback(bool rebuild) {
     if (rebuild) {
@@ -108,10 +95,15 @@ class _HomeState extends State<Home> {
             ListTile(
               title: Text('Rate Us'),
               leading: Icon(Icons.thumbs_up_down),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                _launchInBrowser(
-                    'https://play.google.com/store/apps/details?id=io.epix.warranty_manager');
+                final InAppReview inAppReview = InAppReview.instance;
+
+                if (await inAppReview.isAvailable()) {
+                  inAppReview.openStoreListing();
+                } else {
+                  inAppReview.openStoreListing();
+                }
               },
             ),
           ],

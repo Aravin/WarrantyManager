@@ -1,7 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
   @override
@@ -9,10 +7,7 @@ class PrivacyPolicyScreen extends StatefulWidget {
 }
 
 class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
-  var isLoading = false;
-
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,43 +19,13 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
         ),
       ),
       body: Builder(builder: (BuildContext context) {
-        return Stack(children: <Widget>[
-          WebView(
-            initialUrl: 'https://www.epix.io/terms-policy',
-            javascriptMode: JavascriptMode.disabled,
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller.complete(webViewController);
-            },
-            // ignore: prefer_collection_literals
-            javascriptChannels: <JavascriptChannel>[
-              _toasterJavascriptChannel(context),
-            ].toSet(),
-            onPageStarted: (String url) {
-              print('Page started loading: $url');
-            },
-            onPageFinished: (String url) {
-              print('Page finished loading: $url');
-              setState(() {
-                this.isLoading = false;
-              });
-            },
-            gestureNavigationEnabled: true,
-          ),
-          this.isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Container(),
-        ]);
+        return WebviewScaffold(
+          url: 'https://www.epix.io/terms-policy',
+          withJavascript: false,
+          withZoom: false,
+          hidden: true,
+        );
       }),
     );
-  }
-
-  JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
-    return JavascriptChannel(
-        name: 'Toaster',
-        onMessageReceived: (JavascriptMessage message) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
-        });
   }
 }

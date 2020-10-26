@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:toast/toast.dart';
-import 'package:warranty_manager/contants.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/shared/remove_space_in_string.dart';
 
 class DisplayImage extends StatelessWidget {

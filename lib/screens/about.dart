@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:warranty_manager/contants.dart';
+import 'package:warranty_manager/shared/contants.dart';
 
 class AboutScreen extends StatelessWidget {
   @override

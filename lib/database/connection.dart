@@ -15,9 +15,6 @@ final Future<Database> database = getDatabasesPath().then(
     // upgrade product table V2
     void _upgradeFrom1ToV2(Batch batch) {
       batch.execute('ALTER TABLE product ADD productImage BLOB END');
-      batch.execute('ALTER TABLE product ADD purchaseCopy BLOB END');
-      batch.execute('ALTER TABLE product ADD warrantyCopy BLOB END');
-      batch.execute('ALTER TABLE product ADD additionalImage BLOB END');
       batch.execute('ALTER TABLE product ADD category TEXT END');
       batch.execute('ALTER TABLE product ADD tags TEXT END');
       batch.execute('ALTER TABLE product ADD profile TEXT END');
@@ -25,7 +22,7 @@ final Future<Database> database = getDatabasesPath().then(
 
     return openDatabase(
       join(path, 'product.db'),
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         var batch = db.batch();
         _createV2(batch);
@@ -33,7 +30,7 @@ final Future<Database> database = getDatabasesPath().then(
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         var batch = db.batch();
-        if (oldVersion == 1) {
+        if (oldVersion == 1 || oldVersion == 2) {
           _upgradeFrom1ToV2(batch);
         }
         await batch.commit();

@@ -71,17 +71,6 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: Text('Credits'),
-              leading: Icon(Icons.thumb_up),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (ctxt) => CreditsScreen()),
-                );
-              },
-            ),
-            ListTile(
               title: Text('About'),
               leading: Icon(Icons.info),
               onTap: () {

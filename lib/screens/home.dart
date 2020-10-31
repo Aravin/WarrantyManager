@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/about.dart';
 import 'package:warranty_manager/screens/add.dart';
-import 'package:warranty_manager/screens/credits.dart';
 import 'package:warranty_manager/screens/privacy_policy.dart';
 import 'package:warranty_manager/screens/product_list.dart';
 import 'package:warranty_manager/widgets/product_highlight.dart';

@@ -25,24 +25,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           'Product Details',
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Icon(Icons.keyboard_backspace),
+      ),
       body: Padding(
-        padding: appEdgeInsets,
+        padding: appPaddingLarge,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Row(
               children: [
                 Expanded(
                   flex: 4,
                   child: widget.product.productImage != null
-                      ? Image.memory(
-                          widget.product.productImage,
-                          width: 100,
-                          height: 100,
+                      ? Container(
+                          padding: appPaddingSmall,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(7.5)),
+                          child: Image.memory(
+                            widget.product.productImage,
+                            width: 100,
+                            height: 100,
+                          ),
                         )
-                      : Image.asset('assets/noimage.jpg'),
+                      : Container(
+                          padding: appPaddingSmall,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(7.5)),
+                          child: Image.asset('assets/noimage.jpg')),
                 ),
+                Expanded(flex: 1, child: SizedBox()),
                 Expanded(
                   flex: 8,
                   child: Column(
@@ -56,6 +75,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             fontWeight: FontWeight.bold,
                             color: primaryColor),
                       ),
+                      SizedBox(height: 7.5),
                       Text(
                         widget.product.company,
                         style: TextStyle(fontSize: 20),
@@ -65,7 +85,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             Table(
               children: [
                 TableRow(
@@ -161,7 +181,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ],
             ),
             SizedBox(
-              height: 20.0,
+              height: 10.0,
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 20.0),
@@ -171,11 +191,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 children: [
                   widget.product.productImage != null
                       ? Container(
-                          width: 150.0,
-                          color: Colors.black12,
+                          width: 165.0,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(7.5),
+                          ),
                           child: Column(
                             children: [
-                              Text('Product Image'),
+                              Text(
+                                'Product Image',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                               GestureDetector(
                                 child: Image.memory(
                                   widget.product.productImage,
@@ -199,11 +225,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   SizedBox(width: 20),
                   widget.product.purchaseCopy != null
                       ? Container(
-                          width: 150.0,
-                          color: Colors.black12,
+                          width: 165.0,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(7.5),
+                          ),
                           child: Column(
                             children: [
-                              Text('Purchase Bill'),
+                              Text(
+                                'Purchase Bill',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                               GestureDetector(
                                 child: Image.memory(
                                   widget.product.purchaseCopy,
@@ -224,13 +256,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         )
                       : SizedBox(),
+                  SizedBox(width: 20),
                   widget.product.warrantyCopy != null
                       ? Container(
-                          width: 150.0,
-                          color: Colors.black12,
+                          width: 165.0,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(7.5),
+                          ),
                           child: Column(
                             children: [
-                              Text('Warranty Copy'),
+                              Text(
+                                'Warranty Copy',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                               GestureDetector(
                                 child: Image.memory(
                                   widget.product.warrantyCopy,
@@ -254,11 +293,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   SizedBox(width: 20),
                   widget.product.additionalImage != null
                       ? Container(
-                          width: 150.0,
-                          color: Colors.black12,
+                          width: 165.0,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(7.5),
+                          ),
                           child: Column(
                             children: [
-                              Text('Additional Image'),
+                              Text(
+                                'Additional Image',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                               GestureDetector(
                                 child: Image.memory(
                                   widget.product.additionalImage,
@@ -281,16 +326,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       : SizedBox(),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                RaisedButton(
-                    color: secondaryCOlor,
-                    textColor: Colors.white,
-                    child: Text("Go Back"),
-                    onPressed: () => Navigator.pop(context)),
-              ],
             ),
           ],
         ),

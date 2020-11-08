@@ -77,7 +77,7 @@ class ProductHighlightWidget extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  color: secondaryCOlor,
+                  color: secondaryColor,
                   borderRadius: BorderRadius.circular(7.5)),
               child: Padding(
                 padding: EdgeInsets.all(8.0),

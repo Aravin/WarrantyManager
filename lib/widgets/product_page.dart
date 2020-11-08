@@ -25,7 +25,7 @@ class ProductListWidget extends StatelessWidget {
             length: 3,
             child: Scaffold(
               appBar: TabBar(
-                indicatorColor: secondaryCOlor,
+                indicatorColor: secondaryColor,
                 labelColor: primaryColor,
                 tabs: <Widget>[
                   Tab(

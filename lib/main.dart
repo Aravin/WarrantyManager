@@ -31,8 +31,8 @@ class Main extends StatelessWidget {
         // Define the default brightness and colors.
         brightness: Brightness.light,
         primaryColor: primaryColor,
-        secondaryHeaderColor: secondaryCOlor,
-        accentColor: secondaryCOlor,
+        secondaryHeaderColor: secondaryColor,
+        accentColor: secondaryColor,
         textTheme: TextTheme(
           bodyText2: TextStyle(color: Colors.black),
         ),

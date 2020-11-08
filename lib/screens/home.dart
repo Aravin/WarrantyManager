@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/about.dart';
 import 'package:warranty_manager/screens/add.dart';
+import 'package:warranty_manager/screens/bulk_upload.dart';
 import 'package:warranty_manager/screens/privacy_policy.dart';
 import 'package:warranty_manager/screens/product_list.dart';
 import 'package:warranty_manager/widgets/product_highlight.dart';
@@ -21,6 +22,13 @@ class _HomeState extends State<Home> {
     if (rebuild) {
       setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    actionCallback(true);
   }
 
   @override
@@ -55,6 +63,17 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (ctxt) => ProductListScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Bulk Import'),
+              leading: Icon(Icons.file_upload),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (ctxt) => BulkUploadScreen()),
                 );
               },
             ),
@@ -107,7 +126,7 @@ class _HomeState extends State<Home> {
               .then((value) => setState(() => {}));
         },
         child: Icon(Icons.add),
-        backgroundColor: secondaryCOlor,
+        backgroundColor: secondaryColor,
       ),
       body: Column(
         children: <Widget>[

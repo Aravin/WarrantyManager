@@ -443,7 +443,8 @@ class _AddItemState extends State<AddItem> {
                                           duration: Toast.LENGTH_LONG,
                                           gravity: Toast.BOTTOM,
                                         );
-                                      })
+                                      }),
+                                      setState(() {}),
                                     },
                                   )
                                 ],
@@ -483,7 +484,8 @@ class _AddItemState extends State<AddItem> {
                                           duration: Toast.LENGTH_LONG,
                                           gravity: Toast.BOTTOM,
                                         );
-                                      })
+                                      }),
+                                      setState(() {}),
                                     },
                                   )
                                 ],
@@ -518,7 +520,7 @@ class _AddItemState extends State<AddItem> {
                 },
               ),
               MaterialButton(
-                color: secondaryCOlor,
+                color: secondaryColor,
                 textColor: Colors.white,
                 child: Text("Submit"),
                 onPressed: () async {
@@ -647,7 +649,7 @@ class _AddItemState extends State<AddItem> {
 
                     setState(() {
                       Navigator.pop(context, true);
-                      widget.actionCallback(true);
+                      widget.isUpdate ?? widget.actionCallback(true);
                     });
                   }
                 },

@@ -29,7 +29,7 @@ class DisplayImage extends StatelessWidget {
         children: [
           Expanded(
             flex: 11,
-            child: Center(
+            child: InteractiveViewer(
               child: Image.memory(this.imageBlob),
             ),
           ),

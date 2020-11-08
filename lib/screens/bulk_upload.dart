@@ -153,221 +153,227 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
         ),
       ),
       body: Padding(
-        padding: appEdgeInsets,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        padding: appPaddingLarge,
+        child: ListView(
           children: [
-            Container(
-              child: Text(
-                'Download Sample File',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Download Sample File',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
-              ),
-            ),
-            Container(
-              child: RaisedButton.icon(
-                icon: Icon(Icons.download_sharp),
-                label: Text('Download Sample'),
-                onPressed: () async {
-                  const url =
-                      'https://drive.google.com/file/d/1koyZ3phMxFdu8AtQbk4lPFmKt1cpc-5H/view?usp=sharing';
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    print('Could not launch $url');
-                  }
-                },
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: Text(
-                'Bulk Uploader (.txt)',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0,
+                SizedBox(
+                  height: 5,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: RaisedButton.icon(
-                onPressed: () => _openFileExplorer(),
-                icon: Icon(Icons.file_upload),
-                label: Text("Open File Picker"),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Builder(
-              builder: (BuildContext context) => _loadingPath
-                  ? Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: CircularProgressIndicator(),
-                    )
-                  : _directoryPath != null
-                      ? ListTile(
-                          title: Text('Directory path'),
-                          subtitle: Text(_directoryPath),
+                RaisedButton.icon(
+                  icon: Icon(Icons.download_sharp),
+                  label: Text('Download Sample'),
+                  onPressed: () async {
+                    const url =
+                        'https://drive.google.com/file/d/1koyZ3phMxFdu8AtQbk4lPFmKt1cpc-5H/view?usp=sharing';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      print('Could not launch $url');
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  'Bulk Uploader (.txt)',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                RaisedButton.icon(
+                  onPressed: () => _openFileExplorer(),
+                  icon: Icon(Icons.file_upload),
+                  label: Text("Open File Picker"),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(
+                  builder: (BuildContext context) => _loadingPath
+                      ? Padding(
+                          padding: EdgeInsets.only(bottom: 10.0),
+                          child: CircularProgressIndicator(),
                         )
-                      : _paths != null
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    'Data Preview',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25.0,
-                                    ),
-                                  ),
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    columns: <DataColumn>[
-                                      DataColumn(
-                                        label: Text(
-                                          'Name',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Price',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Purchase Date',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Warranty Period',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Company',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Category',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Purchase at',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Contact Person',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Phone',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Email',
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Notes',
-                                        ),
-                                      ),
-                                    ],
-                                    rows: datarow,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                    child: Text(
-                                        'Total number of Rows : ${lineCount - 1}')),
-                                Container(
-                                    child: Text(
-                                        'Number of Rows parsed : ${datarow.length}')),
-                                Container(
-                                    child: Text(
-                                        'Number of Rows Failed : ${lineCount - 1 - datarow.length}')),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  child: RaisedButton.icon(
-                                    color: secondaryColor,
-                                    onPressed: () async =>
-                                        await _processBulkUpload(productList)
-                                            .then(
-                                              (value) => {
-                                                Toast.show(
-                                                  "Bulk Import Successfully!",
-                                                  context,
-                                                  duration: Toast.LENGTH_LONG,
-                                                  gravity: Toast.BOTTOM,
-                                                  backgroundColor: Colors.green,
-                                                ),
-                                                _clearCachedFiles(),
-                                                Navigator.pop(context),
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        Home(),
-                                                  ),
-                                                ),
-                                              },
-                                            )
-                                            .catchError(
-                                              (err) => {
-                                                Toast.show(
-                                                  "Failed to import!",
-                                                  context,
-                                                  duration: Toast.LENGTH_LONG,
-                                                  gravity: Toast.BOTTOM,
-                                                  backgroundColor: Colors.green,
-                                                ),
-                                                _clearCachedFiles(),
-                                                Navigator.pop(context),
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        Home(),
-                                                  ),
-                                                ),
-                                              },
-                                            ),
-                                    icon: Icon(Icons.save, color: Colors.white),
-                                    label: Text(
-                                      'Complete Bulk Import',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                      : _directoryPath != null
+                          ? ListTile(
+                              title: Text('Directory path'),
+                              subtitle: Text(_directoryPath),
                             )
-                          : SizedBox(),
-            ),
-            SizedBox(
-              height: 20,
+                          : _paths != null
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        'Data Preview',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25.0,
+                                        ),
+                                      ),
+                                    ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: DataTable(
+                                        columns: <DataColumn>[
+                                          DataColumn(
+                                            label: Text(
+                                              'Name',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Price',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Purchase Date',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Warranty Period',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Company',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Category',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Purchase at',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Contact Person',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Phone',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Email',
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Notes',
+                                            ),
+                                          ),
+                                        ],
+                                        rows: datarow,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                        child: Text(
+                                            'Total number of Rows : ${lineCount - 1}')),
+                                    Container(
+                                        child: Text(
+                                            'Number of Rows parsed : ${datarow.length}')),
+                                    Container(
+                                        child: Text(
+                                            'Number of Rows Failed : ${lineCount - 1 - datarow.length}')),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      child: RaisedButton.icon(
+                                        color: secondaryColor,
+                                        onPressed: () async =>
+                                            await _processBulkUpload(
+                                                    productList)
+                                                .then(
+                                                  (value) => {
+                                                    Toast.show(
+                                                      "Bulk Import Successfully!",
+                                                      context,
+                                                      duration:
+                                                          Toast.LENGTH_LONG,
+                                                      gravity: Toast.BOTTOM,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                    ),
+                                                    _clearCachedFiles(),
+                                                    Navigator.pop(context),
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            Home(),
+                                                      ),
+                                                    ),
+                                                  },
+                                                )
+                                                .catchError(
+                                                  (err) => {
+                                                    Toast.show(
+                                                      "Failed to import!",
+                                                      context,
+                                                      duration:
+                                                          Toast.LENGTH_LONG,
+                                                      gravity: Toast.BOTTOM,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                    ),
+                                                    _clearCachedFiles(),
+                                                    Navigator.pop(context),
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            Home(),
+                                                      ),
+                                                    ),
+                                                  },
+                                                ),
+                                        icon: Icon(Icons.save,
+                                            color: Colors.white),
+                                        label: Text(
+                                          'Complete Bulk Import',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
           ],
         ),

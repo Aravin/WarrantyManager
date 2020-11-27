@@ -350,7 +350,6 @@ class _AddItemState extends State<AddItem> {
                                     ),
                                     onPressed: () => {
                                       setState(() {
-                                        widget.product.productImage = null;
                                         Toast.show(
                                           "Image Removed.",
                                           context,

@@ -10,6 +10,7 @@ import 'package:warranty_manager/shared/contants.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:toast/toast.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class BulkUploadScreen extends StatefulWidget {
   @override
@@ -159,17 +160,8 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Download Sample File',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
+                'Download Sample File'.text.xl2.bold.makeCentered(),
+                HeightBox(10),
                 RaisedButton.icon(
                   icon: Icon(Icons.download_sharp),
                   label: Text('Download Sample'),
@@ -183,16 +175,8 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                     }
                   },
                 ),
-                SizedBox(
-                  height: 25,
-                ),
-                Text(
-                  'Bulk Uploader (.txt)',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                  ),
-                ),
+                HeightBox(25),
+                'Bulk Uploader (.txt)'.text.xl2.bold.makeCentered(),
                 SizedBox(
                   height: 5,
                 ),
@@ -201,9 +185,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                   icon: Icon(Icons.file_upload),
                   label: Text("Open File Picker"),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                HeightBox(20),
                 Builder(
                   builder: (BuildContext context) => _loadingPath
                       ? Padding(
@@ -220,13 +202,11 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Container(
-                                      child: Text(
-                                        'Data Preview',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25.0,
-                                        ),
-                                      ),
+                                      child: 'Data Preview'
+                                          .text
+                                          .xl2
+                                          .bold
+                                          .makeCentered(),
                                     ),
                                     SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,

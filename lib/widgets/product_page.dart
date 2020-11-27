@@ -177,8 +177,10 @@ class ProductListWidget extends StatelessWidget {
                             shrinkWrap: true,
                             children: snapshot.data
                                 .map((product) => ProductListItemWidget(
-                                    product: product,
-                                    actionCallback: actionCallback))
+                                      product: product,
+                                      actionCallback: actionCallback,
+                                      cardColor: Colors.green[100],
+                                    ))
                                 .where(
                                   (element) => DateTime.parse(element
                                           .product.warrantyEndDate
@@ -262,8 +264,10 @@ class ProductListWidget extends StatelessWidget {
                           shrinkWrap: true,
                           children: snapshot.data
                               .map((product) => ProductListItemWidget(
-                                  product: product,
-                                  actionCallback: actionCallback))
+                                    product: product,
+                                    actionCallback: actionCallback,
+                                    cardColor: Colors.orange[100],
+                                  ))
                               .where((element) => DateTime.parse(element
                                       .product.warrantyEndDate
                                       .toString())
@@ -352,8 +356,10 @@ class ProductListWidget extends StatelessWidget {
                         shrinkWrap: true,
                         children: snapshot.data
                             .map((product) => ProductListItemWidget(
-                                product: product,
-                                actionCallback: actionCallback))
+                                  product: product,
+                                  actionCallback: actionCallback,
+                                  cardColor: Colors.red[100],
+                                ))
                             .where(
                               (element) => DateTime.parse(element
                                       .product.warrantyEndDate

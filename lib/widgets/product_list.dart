@@ -10,10 +10,9 @@ import '../shared/contants.dart';
 class ProductListItemWidget extends StatelessWidget {
   final Product product;
   final Function actionCallback;
+  final Color cardColor;
 
-  ProductListItemWidget({this.product, this.actionCallback});
-
-  // ProductListItemWidget({this.product, this.actionCallback});
+  ProductListItemWidget({this.product, this.actionCallback, this.cardColor});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +23,10 @@ class ProductListItemWidget extends StatelessWidget {
           padding: appEdgeInsets,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            color: Color(0xFFE4E5E9),
+            color: cardColor ?? Color(0xFFE4E5E9),
           ),
           height: 100,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Expanded(
                 flex: 11,
@@ -37,7 +35,6 @@ class ProductListItemWidget extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Text(
                           product.name,
@@ -57,6 +54,8 @@ class ProductListItemWidget extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
                           'Purchase Date',
@@ -74,6 +73,8 @@ class ProductListItemWidget extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
                           DateFormat.yMMMd().format(product.purchaseDate),

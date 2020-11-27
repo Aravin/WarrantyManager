@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/about.dart';
 import 'package:warranty_manager/screens/add.dart';
+import 'package:warranty_manager/screens/bulk_export.dart';
 import 'package:warranty_manager/screens/bulk_upload.dart';
 import 'package:warranty_manager/screens/privacy_policy.dart';
 import 'package:warranty_manager/screens/product_list.dart';
@@ -26,7 +27,6 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     actionCallback(true);
   }
@@ -74,6 +74,17 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (ctxt) => BulkUploadScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Bulk Export'),
+              leading: Icon(Icons.file_download),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (ctxt) => BulkExportScreen()),
                 );
               },
             ),

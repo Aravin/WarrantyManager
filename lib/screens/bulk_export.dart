@@ -21,7 +21,7 @@ class BulkExportScreen extends StatelessWidget {
       // Write the file.
       await file
           .writeAsString('$data')
-          .then((value) => returnMsg = 'File Saved Successfuly on $file')
+          .then((value) => returnMsg = 'Exported to $file')
           .catchError((onError) => returnMsg = 'Error');
 
       return returnMsg;

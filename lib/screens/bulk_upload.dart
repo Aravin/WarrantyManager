@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/home.dart';
 import 'package:warranty_manager/shared/contants.dart';
+import 'package:warranty_manager/widgets/bulk_actions.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:toast/toast.dart';
@@ -358,6 +359,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: BulkActionScreen(currentIndex: 0),
     );
   }
 }

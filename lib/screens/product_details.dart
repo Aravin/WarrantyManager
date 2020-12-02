@@ -108,7 +108,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 TableRow(
                   children: [
-                    Text('Warrant End Date'),
+                    Text('Warranty End Date'),
                     Text(
                       '${widget.product.warrantyEndDate.day}-${widget.product.warrantyEndDate.month}-${widget.product.warrantyEndDate.year}',
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -117,7 +117,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 TableRow(
                   children: [
-                    Text('Cateogory'),
+                    Text('Category'),
                     Text(
                       widget.product.category,
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -162,7 +162,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 TableRow(
                   children: [
-                    Text('support Email'),
+                    Text('Support Email'),
                     Text(
                       emptyStringPlaceholder(widget.product.email, '-'),
                       style: TextStyle(fontWeight: FontWeight.bold),

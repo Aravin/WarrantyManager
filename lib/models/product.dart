@@ -239,6 +239,14 @@ class Product {
     );
   }
 
+  Future<void> deleteProducts() async {
+    // Get a reference to the database.
+    final db = await database;
+
+    // Remove the Dog from the Database.
+    await db.delete('product');
+  }
+
   Future<void> customQuery1() async {
     // Get a reference to the database.
     final db = await database;

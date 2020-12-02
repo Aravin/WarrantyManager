@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:warranty_manager/widgets/bulk_actions.dart';
 
 class BulkExportScreen extends StatelessWidget {
   // Write data to the file
@@ -47,7 +48,7 @@ class BulkExportScreen extends StatelessWidget {
             'Bulk Export'.text.xl2.bold.makeCentered(),
             HeightBox(20),
             RaisedButton.icon(
-              icon: Icon(Icons.import_export),
+              icon: Icon(Icons.save_alt),
               label: Text('Export Data'),
               onPressed: () async {
                 Product product = new Product();
@@ -71,6 +72,7 @@ class BulkExportScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BulkActionScreen(currentIndex: 1),
     );
   }
 }

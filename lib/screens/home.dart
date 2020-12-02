@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/about.dart';
 import 'package:warranty_manager/screens/add.dart';
-import 'package:warranty_manager/screens/bulk_export.dart';
 import 'package:warranty_manager/screens/bulk_upload.dart';
 import 'package:warranty_manager/screens/privacy_policy.dart';
 import 'package:warranty_manager/screens/product_list.dart';
@@ -67,24 +66,13 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: Text('Bulk Import'),
-              leading: Icon(Icons.file_upload),
+              title: Text('Bulk Actions'),
+              leading: Icon(Icons.group_work),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (ctxt) => BulkUploadScreen()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Bulk Export'),
-              leading: Icon(Icons.file_download),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (ctxt) => BulkExportScreen()),
                 );
               },
             ),
@@ -118,7 +106,7 @@ class _HomeState extends State<Home> {
                 final InAppReview inAppReview = InAppReview.instance;
 
                 if (await inAppReview.isAvailable()) {
-                  inAppReview.openStoreListing();
+                  inAppReview.requestReview();
                 } else {
                   inAppReview.openStoreListing();
                 }

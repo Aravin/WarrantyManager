@@ -104,12 +104,8 @@ class _HomeState extends State<Home> {
               onTap: () async {
                 Navigator.pop(context);
                 final InAppReview inAppReview = InAppReview.instance;
-
-                if (await inAppReview.isAvailable()) {
-                  inAppReview.requestReview();
-                } else {
-                  inAppReview.openStoreListing();
-                }
+                
+                inAppReview.openStoreListing();
               },
             ),
           ],

@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "758575428733-9s9sd618f4ns4v55rt5imberclb6ei8r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "io.epix.warranty_manager",
-            "certificate_hash": "2f46ed7b6e168ba657202b40899f0e56ba43996b"
-          }
-        },
-        {
           "client_id": "758575428733-481oj822q3pf42c4tnsic63m7aut3brk.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -41,8 +33,7 @@
             }
           ]
         }
-      },
-      "admob_app_id": "ca-app-pub-2191548178499350~1691212816"
+      }
     }
   ],
   "configuration_version": "1"

@@ -38,6 +38,18 @@ class _HomeState extends State<Home> {
         title: Text(
           'Warranty Manager',
         ),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.add_box_rounded),
+              onPressed: () => {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (context) => AddItem(
+                                  isUpdate: false,
+                                )))
+                        .then((value) => setState(() => {}))
+                  }),
+        ],
       ),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -104,61 +116,15 @@ class _HomeState extends State<Home> {
               onTap: () async {
                 Navigator.pop(context);
                 final InAppReview inAppReview = InAppReview.instance;
-                
+
                 inAppReview.openStoreListing();
               },
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => AddItem(
-                        isUpdate: false,
-                      )))
-              .then((value) => setState(() => {}));
-        },
-        child: Icon(Icons.add),
-        backgroundColor: secondaryColor,
-      ),
       body: Column(
         children: <Widget>[
-          // Padding(
-          //   padding: appEdgeInsets,
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.end,
-          //     children: <Widget>[
-          //       Expanded(
-          //         flex: 10,
-          //         child: RichText(
-          //           text: TextSpan(
-          //             children: <TextSpan>[
-          //               TextSpan(
-          //                   text: 'Hello,',
-          //                   style: TextStyle(
-          //                       fontSize: 30.0,
-          //                       fontWeight: FontWeight.bold,
-          //                       color: Colors.grey[500])),
-          //               TextSpan(
-          //                   text: ' User!',
-          //                   style: TextStyle(
-          //                     fontSize: 35.0,
-          //                     fontWeight: FontWeight.w900,
-          //                     color: Colors.grey[700],
-          //                   )),
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-          //       Expanded(
-          //         flex: 2,
-          //         child: Text('Hi'),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           ProductHighlightWidget(actionCallback: actionCallback),
           SizedBox(
             height: 7.0,

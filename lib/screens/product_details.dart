@@ -25,11 +25,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           'Product Details',
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Icon(Icons.keyboard_backspace),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: 40.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.keyboard_backspace),
+        ),
       ),
       body: Padding(
         padding: appPaddingLarge,

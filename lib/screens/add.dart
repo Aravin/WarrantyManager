@@ -29,9 +29,9 @@ class AddItem extends StatefulWidget {
 }
 
 class _AddItemState extends State<AddItem> {
-  BannerAd _bannerAd;
-  InterstitialAd _interstitialAd;
-  AdManager _adManager = AdManager();
+  // BannerAd _bannerAd;
+  // InterstitialAd _interstitialAd;
+  // AdManager _adManager = AdManager();
 
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
@@ -78,33 +78,33 @@ class _AddItemState extends State<AddItem> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 10), (timer) {
-      _adManager.initAdMob().then((value) => {
-            _bannerAd = _adManager.createBannerAd()
-              ..load()
-              ..show(
-                anchorType: AnchorType.bottom,
-              ),
-          });
-    });
-    Timer.periodic(Duration(seconds: 60), (timer) {
-      _adManager.initAdMob().then((value) => {
-            _interstitialAd = _adManager.createInterstitialAd()
-              ..load()
-              ..show(
-                anchorType: AnchorType.bottom,
-                anchorOffset: 0.0,
-                horizontalCenterOffset: 0.0,
-              ),
-          });
-    });
+    // Timer.periodic(Duration(seconds: 10), (timer) {
+    //   _adManager.initAdMob().then((value) => {
+    //         _bannerAd = _adManager.createBannerAd()
+    //           ..load()
+    //           ..show(
+    //             anchorType: AnchorType.bottom,
+    //           ),
+    //       });
+    // });
+    // Timer.periodic(Duration(seconds: 60), (timer) {
+    //   _adManager.initAdMob().then((value) => {
+    //         _interstitialAd = _adManager.createInterstitialAd()
+    //           ..load()
+    //           ..show(
+    //             anchorType: AnchorType.bottom,
+    //             anchorOffset: 0.0,
+    //             horizontalCenterOffset: 0.0,
+    //           ),
+    //       });
+    // });
   }
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
-    _interstitialAd?.dispose();
-    super.dispose();
+    // _bannerAd?.dispose();
+    // _interstitialAd?.dispose();
+    // super.dispose();
   }
 
   @override

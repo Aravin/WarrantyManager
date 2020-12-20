@@ -10,6 +10,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
+import 'package:warranty_manager/shared/ads.dart';
+
 // Future<void> _initAdMob() {
 //   return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
 // }
@@ -29,6 +31,9 @@ class _MainState extends State<Main> {
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
+  BannerAd _bannerAd;
+  InterstitialAd _interstitialAd;
+  AdManager _adManager = AdManager();
 
   // BannerAd _bannerAd;
   // InterstitialAd _interstitialAd;
@@ -54,19 +59,33 @@ class _MainState extends State<Main> {
 
   @override
   void initState() {
-    // super.initState();
-    // _initAdMob();
-    // _bannerAd = createBannerAd()
-    //   ..load()
-    //   ..show(anchorType: AnchorType.bottom);
-    // _interstitialAd = createInterstitialAd()..load();
+    super.initState();
+    _adManager.initAdMob().then((value) => {
+          _bannerAd = _adManager.createBannerAd()
+            ..load()
+            ..show(
+              anchorType: AnchorType.bottom,
+            ),
+        });
+    _interstitialAd?.dispose();
+    _interstitialAd = null;
+
+    _adManager.initAdMob().then((value) => {
+          _interstitialAd = _adManager.createInterstitialAd()
+            ..load()
+            ..show(
+              anchorType: AnchorType.bottom,
+              anchorOffset: 0.0,
+              horizontalCenterOffset: 0.0,
+            ),
+        });
   }
 
   @override
   void dispose() {
-    // _bannerAd?.dispose();
-    // _interstitialAd?.dispose();
-    // super.dispose();
+    _bannerAd?.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 
   @override

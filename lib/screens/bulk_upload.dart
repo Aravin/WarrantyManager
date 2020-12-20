@@ -148,7 +148,6 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      persistentFooterButtons: [SizedBox(height: 35)],
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
@@ -360,7 +359,10 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BulkActionScreen(currentIndex: 0),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 55),
+        child: BulkActionScreen(currentIndex: 0),
+      ),
     );
   }
 }

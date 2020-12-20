@@ -8,7 +8,7 @@ class BulkDeleteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      persistentFooterButtons: [SizedBox(height: 35)],
+      // persistentFooterButtons: [SizedBox(height: 35)],
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
@@ -43,7 +43,10 @@ class BulkDeleteScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BulkActionScreen(currentIndex: 2),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 55),
+        child: BulkActionScreen(currentIndex: 2),
+      ),
     );
   }
 }

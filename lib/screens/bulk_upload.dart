@@ -163,6 +163,9 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                 'Download Sample File'.text.xl2.bold.makeCentered(),
                 HeightBox(10),
                 ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    primary: primaryColor,
+                  ),
                   icon: Icon(Icons.download_sharp),
                   label: Text('Download Sample'),
                   onPressed: () async {
@@ -181,6 +184,9 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                   height: 5,
                 ),
                 ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    primary: primaryColor,
+                  ),
                   onPressed: () => _openFileExplorer(),
                   icon: Icon(Icons.file_upload),
                   label: Text("Open File Picker"),
@@ -288,7 +294,9 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                     ),
                                     Container(
                                       child: ElevatedButton.icon(
-                                        // color: secondaryColor, // todo
+                                        style: ElevatedButton.styleFrom(
+                                          primary: secondaryColor,
+                                        ),
                                         onPressed: () async =>
                                             await _processBulkUpload(
                                                     productList)

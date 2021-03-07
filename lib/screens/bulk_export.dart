@@ -50,6 +50,9 @@ class BulkExportScreen extends StatelessWidget {
             'Bulk Export'.text.xl2.bold.makeCentered(),
             HeightBox(20),
             ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+              ),
               icon: Icon(Icons.save_alt),
               label: Text('Export Data'),
               onPressed: () async {

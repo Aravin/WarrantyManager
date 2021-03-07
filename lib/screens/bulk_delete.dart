@@ -24,6 +24,9 @@ class BulkDeleteScreen extends StatelessWidget {
             'Bulk Export'.text.xl2.bold.makeCentered(),
             HeightBox(20),
             ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+              ),
               icon: Icon(Icons.delete_forever),
               label: Text('Delete All Data'),
               onPressed: () async {

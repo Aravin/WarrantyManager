@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:toast/toast.dart';
-import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/shared/remove_space_in_string.dart';
 
 class DisplayImage extends StatelessWidget {
@@ -17,7 +16,6 @@ class DisplayImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      persistentFooterButtons: [SizedBox(height: 35)],
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
@@ -39,9 +37,9 @@ class DisplayImage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                RaisedButton(
-                  color: primaryColor,
-                  textColor: Colors.white,
+                ElevatedButton(
+                  // color: primaryColor,
+                  // textColor: Colors.white,
                   child: Text("Save to Gallery"),
                   onPressed: () async {
                     final directory = await getApplicationDocumentsDirectory();
@@ -71,9 +69,9 @@ class DisplayImage extends StatelessWidget {
                         );
                   },
                 ),
-                RaisedButton(
-                  color: primaryColor,
-                  textColor: Colors.white,
+                ElevatedButton(
+                  // color: primaryColor,
+                  // textColor: Colors.white,
                   child: Text("Share"),
                   onPressed: () async {
                     final directory = await getApplicationDocumentsDirectory();

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/product_page.dart';
 import 'package:warranty_manager/screens/add.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class ProductListScreen extends StatefulWidget {
   @override
@@ -24,7 +26,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ),
         actions: [
           IconButton(
-              icon: Icon(Icons.add_box_rounded),
+              icon: Icon(Icons.add),
               onPressed: () => {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
@@ -32,7 +34,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   isUpdate: false,
                                 )))
                         .then((value) => setState(() => {}))
-                  }),
+                  }).circle(radius: 40, backgroundColor: secondaryColor),
         ],
       ),
       body: Column(

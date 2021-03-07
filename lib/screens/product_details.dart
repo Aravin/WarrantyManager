@@ -19,21 +19,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      persistentFooterButtons: [SizedBox(height: 35)],
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
           'Product Details',
         ),
       ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 40.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(Icons.keyboard_backspace),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Icon(Icons.keyboard_backspace),
       ),
       body: Padding(
         padding: appPaddingLarge,

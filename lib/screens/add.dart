@@ -1,20 +1,17 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:async';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 import 'package:warranty_manager/models/product.dart';
+import 'package:warranty_manager/shared/ads.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/product_image_preview.dart';
 import 'package:warranty_manager/shared/category.dart';
-
-import 'package:warranty_manager/shared/ads.dart';
-import 'package:firebase_admob/firebase_admob.dart';
-
-import '../shared/contants.dart';
 
 class AddItem extends StatefulWidget {
   @override
@@ -78,39 +75,16 @@ class _AddItemState extends State<AddItem> {
   @override
   void initState() {
     super.initState();
-    // Timer.periodic(Duration(seconds: 10), (timer) {
-    //   _adManager.initAdMob().then((value) => {
-    //         _bannerAd = _adManager.createBannerAd()
-    //           ..load()
-    //           ..show(
-    //             anchorType: AnchorType.bottom,
-    //           ),
-    //       });
-    // });
-    // Timer.periodic(Duration(seconds: 60), (timer) {
-    //   _adManager.initAdMob().then((value) => {
-    //         _interstitialAd = _adManager.createInterstitialAd()
-    //           ..load()
-    //           ..show(
-    //             anchorType: AnchorType.bottom,
-    //             anchorOffset: 0.0,
-    //             horizontalCenterOffset: 0.0,
-    //           ),
-    //       });
-    // });
   }
 
   @override
   void dispose() {
-    // _bannerAd?.dispose();
-    // _interstitialAd?.dispose();
-    // super.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      persistentFooterButtons: [SizedBox(height: 35)],
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
@@ -127,7 +101,7 @@ class _AddItemState extends State<AddItem> {
                     ? widget.product.purchaseDate
                     : _fbKey.currentState != null
                         ? _fbKey.currentState.value['purchaseDate']
-                        : new DateTime.now(),
+                        : DateTime.now(),
                 'warranty': widget.isUpdate
                     ? widget.product.warrantyPeriod
                     : _fbKey.currentState != null
@@ -570,10 +544,10 @@ class _AddItemState extends State<AddItem> {
                       widget.product.name = _fbKey.currentState.value['product']
                           .toString()
                           .trim();
-                      widget.product.price =
-                          double.parse(_fbKey.currentState.value['price']);
+                      widget.product.price = double.parse(
+                          _fbKey.currentState.value['price'].toString());
                       widget.product.purchaseDate =
-                          _fbKey.currentState.value['purchaseDate'];
+                          _fbKey.currentState.value['purchaseDate'] as DateTime;
                       widget.product.warrantyPeriod = _fbKey
                           .currentState.value['warranty']
                           .toString()
@@ -594,7 +568,8 @@ class _AddItemState extends State<AddItem> {
                           _fbKey.currentState.value['phone'].toString().trim();
                       widget.product.email =
                           _fbKey.currentState.value['email'].toString().trim();
-                      widget.product.notes = _fbKey.currentState.value['notes'];
+                      widget.product.notes =
+                          _fbKey.currentState.value['notes'].toString();
                       widget.product.productImage =
                           _fbKey.currentState.value['productImage'].length > 0
                               ? _fileToBlob(
@@ -635,10 +610,10 @@ class _AddItemState extends State<AddItem> {
                       newProduct.name = _fbKey.currentState.value['product']
                           .toString()
                           .trim();
-                      newProduct.price =
-                          double.parse(_fbKey.currentState.value['price']);
+                      newProduct.price = double.parse(
+                          _fbKey.currentState.value['price'].toString());
                       newProduct.purchaseDate =
-                          _fbKey.currentState.value['purchaseDate'];
+                          _fbKey.currentState.value['purchaseDate'] as DateTime;
                       newProduct.warrantyPeriod = _fbKey
                           .currentState.value['warranty']
                           .toString()
@@ -658,7 +633,8 @@ class _AddItemState extends State<AddItem> {
                           _fbKey.currentState.value['phone'].toString().trim();
                       newProduct.email =
                           _fbKey.currentState.value['email'].toString().trim();
-                      newProduct.notes = _fbKey.currentState.value['notes'];
+                      newProduct.notes =
+                          _fbKey.currentState.value['notes'].toString();
                       newProduct.productImage =
                           _fbKey.currentState.value['productImage'].length > 0
                               ? _fileToBlob(
@@ -696,6 +672,19 @@ class _AddItemState extends State<AddItem> {
                 },
               ),
             ],
+          ),
+          AdmobBanner(
+            adUnitId: AdManager.bannerAdUnitId,
+            adSize: AdmobBannerSize.BANNER,
+            listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+              print([event, args, 'Banner']);
+            },
+            onBannerCreated: (AdmobBannerController controller) {
+              // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+              // Normally you don't need to worry about disposing this yourself, it's handled.
+              // If you need direct access to dispose, this is your guy!
+              // controller.dispose();
+            },
           ),
         ],
       ),

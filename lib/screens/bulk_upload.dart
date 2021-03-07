@@ -1,14 +1,15 @@
 import 'dart:convert';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/home.dart';
+import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/bulk_actions.dart';
-import 'dart:typed_data';
 import 'dart:io';
 import 'package:toast/toast.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -19,7 +20,6 @@ class BulkUploadScreen extends StatefulWidget {
 }
 
 class _BulkUploadScreenState extends State<BulkUploadScreen> {
-  String _fileName;
   List<PlatformFile> _paths;
   String _directoryPath;
   bool _loadingPath = false;
@@ -51,11 +51,10 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
     setState(
       () {
         _loadingPath = false;
-        _fileName =
-            _paths != null ? _paths.map((e) => e.name).toString() : '...';
+        _paths != null ? _paths.map((e) => e.name).toString() : '...';
 
         // if file selected
-        if (_paths.length > 0) {
+        if (_paths != null && _paths.length > 0) {
           Stream<List> inputStream = File(_paths[0].path).openRead();
 
           inputStream
@@ -113,30 +112,30 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
 
   // todo: replace with file downloader
   // todo: move to new file
-  void _requestFileCopy(Uint8List data, String copyTo) async {
-    File(copyTo)
-        .writeAsBytes(data)
-        .then(
-          (value) => Toast.show(
-            "File Saved Successfully!",
-            context,
-            duration: Toast.LENGTH_LONG,
-            gravity: Toast.BOTTOM,
-            backgroundColor: Colors.green,
-          ),
-        )
-        .catchError(
-          (onError) => {
-            Toast.show(
-              "Failed to Save the File! $onError",
-              context,
-              duration: Toast.LENGTH_LONG,
-              gravity: Toast.BOTTOM,
-              backgroundColor: Colors.red,
-            )
-          },
-        );
-  }
+  // void _requestFileCopy(Uint8List data, String copyTo) async {
+  //   File(copyTo)
+  //       .writeAsBytes(data)
+  //       .then(
+  //         (value) => Toast.show(
+  //           "File Saved Successfully!",
+  //           context,
+  //           duration: Toast.LENGTH_LONG,
+  //           gravity: Toast.BOTTOM,
+  //           backgroundColor: Colors.green,
+  //         ),
+  //       )
+  //       .catchError(
+  //         (onError) => {
+  //           Toast.show(
+  //             "Failed to Save the File! $onError",
+  //             context,
+  //             duration: Toast.LENGTH_LONG,
+  //             gravity: Toast.BOTTOM,
+  //             backgroundColor: Colors.red,
+  //           )
+  //         },
+  //       );
+  // }
 
   // bulk upload
   Future<void> _processBulkUpload(List<Product> products) async {
@@ -163,7 +162,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
               children: [
                 'Download Sample File'.text.xl2.bold.makeCentered(),
                 HeightBox(10),
-                RaisedButton.icon(
+                ElevatedButton.icon(
                   icon: Icon(Icons.download_sharp),
                   label: Text('Download Sample'),
                   onPressed: () async {
@@ -181,7 +180,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                 SizedBox(
                   height: 5,
                 ),
-                RaisedButton.icon(
+                ElevatedButton.icon(
                   onPressed: () => _openFileExplorer(),
                   icon: Icon(Icons.file_upload),
                   label: Text("Open File Picker"),
@@ -288,8 +287,8 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                       height: 20,
                                     ),
                                     Container(
-                                      child: RaisedButton.icon(
-                                        color: secondaryColor,
+                                      child: ElevatedButton.icon(
+                                        // color: secondaryColor, // todo
                                         onPressed: () async =>
                                             await _processBulkUpload(
                                                     productList)
@@ -356,13 +355,23 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                 ),
               ],
             ),
+            AdmobBanner(
+              adUnitId: AdManager.bannerAdUnitId,
+              adSize: AdmobBannerSize.LARGE_BANNER,
+              listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+                print([event, args, 'Banner']);
+              },
+              onBannerCreated: (AdmobBannerController controller) {
+                // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                // Normally you don't need to worry about disposing this yourself, it's handled.
+                // If you need direct access to dispose, this is your guy!
+                // controller.dispose();
+              },
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 55),
-        child: BulkActionScreen(currentIndex: 0),
-      ),
+      bottomNavigationBar: BulkActionScreen(currentIndex: 0),
     );
   }
 }

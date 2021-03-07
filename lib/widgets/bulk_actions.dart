@@ -18,7 +18,7 @@ class _BulkActionScreenState extends State<BulkActionScreen> {
     if (_selectedIndex == widget.currentIndex) {
       return;
     }
-    var page;
+    Widget page;
     if (_selectedIndex == 0) {
       page = BulkUploadScreen();
     }

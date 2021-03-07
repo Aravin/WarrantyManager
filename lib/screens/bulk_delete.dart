@@ -1,5 +1,7 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:warranty_manager/models/product.dart';
+import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/widgets/bulk_actions.dart';
@@ -8,7 +10,6 @@ class BulkDeleteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // persistentFooterButtons: [SizedBox(height: 35)],
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
@@ -22,7 +23,7 @@ class BulkDeleteScreen extends StatelessWidget {
           children: [
             'Bulk Export'.text.xl2.bold.makeCentered(),
             HeightBox(20),
-            RaisedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.delete_forever),
               label: Text('Delete All Data'),
               onPressed: () async {
@@ -40,13 +41,23 @@ class BulkDeleteScreen extends StatelessWidget {
                 .text
                 .bold
                 .makeCentered(),
+            AdmobBanner(
+              adUnitId: AdManager.bannerAdUnitId,
+              adSize: AdmobBannerSize.LARGE_BANNER,
+              listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+                print([event, args, 'Banner']);
+              },
+              onBannerCreated: (AdmobBannerController controller) {
+                // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                // Normally you don't need to worry about disposing this yourself, it's handled.
+                // If you need direct access to dispose, this is your guy!
+                // controller.dispose();
+              },
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 55),
-        child: BulkActionScreen(currentIndex: 2),
-      ),
+      bottomNavigationBar: BulkActionScreen(currentIndex: 2),
     );
   }
 }

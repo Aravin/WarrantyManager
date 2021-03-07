@@ -1,31 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_admob/firebase_admob.dart';
-
 class AdManager {
-  Future<bool> initAdMob() {
-    return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
-  }
-
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: AdManager.bannerAdUnitId,
-      size: AdSize.banner,
-      listener: (MobileAdEvent event) {
-        print("AdMob - BannerAd event $event");
-      },
-    );
-  }
-
-  InterstitialAd createInterstitialAd() {
-    return InterstitialAd(
-      adUnitId: AdManager.interstitialAdUnitId,
-      listener: (MobileAdEvent event) {
-        print("AdMob - InterstitialAd event $event");
-      },
-    );
-  }
-
   static String get appId {
     if (Platform.isAndroid) {
       return "ca-app-pub-2191548178499350~1691212816";

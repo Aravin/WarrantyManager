@@ -8,7 +8,7 @@ import 'package:warranty_manager/screens/product_list.dart';
 import 'package:warranty_manager/widgets/product_highlight.dart';
 import 'package:warranty_manager/widgets/product_page.dart';
 import 'package:in_app_review/in_app_review.dart';
-import '../shared/contants.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class Home extends StatefulWidget {
@@ -39,7 +39,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      persistentFooterButtons: [SizedBox(height: 35)],
       appBar: AppBar(
         textTheme: TextTheme(),
         title: Text(
@@ -47,7 +46,7 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           IconButton(
-              icon: Icon(Icons.add_box_rounded),
+              icon: Icon(Icons.add),
               onPressed: () => {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
@@ -55,7 +54,7 @@ class _HomeState extends State<Home> {
                                   isUpdate: false,
                                 )))
                         .then((value) => setState(() => {}))
-                  }),
+                  }).circle(radius: 40, backgroundColor: secondaryColor),
         ],
       ),
       drawer: Drawer(
@@ -65,7 +64,7 @@ class _HomeState extends State<Home> {
         child: ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
             DrawerHeader(
               child: Text('Menu',
                   style: TextStyle(color: Colors.white, fontSize: 25)),

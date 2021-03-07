@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/screens/home.dart';
 
@@ -8,100 +9,56 @@ import 'package:flutter/widgets.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-import 'package:warranty_manager/shared/ads.dart';
-
-// Future<void> _initAdMob() {
-//   return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
-// }
-
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // Pass all uncaught errors from the framework to Crashlytics.
+  runZonedGuarded(() {
+    runApp(Main());
+  }, (error, stackTrace) {
+    debugPrint('runZonedGuarded: Caught error in my root zone.');
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
   runApp(Main());
 }
 
-class Main extends StatefulWidget {
-  @override
-  _MainState createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
+class Main extends StatelessWidget {
+  // Create the initialization Future outside of `build`:
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
-  BannerAd _bannerAd;
-  InterstitialAd _interstitialAd;
-  AdManager _adManager = AdManager();
-
-  // BannerAd _bannerAd;
-  // InterstitialAd _interstitialAd;
-
-  // BannerAd createBannerAd() {
-  //   return BannerAd(
-  //     adUnitId: AdManager.bannerAdUnitId,
-  //     size: AdSize.banner,
-  //     listener: (MobileAdEvent event) {
-  //       print("BannerAd event $event");
-  //     },
-  //   );
-  // }
-
-  // InterstitialAd createInterstitialAd() {
-  //   return InterstitialAd(
-  //     adUnitId: AdManager.interstitialAdUnitId,
-  //     listener: (MobileAdEvent event) {
-  //       print("InterstitialAd event $event");
-  //     },
-  //   );
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-    _adManager.initAdMob().then((value) => {
-          _bannerAd = _adManager.createBannerAd()
-            ..load()
-            ..show(
-              anchorType: AnchorType.bottom,
-            ),
-        });
-    _interstitialAd?.dispose();
-    _interstitialAd = null;
-
-    _adManager.initAdMob().then((value) => {
-          _interstitialAd = _adManager.createInterstitialAd()
-            ..load()
-            ..show(
-              anchorType: AnchorType.bottom,
-              anchorOffset: 0.0,
-              horizontalCenterOffset: 0.0,
-            ),
-        });
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    _interstitialAd?.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorObservers: <NavigatorObserver>[observer],
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: primaryColor,
         secondaryHeaderColor: secondaryColor,
         accentColor: secondaryColor,
-        textTheme: TextTheme(
-          bodyText2: TextStyle(color: Colors.black),
-        ),
+        textTheme: Typography.blackCupertino,
       ),
-      home: Home(),
+      home: FutureBuilder(
+        // Initialize FlutterFire:
+        future: _initialization,
+        builder: (context, snapshot) {
+          // Check for errors
+          if (snapshot.hasError) {
+            return Center(child: Text('Something went wrong!'));
+          }
+
+          // Once complete, show your application
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Home();
+          }
+
+          // Otherwise, show something whilst waiting for initialization to complete
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
       debugShowCheckedModeBanner: false,
     );
   }

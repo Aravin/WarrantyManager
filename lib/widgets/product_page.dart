@@ -1,4 +1,6 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/widgets/product_list.dart';
@@ -19,7 +21,20 @@ class ProductListWidget extends StatelessWidget {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
+        children: [
+          AdmobBanner(
+            adUnitId: AdManager.bannerAdUnitId,
+            adSize: AdmobBannerSize.BANNER,
+            listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+              print([event, args, 'Banner']);
+            },
+            onBannerCreated: (AdmobBannerController controller) {
+              // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+              // Normally you don't need to worry about disposing this yourself, it's handled.
+              // If you need direct access to dispose, this is your guy!
+              // controller.dispose();
+            },
+          ),
           Expanded(
               child: DefaultTabController(
             length: 3,
@@ -106,10 +121,10 @@ class ProductListWidget extends StatelessWidget {
                 ],
               ),
               body: TabBarView(
-                children: <Widget>[
+                children: [
                   FutureBuilder<List<Product>>(
                     future: _products(),
-                    initialData: List(),
+                    initialData: [],
                     builder: (context, snapshot) {
                       if (!snapshot.hasData && !snapshot.hasError)
                         return Center(child: CircularProgressIndicator());
@@ -120,7 +135,7 @@ class ProductListWidget extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              'Error Occurred ' + snapshot.error,
+                              'Error Occurred ' + snapshot.error.toString(),
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w800,
@@ -173,27 +188,28 @@ class ProductListWidget extends StatelessWidget {
                         }
 
                         return ListView(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            children: snapshot.data
-                                .map((product) => ProductListItemWidget(
-                                      product: product,
-                                      actionCallback: actionCallback,
-                                      cardColor: Colors.green[100],
-                                    ))
-                                .where(
-                                  (element) => DateTime.parse(element
-                                          .product.warrantyEndDate
-                                          .toString())
-                                      .isAfter(DateTime.now()),
-                                )
-                                .toList());
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          children: snapshot.data
+                              .map((product) => ProductListItemWidget(
+                                    product: product,
+                                    actionCallback: actionCallback,
+                                    cardColor: Colors.green[100],
+                                  ))
+                              .where(
+                                (element) => DateTime.parse(element
+                                        .product.warrantyEndDate
+                                        .toString())
+                                    .isAfter(DateTime.now()),
+                              )
+                              .toList(),
+                        );
                       }
                     },
                   ),
                   FutureBuilder<List<Product>>(
                     future: _products(),
-                    initialData: List(),
+                    initialData: [],
                     builder: (context, snapshot) {
                       if (!snapshot.hasData && !snapshot.hasError)
                         return Center(child: CircularProgressIndicator());
@@ -204,7 +220,7 @@ class ProductListWidget extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              'Error Occurred ' + snapshot.error,
+                              'Error Occurred ' + snapshot.error.toString(),
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w800,
@@ -288,7 +304,7 @@ class ProductListWidget extends StatelessWidget {
                   ),
                   FutureBuilder<List<Product>>(
                     future: _products(),
-                    initialData: List(),
+                    initialData: [],
                     builder: (context, snapshot) {
                       if (!snapshot.hasData && !snapshot.hasError)
                         return Center(child: CircularProgressIndicator());
@@ -299,7 +315,7 @@ class ProductListWidget extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              'Error Occurred ' + snapshot.error,
+                              'Error Occurred ' + snapshot.error.toString(),
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w800,

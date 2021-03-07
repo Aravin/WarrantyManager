@@ -18,7 +18,7 @@ class ProductListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Padding(
-        padding: appEdgeInsets,
+        padding: appPaddingSmall,
         child: Container(
           padding: appEdgeInsets,
           decoration: BoxDecoration(

@@ -45,8 +45,8 @@ class ProductHighlightWidget extends StatelessWidget {
                     Expanded(
                       child: FutureBuilder(
                           future: _products(),
-                          initialData: List(),
-                          builder: (context, snapshot) {
+                          initialData: [],
+                          builder: (context, AsyncSnapshot<List> snapshot) {
                             var inWarranty = 0;
                             if (snapshot.hasData) {
                               for (var i = 0; i < snapshot.data.length; i++) {
@@ -100,8 +100,8 @@ class ProductHighlightWidget extends StatelessWidget {
                     Expanded(
                       child: FutureBuilder(
                           future: _products(),
-                          initialData: List(),
-                          builder: (context, snapshot) {
+                          initialData: [],
+                          builder: (context, AsyncSnapshot<List> snapshot) {
                             var inWarranty = 0;
                             if (snapshot.hasData) {
                               for (var i = 0; i < snapshot.data.length; i++) {

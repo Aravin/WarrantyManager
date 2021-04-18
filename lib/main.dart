@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/screens/home.dart';
 
@@ -12,18 +14,38 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() {
+  // ErrorWidget.builder = (FlutterErrorDetails details) {
+  //   bool inDebug = false;
+  //   assert(() {
+  //     inDebug = true;
+  //     return true;
+  //   }());
+  //   // In debug mode, use the normal error widget which shows
+  //   // the error message:
+  //   if (inDebug) return ErrorWidget(details.exception);
+  //   // In release builds, show a yellow-on-blue message instead:
+  //   return Container(
+  //     alignment: Alignment.center,
+  //     child: Text(
+  //       'Error!',
+  //       style: TextStyle(color: Colors.yellow),
+  //       textDirection: TextDirection.ltr,
+  //     ),
+  //   );
+  // };
+
   WidgetsFlutterBinding.ensureInitialized();
   // Pass all uncaught errors from the framework to Crashlytics.
   runZonedGuarded(() {
-    runApp(Main());
+    runApp(ProviderScope(child: Main()));
   }, (error, stackTrace) {
     debugPrint('runZonedGuarded: Caught error in my root zone.');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
-  runApp(Main());
+  // runApp(ProviderScope(child: Main()));
 }
 
-class Main extends StatelessWidget {
+class Main extends HookWidget {
   // Create the initialization Future outside of `build`:
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   static FirebaseAnalytics analytics = FirebaseAnalytics();

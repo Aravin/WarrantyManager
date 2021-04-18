@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: <Widget>[
-          ProductHighlightWidget(actionCallback: actionCallback),
+          ProductHighlightWidget(),
           SizedBox(
             height: 7.0,
           ),

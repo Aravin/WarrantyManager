@@ -12,6 +12,8 @@ import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/product_image_preview.dart';
 import 'package:warranty_manager/shared/category.dart';
+import 'package:form_builder_image_picker/form_builder_image_picker.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class AddItem extends StatefulWidget {
   @override
@@ -171,41 +173,53 @@ class _AddItemState extends State<AddItem> {
                     content: Column(
                       key: UniqueKey(),
                       children: [
-                        FormBuilderDateTimePicker(
-                          attribute: "purchaseDate",
-                          textInputAction: TextInputAction.next,
-                          validators: [FormBuilderValidators.required()],
-                          inputType: InputType.date,
-                          format: DateFormat("EEE, MMMM d, yyyy"),
-                          decoration: InputDecoration(
-                            labelText: "Purchase Date",
-                            prefixIcon: Icon(Icons.calendar_today),
+                        Container(
+                          child: DateTimeField(
+                            onShowPicker: (context, currentValue) {
+                              return showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  initialDate: currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+                            },
+                            // name: "purchaseDate",
+                            textInputAction: TextInputAction.next,
+                            validator: FormBuilderValidators.compose(
+                                [FormBuilderValidators.required(context)]),
+                            // keyboardType: TextInputType.datetime,
+                            // inputType: InputType.date,
+                            format: DateFormat("EEE, MMMM d, yyyy"),
+                            decoration: InputDecoration(
+                              labelText: "Purchase Date",
+                              prefixIcon: Icon(Icons.calendar_today),
+                            ),
+                            onEditingComplete: () => FocusScope.of(context)
+                                .requestFocus(warrantyFocus),
                           ),
-                          onEditingComplete: () => FocusScope.of(context)
-                              .requestFocus(warrantyFocus),
                         ),
                         FormBuilderDropdown(
-                          attribute: "warranty",
+                          name: "warranty",
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.timer),
                             labelText: "Warranty Period",
                           ),
                           // initialValue: 'Male',
                           hint: Text('Select Warranty Period'),
-                          validators: [FormBuilderValidators.required()],
+                          validator: FormBuilderValidators.compose(
+                              [FormBuilderValidators.required(context)]),
                           items: warrantyPeriods
                               .map((period) => DropdownMenuItem(
                                   value: period, child: Text("$period")))
                               .toList(),
                         ),
                         FormBuilderTextField(
-                          attribute: 'product',
+                          name: 'product',
                           focusNode: productFocus,
-                          validators: [
-                            FormBuilderValidators.required(),
-                            FormBuilderValidators.minLength(3),
-                            FormBuilderValidators.maxLength(24)
-                          ],
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.minLength(context, 3),
+                            FormBuilderValidators.maxLength(context, 24)
+                          ]),
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.shopping_basket),
@@ -216,15 +230,15 @@ class _AddItemState extends State<AddItem> {
                               FocusScope.of(context).requestFocus(priceFocus),
                         ),
                         FormBuilderTextField(
-                          attribute: 'price',
+                          name: 'price',
                           focusNode: priceFocus,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          validators: [
-                            FormBuilderValidators.required(),
-                            FormBuilderValidators.min(1),
-                            FormBuilderValidators.max(9999999)
-                          ],
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.min(context, 1),
+                            FormBuilderValidators.max(context, 9999999)
+                          ]),
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.monetization_on),
                             hintText: 'Total Bill Amount ?',
@@ -234,7 +248,7 @@ class _AddItemState extends State<AddItem> {
                               FocusScope.of(context).requestFocus(companyFocus),
                         ),
                         FormBuilderTextField(
-                          attribute: 'company',
+                          name: 'company',
                           focusNode: companyFocus,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -242,11 +256,11 @@ class _AddItemState extends State<AddItem> {
                             hintText: 'Company or Brand Name?',
                             labelText: 'Brand/Company',
                           ),
-                          validators: [
-                            FormBuilderValidators.required(),
-                            FormBuilderValidators.minLength(2),
-                            FormBuilderValidators.maxLength(24)
-                          ],
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(context),
+                            FormBuilderValidators.minLength(context, 2),
+                            FormBuilderValidators.maxLength(context, 24)
+                          ]),
                           onEditingComplete: () => FocusScope.of(context)
                               .requestFocus(categoryFocus),
                         ),
@@ -260,7 +274,7 @@ class _AddItemState extends State<AddItem> {
                       key: UniqueKey(),
                       children: <Widget>[
                         FormBuilderDropdown(
-                          attribute: 'category',
+                          name: 'category',
                           focusNode: categoryFocus,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.category),
@@ -273,7 +287,7 @@ class _AddItemState extends State<AddItem> {
                               .toList(),
                         ),
                         FormBuilderTextField(
-                          attribute: 'purchasedAt',
+                          name: 'purchasedAt',
                           focusNode: purchasedAtFocus,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -285,7 +299,7 @@ class _AddItemState extends State<AddItem> {
                               .requestFocus(salesPersonFocus),
                         ),
                         FormBuilderTextField(
-                          attribute: 'salesPerson',
+                          name: 'salesPerson',
                           focusNode: salesPersonFocus,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -297,7 +311,7 @@ class _AddItemState extends State<AddItem> {
                               FocusScope.of(context).requestFocus(phoneFocus),
                         ),
                         FormBuilderTextField(
-                          attribute: 'phone',
+                          name: 'phone',
                           keyboardType: TextInputType.number,
                           focusNode: phoneFocus,
                           textInputAction: TextInputAction.next,
@@ -311,7 +325,7 @@ class _AddItemState extends State<AddItem> {
                               FocusScope.of(context).requestFocus(emailFocus),
                         ),
                         FormBuilderTextField(
-                          attribute: 'email',
+                          name: 'email',
                           focusNode: emailFocus,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -326,7 +340,7 @@ class _AddItemState extends State<AddItem> {
                           focusNode: notesFocus,
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
-                          attribute: 'notes',
+                          name: 'notes',
                           textInputAction: TextInputAction.done,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.note_add),
@@ -379,7 +393,7 @@ class _AddItemState extends State<AddItem> {
                             : SizedBox(),
                         FormBuilderImagePicker(
                           bottomSheetPadding: EdgeInsets.only(bottom: 50),
-                          attribute: 'productImage',
+                          name: 'productImage',
                           decoration: InputDecoration(
                             labelText: 'Upload Product Image',
                           ),
@@ -422,7 +436,7 @@ class _AddItemState extends State<AddItem> {
                               )
                             : SizedBox(),
                         FormBuilderImagePicker(
-                          attribute: 'imgBill',
+                          name: 'imgBill',
                           decoration: InputDecoration(
                             labelText: 'Upload Purchased Bill/Receipt',
                           ),
@@ -466,7 +480,7 @@ class _AddItemState extends State<AddItem> {
                               )
                             : SizedBox(),
                         FormBuilderImagePicker(
-                          attribute: 'imgWarranty',
+                          name: 'imgWarranty',
                           decoration: InputDecoration(
                             labelText: 'Upload Warraty Copy',
                           ),
@@ -507,7 +521,7 @@ class _AddItemState extends State<AddItem> {
                               )
                             : SizedBox(),
                         FormBuilderImagePicker(
-                          attribute: 'imgAdditional',
+                          name: 'imgAdditional',
                           decoration: InputDecoration(
                             labelText: 'Upload Any Other Additional Image',
                           ),

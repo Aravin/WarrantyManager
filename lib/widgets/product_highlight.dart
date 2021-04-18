@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:warranty_manager/shared/contants.dart';
-import 'package:warranty_manager/models/product.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:warranty_manager/providers/productProvider.dart';
 
-class ProductHighlightWidget extends StatelessWidget {
-  final product = new Product();
-  final Function actionCallback;
-
-  ProductHighlightWidget({this.actionCallback});
-
-  Future<List<Product>> _products() async {
-    return product.getProducts();
-  }
-
+class ProductHighlightWidget extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    final activeItems = watch(productProvider);
+    final inactiveItems = watch(productProvider).inactiveItems;
+
     return Container(
       margin: appEdgeInsets,
       height: 100.0,
       child: Row(
-        children: <Widget>[
+        children: [
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -27,7 +22,7 @@ class ProductHighlightWidget extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Column(
-                  children: <Widget>[
+                  children: [
                     Expanded(
                         child: Icon(
                       Icons.security,
@@ -43,30 +38,14 @@ class ProductHighlightWidget extends StatelessWidget {
                       ),
                     )),
                     Expanded(
-                      child: FutureBuilder(
-                          future: _products(),
-                          initialData: [],
-                          builder: (context, AsyncSnapshot<List> snapshot) {
-                            var inWarranty = 0;
-                            if (snapshot.hasData) {
-                              for (var i = 0; i < snapshot.data.length; i++) {
-                                if (DateTime.parse(snapshot
-                                        .data[i].warrantyEndDate
-                                        .toString())
-                                    .isAfter(DateTime.now())) {
-                                  inWarranty++;
-                                }
-                              }
-                            }
-                            return Text(
-                              inWarranty.toString(),
-                              style: TextStyle(
-                                color: Colors.white60,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 25.0,
-                              ),
-                            );
-                          }),
+                      child: Text(
+                        activeItems.activeItems.length.toString(),
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 25.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -82,7 +61,7 @@ class ProductHighlightWidget extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Column(
-                  children: <Widget>[
+                  children: [
                     Expanded(
                         child: Icon(
                       Icons.timer_off,
@@ -98,30 +77,15 @@ class ProductHighlightWidget extends StatelessWidget {
                       ),
                     )),
                     Expanded(
-                      child: FutureBuilder(
-                          future: _products(),
-                          initialData: [],
-                          builder: (context, AsyncSnapshot<List> snapshot) {
-                            var inWarranty = 0;
-                            if (snapshot.hasData) {
-                              for (var i = 0; i < snapshot.data.length; i++) {
-                                if (DateTime.parse(snapshot
-                                        .data[i].warrantyEndDate
-                                        .toString())
-                                    .isBefore(DateTime.now())) {
-                                  inWarranty++;
-                                }
-                              }
-                            }
-                            return Text(
-                              inWarranty.toString(),
-                              style: TextStyle(
-                                color: Colors.white60,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 25.0,
-                              ),
-                            );
-                          }),
+                      child: Text(
+                        inactiveItems.length.toString(),
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 25.0,
+                        ),
+                      ),
+                      // }),
                     ),
                   ],
                 ),

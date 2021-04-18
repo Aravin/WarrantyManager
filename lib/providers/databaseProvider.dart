@@ -1,15 +1,22 @@
-import 'dart:async';
-import 'package:path/path.dart';
-// import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path/path.dart' as path;
 
-// v1 - testing
-// v2 - main release
-// v3 - added blob type for image
-// v4 - fix for large image - store image in file instead of db
+final dbProvider = ChangeNotifierProvider<DataBaseProvider>((ref) {
+  return DataBaseProvider();
+});
 
-final Future<sql.Database> database = sql.getDatabasesPath().then(
-  (String path) {
+class DataBaseProvider with ChangeNotifier {
+  static final tableName = 'product';
+  sql.Database db;
+
+  DataBaseProvider() {
+    // this will run when provider is instantiate the first time
+    init();
+  }
+
+  void init() async {
     // void v4
     void _createV4(sql.Batch batch) {
       batch.execute(
@@ -36,8 +43,9 @@ final Future<sql.Database> database = sql.getDatabasesPath().then(
       batch.execute('ALTER TABLE product ADD additionalImagePath TEXT END');
     }
 
-    return sql.openDatabase(
-      join(path, 'product.db'),
+    final dbPath = await sql.getDatabasesPath();
+    db = await sql.openDatabase(
+      path.join(dbPath, 'product.db'),
       version: 4,
       onCreate: (db, version) async {
         var batch = db.batch();
@@ -55,5 +63,17 @@ final Future<sql.Database> database = sql.getDatabasesPath().then(
       },
       onDowngrade: sql.onDatabaseDowngradeDelete,
     );
-  },
-);
+    // the init funciton is async so it won't block the main thread
+    // notify provider that depends on it when done
+    notifyListeners();
+  }
+
+  Future<void> insert(String table, Map<String, Object> data) async {
+    await db.insert(table, data,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+  }
+
+  Future<List<Map<String, dynamic>>> getData(String table) async {
+    return await db.query(table);
+  }
+}

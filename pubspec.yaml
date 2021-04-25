@@ -45,7 +45,6 @@ dependencies:
   share: ^2.0.1
   in_app_review: ^2.0.1
   velocity_x: ^2.6.1
-  hooks_riverpod: ^0.14.0+1
 
 dev_dependencies:
   flutter_test:

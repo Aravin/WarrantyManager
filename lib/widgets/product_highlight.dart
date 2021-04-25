@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:warranty_manager/shared/contants.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:warranty_manager/providers/productProvider.dart';
 
-class ProductHighlightWidget extends ConsumerWidget {
+class ProductHighlightWidget extends StatelessWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final activeItems = watch(productProvider);
-    final inactiveItems = watch(productProvider).inactiveItems;
-
+  Widget build(BuildContext context) {
     return Container(
       margin: appEdgeInsets,
       height: 100.0,
@@ -39,7 +34,7 @@ class ProductHighlightWidget extends ConsumerWidget {
                     )),
                     Expanded(
                       child: Text(
-                        activeItems.activeItems.length.toString(),
+                        '0',
                         style: TextStyle(
                           color: Colors.white60,
                           fontWeight: FontWeight.w800,
@@ -78,7 +73,7 @@ class ProductHighlightWidget extends ConsumerWidget {
                     )),
                     Expanded(
                       child: Text(
-                        inactiveItems.length.toString(),
+                        '0',
                         style: TextStyle(
                           color: Colors.white60,
                           fontWeight: FontWeight.w800,

@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/screens/home.dart';
 
@@ -37,7 +35,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   // Pass all uncaught errors from the framework to Crashlytics.
   runZonedGuarded(() {
-    runApp(ProviderScope(child: Main()));
+    runApp(Main());
   }, (error, stackTrace) {
     debugPrint('runZonedGuarded: Caught error in my root zone.');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
@@ -45,7 +43,7 @@ void main() {
   // runApp(ProviderScope(child: Main()));
 }
 
-class Main extends HookWidget {
+class Main extends StatelessWidget {
   // Create the initialization Future outside of `build`:
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   static FirebaseAnalytics analytics = FirebaseAnalytics();

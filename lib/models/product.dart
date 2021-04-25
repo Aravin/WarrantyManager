@@ -99,35 +99,64 @@ class Product {
   }
 
   // A method that retrieves all the dogs from the dogs table.
-  Future<List<Product>> getProducts() async {
-    // Get a reference to the database.
-    final Database db = await database;
+  Future<List<Product>> getProducts({bool retry = false}) async {
+    try {
+      // Get a reference to the database.
+      final Database db = await database;
 
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('product');
+      List<String> columns = [];
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    return List.generate(maps.length, (i) {
-      return Product(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        price: maps[i]['price'],
-        purchaseDate: DateTime.parse(maps[i]['purchaseDate']),
-        warrantyPeriod: maps[i]['warrantyPeriod'],
-        warrantyEndDate: DateTime.parse(maps[i]['warrantyEndDate']),
-        purchasedAt: maps[i]['purchasedAt'],
-        company: maps[i]['company'],
-        salesPerson: maps[i]['salesPerson'],
-        phone: maps[i]['phone'],
-        email: maps[i]['email'],
-        notes: maps[i]['notes'],
-        productImage: maps[i]['productImage'],
-        purchaseCopy: maps[i]['purchaseCopy'],
-        warrantyCopy: maps[i]['warrantyCopy'],
-        additionalImage: maps[i]['additionalImage'],
-        category: maps[i]['category'],
-      );
-    });
+      if (retry) {
+        columns = [
+          'id',
+          'name',
+          'price',
+          'purchaseDate',
+          'warrantyPeriod',
+          'warrantyEndDate',
+          'purchasedAt',
+          'company',
+          'salesPerson',
+          'phone',
+          'email',
+          'notes',
+          // 'productImage',
+          // 'purchaseCopy',
+          // 'warrantyCopy',
+          // 'additionalImage',
+          'category',
+        ];
+      }
+
+      // Query the table for all The Dogs.
+      final List<Map<String, dynamic>> maps =
+          await db.query('product', columns: columns);
+
+      // Convert the List<Map<String, dynamic> into a List<Dog>.
+      return List.generate(maps.length, (i) {
+        return Product(
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          price: maps[i]['price'],
+          purchaseDate: DateTime.parse(maps[i]['purchaseDate']),
+          warrantyPeriod: maps[i]['warrantyPeriod'],
+          warrantyEndDate: DateTime.parse(maps[i]['warrantyEndDate']),
+          purchasedAt: maps[i]['purchasedAt'],
+          company: maps[i]['company'],
+          salesPerson: maps[i]['salesPerson'],
+          phone: maps[i]['phone'],
+          email: maps[i]['email'],
+          notes: maps[i]['notes'],
+          productImage: maps[i]['productImage'],
+          purchaseCopy: maps[i]['purchaseCopy'],
+          warrantyCopy: maps[i]['warrantyCopy'],
+          additionalImage: maps[i]['additionalImage'],
+          category: maps[i]['category'],
+        );
+      });
+    } catch (err) {
+      return await getProducts(retry: true); // getProducts(retry: true);
+    }
   }
 
   // Define a function that inserts dogs into the database

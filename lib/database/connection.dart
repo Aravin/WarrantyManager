@@ -47,7 +47,7 @@ final Future<Database> database = getDatabasesPath().then(
         var batch = db.batch();
         if (oldVersion == 1 || oldVersion == 2) {
           _upgradeFromV1ToV4(batch);
-        } else if (oldVersion == 3) {
+        } else if (oldVersion >= 3) {
           _upgradeFromV2ToV4(batch);
         }
         await batch.commit(continueOnError: true);

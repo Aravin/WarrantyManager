@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/shared/contants.dart';
 
 class ProductHighlightWidget extends StatelessWidget {
+  final product = new Product();
+  final Function actionCallback;
+
+  ProductHighlightWidget({this.actionCallback});
+
+  Future<List<Product>> _products() async {
+    return product.getProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,14 +43,30 @@ class ProductHighlightWidget extends StatelessWidget {
                       ),
                     )),
                     Expanded(
-                      child: Text(
-                        '0',
-                        style: TextStyle(
-                          color: Colors.white60,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 25.0,
-                        ),
-                      ),
+                      child: FutureBuilder(
+                          future: _products(),
+                          initialData: [],
+                          builder: (context, AsyncSnapshot<List> snapshot) {
+                            var inWarranty = 0;
+                            if (snapshot.hasData) {
+                              for (var i = 0; i < snapshot.data.length; i++) {
+                                if (DateTime.parse(snapshot
+                                        .data[i].warrantyEndDate
+                                        .toString())
+                                    .isAfter(DateTime.now())) {
+                                  inWarranty++;
+                                }
+                              }
+                            }
+                            return Text(
+                              inWarranty.toString(),
+                              style: TextStyle(
+                                color: Colors.white60,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 25.0,
+                              ),
+                            );
+                          }),
                     ),
                   ],
                 ),
@@ -72,15 +98,30 @@ class ProductHighlightWidget extends StatelessWidget {
                       ),
                     )),
                     Expanded(
-                      child: Text(
-                        '0',
-                        style: TextStyle(
-                          color: Colors.white60,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 25.0,
-                        ),
-                      ),
-                      // }),
+                      child: FutureBuilder(
+                          future: _products(),
+                          initialData: [],
+                          builder: (context, AsyncSnapshot<List> snapshot) {
+                            var inWarranty = 0;
+                            if (snapshot.hasData) {
+                              for (var i = 0; i < snapshot.data.length; i++) {
+                                if (DateTime.parse(snapshot
+                                        .data[i].warrantyEndDate
+                                        .toString())
+                                    .isBefore(DateTime.now())) {
+                                  inWarranty++;
+                                }
+                              }
+                            }
+                            return Text(
+                              inWarranty.toString(),
+                              style: TextStyle(
+                                color: Colors.white60,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 25.0,
+                              ),
+                            );
+                          }),
                     ),
                   ],
                 ),

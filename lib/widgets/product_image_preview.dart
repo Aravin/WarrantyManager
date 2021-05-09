@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:warranty_manager/shared/contants.dart';
@@ -11,7 +11,7 @@ class ProductImagePreview extends StatelessWidget {
     @required this.imageTitle,
   });
 
-  final Uint8List image;
+  final String image;
   final String previewTitle;
   final String imageTitle;
 
@@ -27,8 +27,8 @@ class ProductImagePreview extends StatelessWidget {
             style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 2.5),
-          Image.memory(
-            this.image,
+          Image.file(
+            File(this.image),
             height: 150,
             width: 150,
             alignment: Alignment.bottomLeft,
@@ -40,7 +40,7 @@ class ProductImagePreview extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (ctxt) => DisplayImage(
-              imageBlob: this.image,
+              imagePath: this.image,
               imageName: this.imageTitle,
             ),
           ),

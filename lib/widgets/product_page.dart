@@ -22,19 +22,19 @@ class ProductListWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AdmobBanner(
-            adUnitId: AdManager.bannerAdUnitId,
-            adSize: AdmobBannerSize.BANNER,
-            listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-              print([event, args, 'Banner']);
-            },
-            onBannerCreated: (AdmobBannerController controller) {
-              // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-              // Normally you don't need to worry about disposing this yourself, it's handled.
-              // If you need direct access to dispose, this is your guy!
-              // controller.dispose();
-            },
-          ),
+          // AdmobBanner(
+          //   adUnitId: AdManager.bannerAdUnitId,
+          //   adSize: AdmobBannerSize.BANNER,
+          //   listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+          //     print([event, args, 'Banner']);
+          //   },
+          //   onBannerCreated: (AdmobBannerController controller) {
+          //     // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+          //     // Normally you don't need to worry about disposing this yourself, it's handled.
+          //     // If you need direct access to dispose, this is your guy!
+          //     // controller.dispose();
+          //   },
+          // ),
           Expanded(
               child: DefaultTabController(
             length: 3,

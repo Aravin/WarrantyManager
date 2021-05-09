@@ -1,7 +1,9 @@
 // ref: https://noxasch.tech/blog/flutter-using-sqflite-with-riverpod/
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:warranty_manager/database/connection.dart';
 
@@ -24,6 +26,10 @@ class Product {
     this.warrantyCopy,
     this.additionalImage,
     this.category,
+    this.productImagePath,
+    this.purchaseCopyPath,
+    this.warrantyCopyPath,
+    this.additionalImagePath,
   }) {
     if (this.warrantyEndDate == null && this.warrantyPeriod != null) {
       if (this.warrantyPeriod.toLowerCase().indexOf('month') > 0) {
@@ -74,6 +80,12 @@ class Product {
   // added later
   String category;
 
+  // paths
+  String productImagePath;
+  String purchaseCopyPath;
+  String warrantyCopyPath;
+  String additionalImagePath;
+
   // Convert a Dog into a Map. The keys must correspond to the names of the
   // columns in the database.
   Map<String, dynamic> toMap() {
@@ -95,6 +107,10 @@ class Product {
       'warrantyCopy': warrantyCopy,
       'additionalImage': additionalImage,
       'category': category,
+      'productImagePath': productImagePath,
+      'purchaseCopyPath': purchaseCopyPath,
+      'warrantyCopyPath': warrantyCopyPath,
+      'additionalImagePath': additionalImagePath,
     };
   }
 
@@ -125,6 +141,10 @@ class Product {
           // 'warrantyCopy',
           // 'additionalImage',
           'category',
+          'productImagePath',
+          'purchaseCopyPath',
+          'warrantyCopyPath',
+          'additionalImagePath',
         ];
       }
 
@@ -152,9 +172,14 @@ class Product {
           warrantyCopy: maps[i]['warrantyCopy'],
           additionalImage: maps[i]['additionalImage'],
           category: maps[i]['category'],
+          productImagePath: maps[i]['productImagePath'],
+          purchaseCopyPath: maps[i]['purchaseCopyPath'],
+          warrantyCopyPath: maps[i]['warrantyCopyPath'],
+          additionalImagePath: maps[i]['additionalImagePath'],
         );
       });
     } catch (err) {
+      print('epix - retry called - $err');
       return await getProducts(retry: true); // getProducts(retry: true);
     }
   }
@@ -163,10 +188,6 @@ class Product {
   Future<void> insertProduct() async {
     // Get a reference to the database.
     final Database db = await database;
-
-    // Insert the Dog into the correct table. You might also specify the
-    // `conflictAlgorithm` to use in case the same product is inserted twice.
-    //
 
     // Create a Dog and add it to the dogs table.
     final productToInsert = Product(
@@ -182,11 +203,15 @@ class Product {
       phone: this.phone,
       email: this.email,
       notes: this.notes,
-      productImage: this.productImage,
-      purchaseCopy: this.purchaseCopy,
-      warrantyCopy: this.warrantyCopy,
-      additionalImage: this.additionalImage,
+      // productImage: this.productImage,
+      // purchaseCopy: this.purchaseCopy,
+      // warrantyCopy: this.warrantyCopy,
+      // additionalImage: this.additionalImage,
       category: this.category,
+      productImagePath: this.productImagePath,
+      purchaseCopyPath: this.purchaseCopyPath,
+      warrantyCopyPath: this.warrantyCopyPath,
+      additionalImagePath: this.additionalImagePath,
     );
     // In this case, replace any previous data.
     await db.insert(
@@ -214,11 +239,15 @@ class Product {
       phone: this.phone,
       email: this.email,
       notes: this.notes,
-      productImage: this.productImage,
-      purchaseCopy: this.purchaseCopy,
-      warrantyCopy: this.warrantyCopy,
-      additionalImage: this.additionalImage,
+      // productImage: this.productImage,
+      // purchaseCopy: this.purchaseCopy,
+      // warrantyCopy: this.warrantyCopy,
+      // additionalImage: this.additionalImage,
       category: this.category,
+      productImagePath: this.productImagePath,
+      purchaseCopyPath: this.purchaseCopyPath,
+      warrantyCopyPath: this.warrantyCopyPath,
+      additionalImagePath: this.additionalImagePath,
     );
 
     // TODO: remove duplicate code
@@ -278,22 +307,72 @@ class Product {
     await db.delete('product');
   }
 
-  Future<void> customQuery1() async {
+  Future<int> getProductCount() async {
     // Get a reference to the database.
     final db = await database;
 
-    db.execute(
-      "DROP table product",
+    return await Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(1) FROM product'));
+  }
+
+  // for blob to path conversion
+  Future<List<Map<String, Object>>> getProductColumn(
+      List<String> columns, int offset) async {
+    // Get a reference to the database.
+    final db = await database;
+
+    return await db.query('product',
+        columns: columns, limit: 1, offset: offset, orderBy: 'id');
+  }
+
+  updateColumn(int id, String column, String val) async {
+    // Get a reference to the database.
+    final db = await database;
+
+    return await db.execute(
+      'UPDATE product SET $column = ? WHERE Id = ?',
+      [val, id],
     );
   }
 
-  // unused
-  // Future<void> customQuery2() async {
-  //   // Get a reference to the database.
-  //   final db = await database;
+  deleteColumn(int id, String column) async {
+    // Get a reference to the database.
+    final db = await database;
 
-  //   db.execute(
-  //     "CREATE TABLE product(id INTEGER PRIMARY KEY, name TEXT, price REAL, purchaseDate TEXT, warrantyPeriod TEXT, warrantyEndDate TEXT, purchasedAt TEXT, company TEXT, salesPerson TEXT, phone TEXT, email TEXT, notes TEXT )",
-  //   );
-  // }
+    return await db.execute(
+      'UPDATE product SET $column = null WHERE Id = ?',
+      [id],
+    );
+  }
+
+  // end of -- for blob to path conversion
+
+  // unused
+  Future<void> reproduceIssue(int columnId) async {
+    // Get a reference to the database.
+    final db = await database;
+    String imagePath =
+        '/data/user/0/io.epix.warranty_manager/app_flutter/products/1620546857245.jpg';
+    final Uint8List blob = _fileToBlob(File(imagePath));
+
+    db.execute(
+        "UPDATE product SET productImagePath = ?, purchaseCopyPath = ?, warrantyCopyPath = ?, additionalImagePath = ? WHERE Id = ?",
+        [null, null, null, null, columnId]);
+
+    db.execute(
+        "UPDATE product SET productImage = ?, purchaseCopy = ?, warrantyCopy = ?, additionalImage = ? WHERE Id = ?",
+        [blob, blob, blob, blob, columnId]);
+  }
+}
+
+// this.productImagePath,
+// this.purchaseCopyPath,
+// this.warrantyCopyPath,
+// this.additionalImagePath
+
+Uint8List _fileToBlob(File file) {
+  if (file != null) {
+    return file.readAsBytesSync();
+  }
+  return null;
 }

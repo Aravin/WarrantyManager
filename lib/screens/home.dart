@@ -83,17 +83,17 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
-            ListTile(
-              title: Text('Bulk Actions'),
-              leading: Icon(Icons.group_work),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (ctxt) => BulkUploadScreen()),
-                );
-              },
-            ),
+            // ListTile(
+            //   title: Text('Bulk Actions'),
+            //   leading: Icon(Icons.group_work),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (ctxt) => BulkUploadScreen()),
+            //     );
+            //   },
+            // ),
             ListTile(
               title: Text('Privacy Policy'),
               leading: Icon(Icons.description),
@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: <Widget>[
-          ProductHighlightWidget(),
+          ProductHighlightWidget(actionCallback: actionCallback),
           SizedBox(
             height: 7.0,
           ),

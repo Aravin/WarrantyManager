@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:warranty_manager/init.dart';
+import 'package:warranty_manager/initilization/firebase.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/screens/home.dart';
 
@@ -45,7 +46,7 @@ void main() {
 
 class Main extends StatelessWidget {
   // Create the initialization Future outside of `build`:
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   static FirebaseAnalytics analytics = FirebaseAnalytics();
 
   @override
@@ -60,11 +61,12 @@ class Main extends StatelessWidget {
       ),
       home: FutureBuilder(
         // Initialize FlutterFire:
-        future: _initialization,
+        future: AppInitialization.Init(),
         builder: (context, snapshot) {
           // Check for errors
           if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong!'));
+            return Center(
+                child: Text('Something went wrong! ${snapshot.error}'));
           }
 
           // Once complete, show your application
@@ -73,7 +75,7 @@ class Main extends StatelessWidget {
           }
 
           // Otherwise, show something whilst waiting for initialization to complete
-          return Center(child: CircularProgressIndicator());
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
         },
       ),
       navigatorObservers: [

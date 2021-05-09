@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:warranty_manager/models/product.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/shared/string_functions.dart';
 import 'package:warranty_manager/screens/image_viewer.dart';
-
-import '../shared/contants.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   @override
@@ -42,14 +43,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               children: [
                 Expanded(
                   flex: 4,
-                  child: widget.product.productImage != null
+                  child: widget.product.productImagePath != null
                       ? Container(
                           padding: appPaddingSmall,
                           decoration: BoxDecoration(
                               color: Colors.grey[300],
                               borderRadius: BorderRadius.circular(7.5)),
-                          child: Image.memory(
-                            widget.product.productImage,
+                          child: Image.file(
+                            File(widget.product.productImagePath),
                             width: 100,
                             height: 100,
                           ),
@@ -59,7 +60,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           decoration: BoxDecoration(
                               color: Colors.grey[300],
                               borderRadius: BorderRadius.circular(7.5)),
-                          child: Image.asset('assets/noimage.jpg')),
+                          child: Image.asset('assets/noimage.jpg'),
+                        ),
                 ),
                 Expanded(flex: 1, child: SizedBox()),
                 Expanded(
@@ -189,7 +191,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  widget.product.productImage != null
+                  widget.product.productImagePath != null
                       ? Container(
                           width: 165.0,
                           decoration: BoxDecoration(
@@ -203,8 +205,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               GestureDetector(
-                                child: Image.memory(
-                                  widget.product.productImage,
+                                child: Image.file(
+                                  File(widget.product.productImagePath),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -212,7 +214,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
-                                      imageBlob: widget.product.productImage,
+                                      imagePath:
+                                          widget.product.productImagePath,
                                       imageName: 'Product Image',
                                     ),
                                   ),
@@ -223,7 +226,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         )
                       : SizedBox(),
                   SizedBox(width: 20),
-                  widget.product.purchaseCopy != null
+                  widget.product.purchaseCopyPath != null
                       ? Container(
                           width: 165.0,
                           decoration: BoxDecoration(
@@ -237,8 +240,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               GestureDetector(
-                                child: Image.memory(
-                                  widget.product.purchaseCopy,
+                                child: Image.file(
+                                  File(widget.product.purchaseCopyPath),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -246,7 +249,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
-                                      imageBlob: widget.product.purchaseCopy,
+                                      imagePath:
+                                          widget.product.purchaseCopyPath,
                                       imageName: 'Purchase Bill',
                                     ),
                                   ),
@@ -257,7 +261,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         )
                       : SizedBox(),
                   SizedBox(width: 20),
-                  widget.product.warrantyCopy != null
+                  widget.product.warrantyCopyPath != null
                       ? Container(
                           width: 165.0,
                           decoration: BoxDecoration(
@@ -271,8 +275,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               GestureDetector(
-                                child: Image.memory(
-                                  widget.product.warrantyCopy,
+                                child: Image.file(
+                                  File(widget.product.warrantyCopyPath),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -280,7 +284,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
-                                      imageBlob: widget.product.warrantyCopy,
+                                      imagePath:
+                                          widget.product.warrantyCopyPath,
                                       imageName: 'Warranty Copy',
                                     ),
                                   ),
@@ -291,7 +296,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         )
                       : SizedBox(),
                   SizedBox(width: 20),
-                  widget.product.additionalImage != null
+                  widget.product.additionalImagePath != null
                       ? Container(
                           width: 165.0,
                           decoration: BoxDecoration(
@@ -305,8 +310,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               GestureDetector(
-                                child: Image.memory(
-                                  widget.product.additionalImage,
+                                child: Image.file(
+                                  File(widget.product.additionalImagePath),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -314,7 +319,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
-                                      imageBlob: widget.product.additionalImage,
+                                      imagePath:
+                                          widget.product.additionalImagePath,
                                       imageName: 'Additional Image',
                                     ),
                                   ),

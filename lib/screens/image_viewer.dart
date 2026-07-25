@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/shared/file.dart';
@@ -12,14 +11,13 @@ class DisplayImage extends StatelessWidget {
   final String imagePath;
   final String imageName;
 
-  DisplayImage({this.imagePath, this.imageName});
+  const DisplayImage({super.key, required this.imagePath, required this.imageName});
 
   @override
   Widget build(BuildContext context) {
     print('epix - path ${imagePath} - ${imageName}');
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           imageName ?? 'Image Viewer',
         ),

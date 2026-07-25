@@ -3,10 +3,10 @@ import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/shared/contants.dart';
 
 class ProductHighlightWidget extends StatelessWidget {
-  final product = new Product();
+  final product = Product();
   final Function actionCallback;
 
-  ProductHighlightWidget({this.actionCallback});
+  ProductHighlightWidget({Key? key, required this.actionCallback}) : super(key: key);
 
   Future<List<Product>> _products() async {
     return product.getProducts();
@@ -43,15 +43,15 @@ class ProductHighlightWidget extends StatelessWidget {
                       ),
                     )),
                     Expanded(
-                      child: FutureBuilder(
+                      child: FutureBuilder<List<Product>>(
                           future: _products(),
-                          initialData: [],
-                          builder: (context, AsyncSnapshot<List> snapshot) {
+                          initialData: const <Product>[],
+                          builder: (context, snapshot) {
                             var inWarranty = 0;
                             if (snapshot.hasData) {
-                              for (var i = 0; i < snapshot.data.length; i++) {
+                              for (var i = 0; i < snapshot.data!.length; i++) {
                                 if (DateTime.parse(snapshot
-                                        .data[i].warrantyEndDate
+                                        .data![i].warrantyEndDate
                                         .toString())
                                     .isAfter(DateTime.now())) {
                                   inWarranty++;
@@ -98,15 +98,15 @@ class ProductHighlightWidget extends StatelessWidget {
                       ),
                     )),
                     Expanded(
-                      child: FutureBuilder(
+                      child: FutureBuilder<List<Product>>(
                           future: _products(),
-                          initialData: [],
-                          builder: (context, AsyncSnapshot<List> snapshot) {
+                          initialData: const <Product>[],
+                          builder: (context, snapshot) {
                             var inWarranty = 0;
                             if (snapshot.hasData) {
-                              for (var i = 0; i < snapshot.data.length; i++) {
+                              for (var i = 0; i < snapshot.data!.length; i++) {
                                 if (DateTime.parse(snapshot
-                                        .data[i].warrantyEndDate
+                                        .data![i].warrantyEndDate
                                         .toString())
                                     .isBefore(DateTime.now())) {
                                   inWarranty++;

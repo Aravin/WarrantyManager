@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
@@ -6,11 +5,11 @@ import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/widgets/product_list.dart';
 
 class ProductListWidget extends StatelessWidget {
-  final product = new Product();
-  final Function actionCallback;
-  final tempDate = new DateTime.now();
+  final product = Product();
+  late final Function actionCallback;
+  final tempDate = DateTime.now();
 
-  ProductListWidget({this.actionCallback});
+  ProductListWidget({Key? key, required this.actionCallback}) : super(key: key);
 
   Future<List<Product>> _products() async {
     return product.getProducts();
@@ -44,12 +43,12 @@ class ProductListWidget extends StatelessWidget {
                 labelColor: primaryColor,
                 tabs: <Widget>[
                   Tab(
-                    child: FutureBuilder(
+                    child: FutureBuilder<List<Product>>(
                         future: _products(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Text('ACTIVE (' +
-                                snapshot.data
+                                snapshot.data!
                                     .map((product) => product)
                                     .where((element) => DateTime.parse(
                                             element.warrantyEndDate.toString())
@@ -69,12 +68,12 @@ class ProductListWidget extends StatelessWidget {
                         }),
                   ),
                   Tab(
-                    child: FutureBuilder(
+                    child: FutureBuilder<List<Product>>(
                         future: _products(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Text('EXPIRING (' +
-                                snapshot.data
+                                snapshot.data!
                                     .map((product) => product)
                                     .where((element) => DateTime.parse(
                                             element.warrantyEndDate.toString())
@@ -97,12 +96,12 @@ class ProductListWidget extends StatelessWidget {
                         }),
                   ),
                   Tab(
-                    child: FutureBuilder(
+                    child: FutureBuilder<List<Product>>(
                         future: _products(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Text('EXPIRED (' +
-                                snapshot.data
+                                snapshot.data!
                                     .map((product) => product)
                                     .where(
                                       (element) => DateTime.parse(element
@@ -144,7 +143,7 @@ class ProductListWidget extends StatelessWidget {
                           ),
                         );
                       } else {
-                        if (snapshot.data.length == 0)
+                        if (snapshot.data!.length == 0)
                           return Container(
                             padding: EdgeInsets.only(top: 20.0),
                             child: Padding(
@@ -159,7 +158,7 @@ class ProductListWidget extends StatelessWidget {
                             ),
                           );
 
-                        if (snapshot.data
+                        if (snapshot.data!
                                 .map((product) => product)
                                 .where((element) => DateTime.parse(
                                         element.warrantyEndDate.toString())
@@ -190,7 +189,7 @@ class ProductListWidget extends StatelessWidget {
                         return ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          children: snapshot.data
+                          children: snapshot.data!
                               .map((product) => ProductListItemWidget(
                                     product: product,
                                     actionCallback: actionCallback,
@@ -229,7 +228,7 @@ class ProductListWidget extends StatelessWidget {
                           ),
                         );
                       } else {
-                        if (snapshot.data.length == 0)
+                        if (snapshot.data!.length == 0)
                           return Container(
                             padding: EdgeInsets.only(top: 20.0),
                             child: Padding(
@@ -244,7 +243,7 @@ class ProductListWidget extends StatelessWidget {
                             ),
                           );
 
-                        if (snapshot.data
+                        if (snapshot.data!
                                 .map((product) => product)
                                 .where((element) => DateTime.parse(
                                         element.warrantyEndDate.toString())
@@ -278,7 +277,7 @@ class ProductListWidget extends StatelessWidget {
                         return ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          children: snapshot.data
+                          children: snapshot.data!
                               .map((product) => ProductListItemWidget(
                                     product: product,
                                     actionCallback: actionCallback,
@@ -324,7 +323,7 @@ class ProductListWidget extends StatelessWidget {
                           ),
                         );
                       } else {
-                        if (!snapshot.hasError && snapshot.data.length == 0)
+                        if (!snapshot.hasError && snapshot.data!.length == 0)
                           return Container(
                             padding: EdgeInsets.only(top: 20.0),
                             child: Padding(
@@ -340,7 +339,7 @@ class ProductListWidget extends StatelessWidget {
                           );
 
                         if (!snapshot.hasError &&
-                            snapshot.data
+                            snapshot.data!
                                     .map((product) => product)
                                     .where(
                                       (element) => DateTime.parse(element
@@ -370,7 +369,7 @@ class ProductListWidget extends StatelessWidget {
                       return ListView(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        children: snapshot.data
+                        children: snapshot.data!
                             .map((product) => ProductListItemWidget(
                                   product: product,
                                   actionCallback: actionCallback,

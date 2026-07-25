@@ -40,7 +40,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           'Warranty Manager',
         ),

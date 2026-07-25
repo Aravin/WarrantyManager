@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 4.3.0+30
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.17.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -27,31 +27,31 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  intl: ^0.17.0
-  flutter_form_builder: ^6.0.0
-  flutter_form_builder_fixed: ^4.2.2
-  form_builder_image_picker: ^1.0.0-nullsafety.0
-  file_picker: ^3.0.1
+  intl: ^0.20.2
+  flutter_form_builder: ^10.3.0+2
+  form_builder_image_picker: ^4.4.0
+  file_picker: ^11.0.2
   sqflite: ^2.0.0+3
   path: ^1.8.0
-  path_provider : ^2.0.1
-  toast: ^0.1.5
-  flutter_webview_plugin: ^0.3.11
+  path_provider : ^2.1.0
+  toast: ^0.3.0
+  webview_flutter: ^4.7.0
   url_launcher: ^6.0.3
-  firebase_core: ^1.0.3
-  firebase_analytics: ^8.0.0
-  firebase_crashlytics: ^2.0.0
-  admob_flutter: ^1.0.1
-  share: ^2.0.1
-  in_app_review: ^2.0.1
-  velocity_x: ^3.0.0
+  firebase_core: ^4.12.1
+  firebase_analytics: ^12.4.5
+  firebase_crashlytics: ^5.2.6
+  google_mobile_ads: ^9.0.0
+  share_plus: ^10.0.0
+  in_app_review: ^2.0.12
+  velocity_x: ^4.3.1
   shared_preferences: ^2.0.5
+  form_builder_validators: ^11.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   # flutter_launcher_icons: ^0.9.0
-  lint: ^1.3.0
+  lint: ^2.8.0
 
 dependency_overrides:
   freezed_annotation:

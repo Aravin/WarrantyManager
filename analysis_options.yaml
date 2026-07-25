@@ -4,6 +4,8 @@ linter:
   rules:
 
 analyzer:
+  exclude:
+    - build/**
   errors:
     argument_type_not_assignable: ignore
     non_bool_condition: ignore

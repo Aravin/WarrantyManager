@@ -6,7 +6,7 @@ import 'package:warranty_manager/screens/bulk_delete.dart';
 class BulkActionScreen extends StatefulWidget {
   final int currentIndex;
 
-  BulkActionScreen({this.currentIndex});
+  BulkActionScreen({Key? key, required this.currentIndex}) : super(key: key);
 
   @override
   _BulkActionScreenState createState() => _BulkActionScreenState();
@@ -21,12 +21,12 @@ class _BulkActionScreenState extends State<BulkActionScreen> {
     Widget page;
     if (_selectedIndex == 0) {
       page = BulkUploadScreen();
-    }
-    if (_selectedIndex == 1) {
+    } else if (_selectedIndex == 1) {
       page = BulkExportScreen();
-    }
-    if (_selectedIndex == 2) {
+    } else if (_selectedIndex == 2) {
       page = BulkDeleteScreen();
+    } else {
+      page = BulkUploadScreen();
     }
 
     Navigator.pop(context);

@@ -20,7 +20,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           'Saved Items',
         ),

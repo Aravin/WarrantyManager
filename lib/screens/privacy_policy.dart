@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
   @override
@@ -7,25 +7,25 @@ class PrivacyPolicyScreen extends StatefulWidget {
 }
 
 class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
-  bool isLoading = false;
+  late WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.disabled)
+      ..loadRequest(Uri.parse('https://www.epix.io/terms-policy'));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           'Privacy Policy',
         ),
       ),
-      body: Builder(builder: (BuildContext context) {
-        return WebviewScaffold(
-          url: 'https://www.epix.io/terms-policy',
-          withJavascript: false,
-          withZoom: false,
-          hidden: true,
-        );
-      }),
+      body: WebViewWidget(controller: _controller),
     );
   }
 }

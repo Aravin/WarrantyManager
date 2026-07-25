@@ -6,7 +6,6 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           'Saved Items',
         ),

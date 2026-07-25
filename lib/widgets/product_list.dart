@@ -10,9 +10,9 @@ import '../shared/contants.dart';
 class ProductListItemWidget extends StatelessWidget {
   final Product product;
   final Function actionCallback;
-  final Color cardColor;
+  final Color? cardColor;
 
-  ProductListItemWidget({this.product, this.actionCallback, this.cardColor});
+  ProductListItemWidget({Key? key, required this.product, required this.actionCallback, this.cardColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,13 +77,13 @@ class ProductListItemWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
-                          DateFormat.yMMMd().format(product.purchaseDate),
+                          DateFormat.yMMMd().format(product.purchaseDate!),
                           style: TextStyle(
                             fontSize: 15,
                           ),
                         ),
                         Text(
-                          DateFormat.yMMMd().format(product.warrantyEndDate),
+                          DateFormat.yMMMd().format(product.warrantyEndDate!),
                           style: TextStyle(
                             fontSize: 15,
                           ),
@@ -103,9 +103,9 @@ class ProductListItemWidget extends StatelessWidget {
                           product
                               .deleteProduct(int.parse(result[1], radix: 10));
                           actionCallback(true);
-                          Toast.show("Product Deleted Successfully!", context,
-                              duration: Toast.LENGTH_LONG,
-                              gravity: Toast.BOTTOM);
+                          Toast.show("Product Deleted Successfully!",
+                              duration: Toast.lengthLong,
+                              gravity: Toast.bottom);
                         } else if (result[0] == 'edit') {
                           Navigator.of(context).push(
                             MaterialPageRoute(

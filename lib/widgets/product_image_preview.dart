@@ -6,9 +6,9 @@ import 'package:warranty_manager/screens/image_viewer.dart';
 
 class ProductImagePreview extends StatelessWidget {
   const ProductImagePreview({
-    @required this.image,
-    @required this.previewTitle,
-    @required this.imageTitle,
+    required this.image,
+    required this.previewTitle,
+    required this.imageTitle,
   });
 
   final String image;

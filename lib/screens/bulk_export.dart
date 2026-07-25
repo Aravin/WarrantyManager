@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:warranty_manager/models/product.dart';
@@ -14,7 +13,7 @@ class BulkExportScreen extends StatelessWidget {
   Future<String> _writeToFile(String data) async {
     try {
       final directory = await getExternalStorageDirectory();
-      final path = directory.path;
+      final path = directory!.path;
       final fileName =
           '$path/warranty_manager_${DateTime.now().millisecondsSinceEpoch}.txt';
       final file = File(fileName);
@@ -37,7 +36,6 @@ class BulkExportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           'Bulk Export',
         ),
@@ -51,7 +49,7 @@ class BulkExportScreen extends StatelessWidget {
             HeightBox(20),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                primary: primaryColor,
+                backgroundColor: primaryColor,
               ),
               icon: Icon(Icons.save_alt),
               label: Text('Export Data'),
@@ -74,19 +72,7 @@ class BulkExportScreen extends StatelessWidget {
                         msg: onError.toString(), showTime: 5000));
               },
             ),
-            AdmobBanner(
-              adUnitId: AdManager.bannerAdUnitId,
-              adSize: AdmobBannerSize.LARGE_BANNER,
-              listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-                print([event, args, 'Banner']);
-              },
-              onBannerCreated: (AdmobBannerController controller) {
-                // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                // Normally you don't need to worry about disposing this yourself, it's handled.
-                // If you need direct access to dispose, this is your guy!
-                // controller.dispose();
-              },
-            ),
+            AdBannerWidget(),
           ],
         ),
       ),

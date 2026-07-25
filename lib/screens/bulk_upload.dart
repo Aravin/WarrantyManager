@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,8 +19,8 @@ class BulkUploadScreen extends StatefulWidget {
 }
 
 class _BulkUploadScreenState extends State<BulkUploadScreen> {
-  List<PlatformFile> _paths;
-  String _directoryPath;
+  List<PlatformFile>? _paths;
+  String? _directoryPath;
   bool _loadingPath = false;
   List<Product> productList = [];
   List<DataRow> datarow = [];
@@ -36,7 +35,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
     setState(() => _loadingPath = true);
     try {
       _directoryPath = null;
-      _paths = (await FilePicker.platform.pickFiles(
+      _paths = (await FilePicker.pickFiles(
         type: FileType.custom,
         allowMultiple: false,
         allowedExtensions: ['txt'],
@@ -51,11 +50,11 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
     setState(
       () {
         _loadingPath = false;
-        _paths != null ? _paths.map((e) => e.name).toString() : '...';
+        _paths != null ? _paths!.map((e) => e.name).toString() : '...';
 
         // if file selected
-        if (_paths != null && _paths.length > 0) {
-          Stream<List> inputStream = File(_paths[0].path).openRead();
+        if (_paths != null && _paths!.length > 0) {
+          Stream<List> inputStream = File(_paths![0].path!).openRead();
 
           inputStream
               .transform(utf8.decoder) // Decode bytes to UTF-8.
@@ -107,7 +106,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
   }
 
   void _clearCachedFiles() {
-    FilePicker.platform.clearTemporaryFiles();
+    FilePicker.clearTemporaryFiles();
   }
 
   // todo: replace with file downloader
@@ -148,7 +147,6 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           'Bulk Upload',
         ),
@@ -164,7 +162,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                 HeightBox(10),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    primary: primaryColor,
+                    backgroundColor: primaryColor,
                   ),
                   icon: Icon(Icons.download_sharp),
                   label: Text('Download Sample'),
@@ -185,7 +183,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                 ),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    primary: primaryColor,
+                    backgroundColor: primaryColor,
                   ),
                   onPressed: () => _openFileExplorer(),
                   icon: Icon(Icons.file_upload),
@@ -201,7 +199,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                       : _directoryPath != null
                           ? ListTile(
                               title: Text('Directory path'),
-                              subtitle: Text(_directoryPath),
+                              subtitle: Text(_directoryPath ?? ''),
                             )
                           : _paths != null
                               ? Column(
@@ -295,7 +293,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                     Container(
                                       child: ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
-                                          primary: secondaryColor,
+                                          backgroundColor: secondaryColor,
                                         ),
                                         onPressed: () async =>
                                             await _processBulkUpload(
@@ -304,10 +302,9 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                                   (value) => {
                                                     Toast.show(
                                                       "Bulk Import Successfully!",
-                                                      context,
                                                       duration:
-                                                          Toast.LENGTH_LONG,
-                                                      gravity: Toast.BOTTOM,
+                                                          Toast.lengthLong,
+                                                      gravity: Toast.bottom,
                                                       backgroundColor:
                                                           Colors.green,
                                                     ),
@@ -327,10 +324,9 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                                   (err) => {
                                                     Toast.show(
                                                       "Failed to import!",
-                                                      context,
                                                       duration:
-                                                          Toast.LENGTH_LONG,
-                                                      gravity: Toast.BOTTOM,
+                                                          Toast.lengthLong,
+                                                      gravity: Toast.bottom,
                                                       backgroundColor:
                                                           Colors.green,
                                                     ),
@@ -363,19 +359,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                 ),
               ],
             ),
-            AdmobBanner(
-              adUnitId: AdManager.bannerAdUnitId,
-              adSize: AdmobBannerSize.LARGE_BANNER,
-              listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-                print([event, args, 'Banner']);
-              },
-              onBannerCreated: (AdmobBannerController controller) {
-                // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                // Normally you don't need to worry about disposing this yourself, it's handled.
-                // If you need direct access to dispose, this is your guy!
-                // controller.dispose();
-              },
-            ),
+            AdBannerWidget(),
           ],
         ),
       ),

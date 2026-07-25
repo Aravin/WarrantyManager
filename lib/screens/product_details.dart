@@ -11,9 +11,10 @@ class ProductDetailsScreen extends StatefulWidget {
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
 
   final Product product;
-  final Function actionCallback;
+  final Function? actionCallback;
 
-  ProductDetailsScreen({this.product, this.actionCallback});
+  ProductDetailsScreen({Key? key, required this.product, this.actionCallback})
+      : super(key: key);
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
@@ -21,7 +22,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        textTheme: TextTheme(),
         title: Text(
           'Product Details',
         ),
@@ -50,7 +50,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               color: Colors.grey[300],
                               borderRadius: BorderRadius.circular(7.5)),
                           child: Image.file(
-                            File(widget.product.productImagePath),
+                            File(widget.product.productImagePath!),
                             width: 100,
                             height: 100,
                           ),
@@ -94,7 +94,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   children: [
                     Text('Purchase Date'),
                     Text(
-                      '${widget.product.purchaseDate.day}-${widget.product.purchaseDate.month}-${widget.product.purchaseDate.year}',
+                      '${widget.product.purchaseDate!.day}-${widget.product.purchaseDate!.month}-${widget.product.purchaseDate!.year}',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -112,7 +112,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   children: [
                     Text('Warranty End Date'),
                     Text(
-                      '${widget.product.warrantyEndDate.day}-${widget.product.warrantyEndDate.month}-${widget.product.warrantyEndDate.year}',
+                      '${widget.product.warrantyEndDate!.day}-${widget.product.warrantyEndDate!.month}-${widget.product.warrantyEndDate!.year}',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -206,7 +206,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                               GestureDetector(
                                 child: Image.file(
-                                  File(widget.product.productImagePath),
+                                  File(widget.product.productImagePath!),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -215,7 +215,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
                                       imagePath:
-                                          widget.product.productImagePath,
+                                          widget.product.productImagePath!,
                                       imageName: 'Product Image',
                                     ),
                                   ),
@@ -241,7 +241,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                               GestureDetector(
                                 child: Image.file(
-                                  File(widget.product.purchaseCopyPath),
+                                  File(widget.product.purchaseCopyPath!),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -250,7 +250,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
                                       imagePath:
-                                          widget.product.purchaseCopyPath,
+                                          widget.product.purchaseCopyPath!,
                                       imageName: 'Purchase Bill',
                                     ),
                                   ),
@@ -276,7 +276,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                               GestureDetector(
                                 child: Image.file(
-                                  File(widget.product.warrantyCopyPath),
+                                  File(widget.product.warrantyCopyPath!),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -285,7 +285,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
                                       imagePath:
-                                          widget.product.warrantyCopyPath,
+                                          widget.product.warrantyCopyPath!,
                                       imageName: 'Warranty Copy',
                                     ),
                                   ),
@@ -311,7 +311,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                               GestureDetector(
                                 child: Image.file(
-                                  File(widget.product.additionalImagePath),
+                                  File(widget.product.additionalImagePath!),
                                   width: 150,
                                   height: 150,
                                 ),
@@ -320,7 +320,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   MaterialPageRoute(
                                     builder: (ctxt) => DisplayImage(
                                       imagePath:
-                                          widget.product.additionalImagePath,
+                                          widget.product.additionalImagePath!,
                                       imageName: 'Additional Image',
                                     ),
                                   ),

@@ -26,7 +26,7 @@ Future<String> saveBolbAsImagePath(Uint8List bolb) async {
   final directory = await getApplicationDocumentsDirectory();
 
   if (bolb == null) {
-    return null;
+    return '';
   }
 
   new Directory('${directory.path}/products/').createSync(recursive: true);
@@ -47,8 +47,7 @@ Future<File> saveFilebAsImage(File file, String imgFullPath) async {
   String savePath = '';
 
   if (file == null) {
-    // throw ('Invalid Blob');
-    return null;
+    throw ('Invalid File');
   }
 
   if (imgFullPath == null) {
@@ -64,16 +63,8 @@ Future<File> saveFilebAsImage(File file, String imgFullPath) async {
 Future<String> saveFileAsImagePath(List<dynamic> file) async {
   final directory = await getApplicationDocumentsDirectory();
 
-  if (file == null) {
-    return null;
-  }
-
-  if (file.isEmpty) {
-    return null;
-  }
-
-  if (file.length == 0) {
-    return null;
+  if (file == null || file.isEmpty) {
+    return '';
   }
 
   new Directory('${directory.path}/products/').createSync(recursive: true);

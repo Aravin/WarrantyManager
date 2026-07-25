@@ -4,7 +4,7 @@ import 'package:warranty_manager/shared/contants.dart';
 
 class ProductHighlightWidget extends StatelessWidget {
   final product = Product();
-  final Function actionCallback;
+  final void Function(bool) actionCallback;
 
   ProductHighlightWidget({super.key, required this.actionCallback});
 

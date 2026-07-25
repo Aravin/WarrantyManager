@@ -9,7 +9,7 @@ import 'package:warranty_manager/shared/contants.dart';
 
 class ProductListItemWidget extends StatelessWidget {
   final Product product;
-  final Function actionCallback;
+  final void Function(bool) actionCallback;
   final Color? cardColor;
 
   const ProductListItemWidget({super.key, required this.product, required this.actionCallback, this.cardColor});

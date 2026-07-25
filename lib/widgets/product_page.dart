@@ -5,7 +5,7 @@ import 'package:warranty_manager/widgets/product_list.dart';
 
 class ProductListWidget extends StatelessWidget {
   final product = Product();
-  late final Function actionCallback;
+  late final void Function(bool) actionCallback;
   final tempDate = DateTime.now();
 
   ProductListWidget({super.key, required this.actionCallback});

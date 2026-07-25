@@ -11,7 +11,7 @@ class ProductDetailsScreen extends StatefulWidget {
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
 
   final Product product;
-  final Function? actionCallback;
+  final void Function(bool)? actionCallback;
 
   const ProductDetailsScreen({super.key, required this.product, this.actionCallback});
 }

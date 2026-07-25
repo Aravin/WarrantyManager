@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
             //   },
             // ),
             ListTile(
-              title: const Text('Pro Version'),
+              title: const Text('Cloud Version'),
               leading: const Icon(Icons.star),
               onTap: () async {
                 Navigator.pop(context);

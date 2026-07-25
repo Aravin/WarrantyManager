@@ -14,8 +14,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "io.epix.warranty_manager"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -36,8 +36,8 @@ android {
 
     defaultConfig {
         applicationId = "io.epix.warranty_manager"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk = 24
+        targetSdk = 36
         versionCode = flutter.versionCode.toInteger()
         versionName = flutter.versionName
     }
@@ -53,7 +53,17 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            def keystoreFile = keystoreProperties['storeFile']
+            if (keystoreFile != null && file(keystoreFile).exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                if (keystoreFile != null) {
+                    logger.warn("Release keystore not found at ${keystoreFile}, falling back to debug signing")
+                } else {
+                    logger.warn("Release keystore not configured in key.properties, falling back to debug signing")
+                }
+                signingConfig signingConfigs.debug
+            }
         }
     }
 }
@@ -63,5 +73,5 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-ads:25.3.0'
+    implementation 'com.google.android.gms:play-services-ads:25.4.0'
 }

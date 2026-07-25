@@ -5,9 +5,15 @@ allprojects {
     }
     configurations.all {
         resolutionStrategy {
-            force 'com.google.android.gms:play-services-ads:25.3.0'
+            force 'com.google.android.gms:play-services-ads:25.4.0'
+            force 'com.google.android.gms:play-services-ads-lite:25.0.0'
+            force 'com.google.android.play:core:1.10.3'
         }
     }
+}
+
+ext {
+    FirebaseSDKVersion = "34.16.0"
 }
 
 rootProject.buildDir = '../build'

@@ -8,11 +8,10 @@ import 'package:warranty_manager/init.dart';
 import 'package:warranty_manager/screens/home.dart';
 import 'package:warranty_manager/shared/contants.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
-  runZonedGuarded(() {
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
     runApp(Main());
   }, (error, stackTrace) {
     debugPrint('runZonedGuarded: Caught error in my root zone.');

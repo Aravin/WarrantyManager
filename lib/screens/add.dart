@@ -163,7 +163,6 @@ class _AddItemState extends State<AddItem> {
               },
               // autovalidate: false,
               child: Stepper(
-                type: StepperType.horizontal,
                 currentStep: currentStep,
                 onStepContinue: next,
                 onStepTapped: (step) => goTo(step),

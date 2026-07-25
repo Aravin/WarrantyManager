@@ -9,17 +9,16 @@ Future<File> saveBolbAsImage(Uint8List bolb, String imgFullPath) async {
 }
 
 Future<String> saveBolbAsImagePath(Uint8List bolb) async {
+  if (bolb.isEmpty) return '';
+
   final directory = await getApplicationDocumentsDirectory();
 
   Directory('${directory.path}/products/').createSync(recursive: true);
 
   final String img =
       '${directory.path}/products/${DateTime.now().millisecondsSinceEpoch}.jpg';
-  saveBolbAsImage(bolb, img)
-      .then((value) => print('epix - file saved'))
-      .catchError((onError) => print('epix - file not saved $onError'));
+  await saveBolbAsImage(bolb, img);
 
-  print('epix - image path - $img');
   return img;
 }
 
@@ -28,21 +27,17 @@ Future<File> saveFilebAsImage(File file, String imgFullPath) async {
   return file.copy(imgFullPath);
 }
 
-Future<String> saveFileAsImagePath(List<dynamic> file) async {
-  final directory = await getApplicationDocumentsDirectory();
+Future<String> saveFileAsImagePath(dynamic file) async {
+  if (file == null || (file is List && file.isEmpty)) return '';
 
-  if (file.isEmpty) {
-    return '';
-  }
+  final directory = await getApplicationDocumentsDirectory();
 
   Directory('${directory.path}/products/').createSync(recursive: true);
 
   final String img =
       '${directory.path}/products/${DateTime.now().millisecondsSinceEpoch}.jpg';
-  saveFilebAsImage(file[0], img)
-      .then((value) => print('epix - file saved'))
-      .catchError((onError) => print('epix - file not saved $onError'));
+  final File source = file is File ? file : file[0] as File;
+  await saveFilebAsImage(source, img);
 
-  print('epix - image path - $img');
   return img;
 }

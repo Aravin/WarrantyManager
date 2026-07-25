@@ -361,7 +361,7 @@ class _AddItemState extends State<AddItem> {
                         // Text(
                         //     'Image Path is ${widget.product.productImagePath}'),
                         if (widget.isUpdate == true &&
-                                widget.product!.productImagePath != null) Row(
+                                widget.product!.productImagePath != null && widget.product!.productImagePath!.isNotEmpty) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -398,7 +398,7 @@ class _AddItemState extends State<AddItem> {
                           maxWidth: 720,
                         ),
                         if (widget.isUpdate == true &&
-                                widget.product!.purchaseCopyPath != null) Row(
+                                widget.product!.purchaseCopyPath != null && widget.product!.purchaseCopyPath!.isNotEmpty) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -434,7 +434,7 @@ class _AddItemState extends State<AddItem> {
                           maxWidth: 720,
                         ),
                         if (widget.isUpdate == true &&
-                                widget.product!.warrantyCopyPath != null) Row(
+                                widget.product!.warrantyCopyPath != null && widget.product!.warrantyCopyPath!.isNotEmpty) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -468,7 +468,7 @@ class _AddItemState extends State<AddItem> {
                           maxImages: 1,
                         ),
                         if (widget.isUpdate == true &&
-                                widget.product!.additionalImagePath != null) Row(
+                                widget.product!.additionalImagePath != null && widget.product!.additionalImagePath!.isNotEmpty) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [

@@ -40,7 +40,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               children: [
                 Expanded(
                   flex: 4,
-                  child: widget.product.productImagePath != null
+                  child: widget.product.productImagePath != null && widget.product.productImagePath!.isNotEmpty
                       ? Container(
                           padding: appPaddingSmall,
                           decoration: BoxDecoration(
@@ -187,7 +187,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  if (widget.product.productImagePath != null) Container(
+                  if (widget.product.productImagePath != null && widget.product.productImagePath!.isNotEmpty) Container(
                           width: 165.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
@@ -220,7 +220,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         ) else const SizedBox(),
                   const SizedBox(width: 20),
-                  if (widget.product.purchaseCopyPath != null) Container(
+                  if (widget.product.purchaseCopyPath != null && widget.product.purchaseCopyPath!.isNotEmpty) Container(
                           width: 165.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
@@ -253,7 +253,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         ) else const SizedBox(),
                   const SizedBox(width: 20),
-                  if (widget.product.warrantyCopyPath != null) Container(
+                  if (widget.product.warrantyCopyPath != null && widget.product.warrantyCopyPath!.isNotEmpty) Container(
                           width: 165.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
@@ -286,7 +286,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         ) else const SizedBox(),
                   const SizedBox(width: 20),
-                  if (widget.product.additionalImagePath != null) Container(
+                  if (widget.product.additionalImagePath != null && widget.product.additionalImagePath!.isNotEmpty) Container(
                           width: 165.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],

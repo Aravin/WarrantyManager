@@ -5,14 +5,14 @@ import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/add.dart';
 import 'package:warranty_manager/screens/product_details.dart';
 
-import '../shared/contants.dart';
+import 'package:warranty_manager/shared/contants.dart';
 
 class ProductListItemWidget extends StatelessWidget {
   final Product product;
   final Function actionCallback;
   final Color? cardColor;
 
-  ProductListItemWidget({Key? key, required this.product, required this.actionCallback, this.cardColor}) : super(key: key);
+  const ProductListItemWidget({super.key, required this.product, required this.actionCallback, this.cardColor});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ProductListItemWidget extends StatelessWidget {
           padding: appEdgeInsets,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            color: cardColor ?? Color(0xFFE4E5E9),
+            color: cardColor ?? const Color(0xFFE4E5E9),
           ),
           height: 100,
           child: Row(
@@ -38,24 +38,23 @@ class ProductListItemWidget extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           product.name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 17.5,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           product.company,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 17.5,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
                           'Purchase Date',
@@ -74,17 +73,16 @@ class ProductListItemWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
                           DateFormat.yMMMd().format(product.purchaseDate!),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
                           ),
                         ),
                         Text(
                           DateFormat.yMMMd().format(product.warrantyEndDate!),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
                           ),
                         ),
@@ -94,7 +92,6 @@ class ProductListItemWidget extends StatelessWidget {
                 ),
               ),
               Expanded(
-                  flex: 1,
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: PopupMenuButton<List<String>>(
@@ -104,15 +101,14 @@ class ProductListItemWidget extends StatelessWidget {
                               .deleteProduct(int.parse(result[1], radix: 10));
                           actionCallback(true);
                           Toast.show("Product Deleted Successfully!",
-                              duration: Toast.lengthLong,
-                              gravity: Toast.bottom);
+                              duration: Toast.lengthLong);
                         } else if (result[0] == 'edit') {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => AddItem(
                                 product: product,
                                 isUpdate: true,
-                                actionCallback: this.actionCallback,
+                                actionCallback: actionCallback,
                               ),
                             ),
                           );
@@ -121,7 +117,7 @@ class ProductListItemWidget extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => ProductDetailsScreen(
                                 product: product,
-                                actionCallback: this.actionCallback,
+                                actionCallback: actionCallback,
                               ),
                             ),
                           );
@@ -131,15 +127,15 @@ class ProductListItemWidget extends StatelessWidget {
                           <PopupMenuEntry<List<String>>>[
                         PopupMenuItem<List<String>>(
                           value: ['view', product.id.toString()],
-                          child: Text('View'),
+                          child: const Text('View'),
                         ),
                         PopupMenuItem<List<String>>(
                           value: ['edit', product.id.toString()],
-                          child: Text('Edit'),
+                          child: const Text('Edit'),
                         ),
                         PopupMenuItem<List<String>>(
                           value: ['delete', product.id.toString()],
-                          child: Text('Delete'),
+                          child: const Text('Delete'),
                         ),
                       ],
                     ),

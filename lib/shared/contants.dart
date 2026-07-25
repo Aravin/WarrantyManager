@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 const appPadding = 12.5;
-const appEdgeInsets = const EdgeInsets.all(appPadding);
-const appPaddingSmall = const EdgeInsets.all(7.5);
-const appPaddingLarge = const EdgeInsets.all(15);
+const appEdgeInsets = EdgeInsets.all(appPadding);
+const appPaddingSmall = EdgeInsets.all(7.5);
+const appPaddingLarge = EdgeInsets.all(15);
 
-var warrantyPeriods = [
+List<String> warrantyPeriods = [
   '1 Month',
   '3 Month',
   '6 Month',

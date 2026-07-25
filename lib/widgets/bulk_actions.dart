@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:warranty_manager/screens/bulk_upload.dart';
-import 'package:warranty_manager/screens/bulk_export.dart';
 import 'package:warranty_manager/screens/bulk_delete.dart';
+import 'package:warranty_manager/screens/bulk_export.dart';
+import 'package:warranty_manager/screens/bulk_upload.dart';
 
 class BulkActionScreen extends StatefulWidget {
   final int currentIndex;
 
-  BulkActionScreen({Key? key, required this.currentIndex}) : super(key: key);
+  const BulkActionScreen({super.key, required this.currentIndex});
 
   @override
   _BulkActionScreenState createState() => _BulkActionScreenState();
 }
 
 class _BulkActionScreenState extends State<BulkActionScreen> {
-  void _onItemTapped(int _selectedIndex) {
-    print('item tapped $_selectedIndex');
-    if (_selectedIndex == widget.currentIndex) {
+  void _onItemTapped(int selectedIndex) {
+    print('item tapped $selectedIndex');
+    if (selectedIndex == widget.currentIndex) {
       return;
     }
     Widget page;
-    if (_selectedIndex == 0) {
+    if (selectedIndex == 0) {
       page = BulkUploadScreen();
-    } else if (_selectedIndex == 1) {
+    } else if (selectedIndex == 1) {
       page = BulkExportScreen();
-    } else if (_selectedIndex == 2) {
+    } else if (selectedIndex == 2) {
       page = BulkDeleteScreen();
     } else {
       page = BulkUploadScreen();

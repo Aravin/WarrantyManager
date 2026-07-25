@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/widgets/bulk_actions.dart';
 
 class BulkDeleteScreen extends StatelessWidget {
@@ -10,25 +10,24 @@ class BulkDeleteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Bulk Delete',
         ),
       ),
       body: Padding(
         padding: appPaddingLarge,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             'Bulk Export'.text.xl2.bold.makeCentered(),
-            HeightBox(20),
+            const HeightBox(20),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
               ),
-              icon: Icon(Icons.delete_forever),
-              label: Text('Delete All Data'),
+              icon: const Icon(Icons.delete_forever),
+              label: const Text('Delete All Data'),
               onPressed: () async {
-                Product product = new Product();
+                final Product product = Product();
                 product
                     .deleteProducts()
                     .then((value) => context.showToast(
@@ -37,16 +36,16 @@ class BulkDeleteScreen extends StatelessWidget {
                         context.showToast(msg: onError.toString()));
               },
             ),
-            HeightBox(20),
+            const HeightBox(20),
             'Note: This action will delete all the products/items you have saved in this application. Please backup your products/items using the Export option before deletion.'
                 .text
                 .bold
                 .makeCentered(),
-            AdBannerWidget(),
+            const AdBannerWidget(),
           ],
         ),
       ),
-      bottomNavigationBar: BulkActionScreen(currentIndex: 2),
+      bottomNavigationBar: const BulkActionScreen(currentIndex: 2),
     );
   }
 }

@@ -1,13 +1,13 @@
 bool isEmptyString(String input) {
-  if (input == '' || input.length == 0) {
+  if (input == '' || input.isEmpty) {
     return true;
   }
   return false;
 }
 
 String emptyStringPlaceholder(String input, String returnTxt) {
-  if (input != null || input == '' || input.length == 0) {
-    return returnTxt ?? 'na';
+  if (input == '' || input.isEmpty) {
+    return returnTxt;
   }
   return input;
 }

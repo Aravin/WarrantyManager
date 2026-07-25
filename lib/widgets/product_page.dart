@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:warranty_manager/shared/ads.dart';
-import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/models/product.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/product_list.dart';
 
 class ProductListWidget extends StatelessWidget {
@@ -9,7 +8,7 @@ class ProductListWidget extends StatelessWidget {
   late final Function actionCallback;
   final tempDate = DateTime.now();
 
-  ProductListWidget({Key? key, required this.actionCallback}) : super(key: key);
+  ProductListWidget({super.key, required this.actionCallback});
 
   Future<List<Product>> _products() async {
     return product.getProducts();
@@ -47,8 +46,7 @@ class ProductListWidget extends StatelessWidget {
                         future: _products(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Text('ACTIVE (' +
-                                snapshot.data!
+                            return Text('ACTIVE (${snapshot.data!
                                     .map((product) => product)
                                     .where((element) => DateTime.parse(
                                             element.warrantyEndDate.toString())
@@ -60,11 +58,9 @@ class ProductListWidget extends StatelessWidget {
                                           .isAfter(DateTime.now()),
                                     )
                                     .toList()
-                                    .length
-                                    .toString() +
-                                ')');
+                                    .length})');
                           }
-                          return Text('ACTIVE (0)');
+                          return const Text('ACTIVE (0)');
                         }),
                   ),
                   Tab(
@@ -72,8 +68,7 @@ class ProductListWidget extends StatelessWidget {
                         future: _products(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Text('EXPIRING (' +
-                                snapshot.data!
+                            return Text('EXPIRING (${snapshot.data!
                                     .map((product) => product)
                                     .where((element) => DateTime.parse(
                                             element.warrantyEndDate.toString())
@@ -83,16 +78,14 @@ class ProductListWidget extends StatelessWidget {
                                               .warrantyEndDate
                                               .toString())
                                           .isBefore(
-                                        new DateTime(tempDate.year,
+                                        DateTime(tempDate.year,
                                             tempDate.month + 1, tempDate.day),
                                       ),
                                     )
                                     .toList()
-                                    .length
-                                    .toString() +
-                                ')');
+                                    .length})');
                           }
-                          return Text('EXPIRING (0)');
+                          return const Text('EXPIRING (0)');
                         }),
                   ),
                   Tab(
@@ -100,8 +93,7 @@ class ProductListWidget extends StatelessWidget {
                         future: _products(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Text('EXPIRED (' +
-                                snapshot.data!
+                            return Text('EXPIRED (${snapshot.data!
                                     .map((product) => product)
                                     .where(
                                       (element) => DateTime.parse(element
@@ -110,11 +102,9 @@ class ProductListWidget extends StatelessWidget {
                                           .isBefore(DateTime.now()),
                                     )
                                     .toList()
-                                    .length
-                                    .toString() +
-                                ')');
+                                    .length})');
                           }
-                          return Text('EXPIRED (0)');
+                          return const Text('EXPIRED (0)');
                         }),
                   ),
                 ],
@@ -123,19 +113,20 @@ class ProductListWidget extends StatelessWidget {
                 children: [
                   FutureBuilder<List<Product>>(
                     future: _products(),
-                    initialData: [],
+                    initialData: const [],
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData && !snapshot.hasError)
-                        return Center(child: CircularProgressIndicator());
+                      if (!snapshot.hasData && !snapshot.hasError) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
                       if (snapshot.hasError) {
                         return Container(
-                          padding: EdgeInsets.only(top: 20.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              'Error Occurred ' + snapshot.error.toString(),
-                              style: TextStyle(
+                              'Error Occurred ${snapshot.error}',
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -143,11 +134,11 @@ class ProductListWidget extends StatelessWidget {
                           ),
                         );
                       } else {
-                        if (snapshot.data!.length == 0)
+                        if (snapshot.data!.isEmpty) {
                           return Container(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
                               child: Text(
                                 'No Product Saved, Click on + button to save the product details!',
                                 style: TextStyle(
@@ -157,6 +148,7 @@ class ProductListWidget extends StatelessWidget {
                               ),
                             ),
                           );
+                        }
 
                         if (snapshot.data!
                                 .map((product) => product)
@@ -168,13 +160,11 @@ class ProductListWidget extends StatelessWidget {
                                           element.warrantyEndDate.toString())
                                       .isAfter(DateTime.now()),
                                 )
-                                .toList()
-                                .length ==
-                            0) {
+                                .toList().isEmpty) {
                           return Container(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
                               child: Text(
                                 'No Active Product!',
                                 style: TextStyle(
@@ -187,7 +177,6 @@ class ProductListWidget extends StatelessWidget {
                         }
 
                         return ListView(
-                          scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           children: snapshot.data!
                               .map((product) => ProductListItemWidget(
@@ -208,19 +197,20 @@ class ProductListWidget extends StatelessWidget {
                   ),
                   FutureBuilder<List<Product>>(
                     future: _products(),
-                    initialData: [],
+                    initialData: const [],
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData && !snapshot.hasError)
-                        return Center(child: CircularProgressIndicator());
+                      if (!snapshot.hasData && !snapshot.hasError) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
                       if (snapshot.hasError) {
                         return Container(
-                          padding: EdgeInsets.only(top: 20.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              'Error Occurred ' + snapshot.error.toString(),
-                              style: TextStyle(
+                              'Error Occurred ${snapshot.error}',
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -228,11 +218,11 @@ class ProductListWidget extends StatelessWidget {
                           ),
                         );
                       } else {
-                        if (snapshot.data!.length == 0)
+                        if (snapshot.data!.isEmpty) {
                           return Container(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
                               child: Text(
                                 'No Product Saved, Click on + button to save the product details!',
                                 style: TextStyle(
@@ -242,6 +232,7 @@ class ProductListWidget extends StatelessWidget {
                               ),
                             ),
                           );
+                        }
 
                         if (snapshot.data!
                                 .map((product) => product)
@@ -252,17 +243,15 @@ class ProductListWidget extends StatelessWidget {
                                   (element) => DateTime.parse(
                                           element.warrantyEndDate.toString())
                                       .isBefore(
-                                    new DateTime(tempDate.year,
+                                    DateTime(tempDate.year,
                                         tempDate.month + 1, tempDate.day),
                                   ),
                                 )
-                                .toList()
-                                .length ==
-                            0) {
+                                .toList().isEmpty) {
                           return Container(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
                               child: Text(
                                 'No Product Expiring in 30 days!',
                                 style: TextStyle(
@@ -275,7 +264,6 @@ class ProductListWidget extends StatelessWidget {
                         }
 
                         return ListView(
-                          scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           children: snapshot.data!
                               .map((product) => ProductListItemWidget(
@@ -292,7 +280,7 @@ class ProductListWidget extends StatelessWidget {
                                         .product.warrantyEndDate
                                         .toString())
                                     .isBefore(
-                                  new DateTime(tempDate.year,
+                                  DateTime(tempDate.year,
                                       tempDate.month + 1, tempDate.day),
                                 ),
                               )
@@ -303,19 +291,20 @@ class ProductListWidget extends StatelessWidget {
                   ),
                   FutureBuilder<List<Product>>(
                     future: _products(),
-                    initialData: [],
+                    initialData: const [],
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData && !snapshot.hasError)
-                        return Center(child: CircularProgressIndicator());
+                      if (!snapshot.hasData && !snapshot.hasError) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
                       if (snapshot.hasError) {
                         return Container(
-                          padding: EdgeInsets.only(top: 20.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              'Error Occurred ' + snapshot.error.toString(),
-                              style: TextStyle(
+                              'Error Occurred ${snapshot.error}',
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -323,11 +312,11 @@ class ProductListWidget extends StatelessWidget {
                           ),
                         );
                       } else {
-                        if (!snapshot.hasError && snapshot.data!.length == 0)
+                        if (!snapshot.hasError && snapshot.data!.isEmpty) {
                           return Container(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
                               child: Text(
                                 'No Product Saved, Click on + button to save the product details!',
                                 style: TextStyle(
@@ -337,6 +326,7 @@ class ProductListWidget extends StatelessWidget {
                               ),
                             ),
                           );
+                        }
 
                         if (!snapshot.hasError &&
                             snapshot.data!
@@ -347,13 +337,11 @@ class ProductListWidget extends StatelessWidget {
                                               .toString())
                                           .isBefore(DateTime.now()),
                                     )
-                                    .toList()
-                                    .length ==
-                                0) {
+                                    .toList().isEmpty) {
                           return Container(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(15.0),
                               child: Text(
                                 'No Products Expired!',
                                 style: TextStyle(
@@ -367,7 +355,6 @@ class ProductListWidget extends StatelessWidget {
                       }
 
                       return ListView(
-                        scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         children: snapshot.data!
                             .map((product) => ProductListItemWidget(

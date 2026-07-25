@@ -9,7 +9,7 @@ class AdManager {
     } else if (Platform.isIOS) {
       return "<YOUR_IOS_ADMOB_APP_ID>"; // no account
     } else {
-      throw new UnsupportedError("Unsupported platform");
+      throw UnsupportedError("Unsupported platform");
     }
   }
 
@@ -19,7 +19,7 @@ class AdManager {
     } else if (Platform.isIOS) {
       return "<YOUR_IOS_BANNER_AD_UNIT_ID>"; // no account
     } else {
-      throw new UnsupportedError("Unsupported platform");
+      throw UnsupportedError("Unsupported platform");
     }
   }
 
@@ -29,7 +29,7 @@ class AdManager {
     } else if (Platform.isIOS) {
       return "<YOUR_IOS_INTERSTITIAL_AD_UNIT_ID>"; // no account
     } else {
-      throw new UnsupportedError("Unsupported platform");
+      throw UnsupportedError("Unsupported platform");
     }
   }
 }
@@ -78,13 +78,13 @@ class _AdBannerWidgetState extends State<AdBannerWidget> {
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoaded && _bannerAd != null) {
+    if (_isLoaded) {
       return Container(
         alignment: Alignment.center,
         width: _bannerAd.size.width.toDouble(),

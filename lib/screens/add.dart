@@ -1,19 +1,15 @@
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 import 'package:warranty_manager/models/product.dart';
-import 'package:warranty_manager/shared/ads.dart';
+import 'package:warranty_manager/shared/category.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/shared/file.dart';
 import 'package:warranty_manager/widgets/product_image_preview.dart';
-import 'package:warranty_manager/shared/category.dart';
-import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 
 class AddItem extends StatefulWidget {
   @override
@@ -23,8 +19,7 @@ class AddItem extends StatefulWidget {
   final bool isUpdate;
   final Function? actionCallback;
 
-  AddItem({Key? key, this.product, this.isUpdate = false, this.actionCallback})
-      : super(key: key);
+  const AddItem({super.key, this.product, this.isUpdate = false, this.actionCallback});
 }
 
 class _AddItemState extends State<AddItem> {
@@ -48,7 +43,7 @@ class _AddItemState extends State<AddItem> {
   int currentStep = 0;
   bool complete = false;
 
-  next() {
+  void next() {
     currentStep + 1 != 3
         ? goTo(currentStep + 1)
         : setState(() {
@@ -56,13 +51,13 @@ class _AddItemState extends State<AddItem> {
           });
   }
 
-  cancel() {
+  void cancel() {
     if (currentStep > 0) {
       goTo(currentStep - 1);
     }
   }
 
-  goTo(int step) {
+  void goTo(int step) {
                     if (_fbKey.currentState!.saveAndValidate()) {
       setState(() {
         currentStep = step;
@@ -132,48 +127,36 @@ class _AddItemState extends State<AddItem> {
                         ? _fbKey.currentState!.value['company']
                         : '',
                 'purchasedAt': widget.isUpdate
-                    ? widget.product?.purchasedAt != null
-                        ? widget.product?.purchasedAt
-                        : ''
+                    ? widget.product?.purchasedAt ?? ''
                     : _fbKey.currentState != null
                         ? _fbKey.currentState!.value['purchasedAt']
                         : '',
                 'salesPerson': widget.isUpdate
-                    ? widget.product?.salesPerson != null
-                        ? widget.product?.salesPerson
-                        : ''
+                    ? widget.product?.salesPerson ?? ''
                     : _fbKey.currentState != null
                         ? _fbKey.currentState!.value['salesPerson']
                         : '',
                 'phone': widget.isUpdate
-                    ? widget.product?.phone != null
-                        ? widget.product?.phone
-                        : ''
+                    ? widget.product?.phone ?? ''
                     : _fbKey.currentState != null
                         ? _fbKey.currentState!.value['phone']
                         : '',
                 'email': widget.isUpdate
-                    ? widget.product?.email != null
-                        ? widget.product?.email
-                        : ''
+                    ? widget.product?.email ?? ''
                     : _fbKey.currentState != null
                         ? _fbKey.currentState!.value['email']
                         : '',
                 'notes': widget.isUpdate
-                    ? widget.product?.notes != null
-                        ? widget.product?.notes
-                        : ''
+                    ? widget.product?.notes ?? ''
                     : _fbKey.currentState != null
                         ? _fbKey.currentState!.value['notes']
                         : '',
-                'productImage': [],
-                'imgBill': [],
-                'imgWarranty': [],
-                'imgAdditional': [],
+                'productImage': const [],
+                'imgBill': const [],
+                'imgWarranty': const [],
+                'imgAdditional': const [],
                 'category': widget.isUpdate
-                    ? widget.product?.category != null
-                        ? widget.product?.category
-                        : 'Other'
+                    ? widget.product?.category ?? 'Other'
                     : _fbKey.currentState != null
                         ? _fbKey.currentState!.value['category']
                         : 'Other'
@@ -181,14 +164,14 @@ class _AddItemState extends State<AddItem> {
               // autovalidate: false,
               child: Stepper(
                 type: StepperType.horizontal,
-                currentStep: currentStep ?? 0,
+                currentStep: currentStep,
                 onStepContinue: next,
                 onStepTapped: (step) => goTo(step),
                 onStepCancel: cancel,
                 steps: [
                   Step(
-                    isActive: currentStep == 0 ? true : false,
-                    title: Text('Required*'),
+                    isActive: currentStep == 0,
+                    title: const Text('Required*'),
                     content: Column(
                       key: UniqueKey(),
                       children: [
@@ -201,7 +184,7 @@ class _AddItemState extends State<AddItem> {
                             keyboardType: TextInputType.datetime,
                             inputType: InputType.date,
                             format: DateFormat("EEE, MMMM d, yyyy"),
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: "Purchase Date",
                               prefixIcon: Icon(Icons.calendar_today),
                             ),
@@ -211,17 +194,17 @@ class _AddItemState extends State<AddItem> {
                         ),
                         FormBuilderDropdown(
                           name: "warranty",
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.timer),
                             labelText: "Warranty Period",
                           ),
                           // initialValue: 'Other',
-                          hint: Text('Select Warranty Period'),
+                          hint: const Text('Select Warranty Period'),
                           validator: FormBuilderValidators.compose(
                               [FormBuilderValidators.required()]),
                           items: warrantyPeriods
                               .map((period) => DropdownMenuItem(
-                                  value: period, child: Text("$period")))
+                                  value: period, child: Text(period)))
                               .toList(),
                         ),
                         FormBuilderTextField(
@@ -233,7 +216,7 @@ class _AddItemState extends State<AddItem> {
                             FormBuilderValidators.maxLength(24)
                           ]),
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.shopping_basket),
                             hintText: 'Product/Service Name ?',
                             labelText: 'Product/Service Name *',
@@ -251,7 +234,7 @@ class _AddItemState extends State<AddItem> {
                             FormBuilderValidators.min(1),
                             FormBuilderValidators.max(9999999)
                           ]),
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.monetization_on),
                             hintText: 'Total Bill Amount ?',
                             labelText: 'Price *',
@@ -263,7 +246,7 @@ class _AddItemState extends State<AddItem> {
                           name: 'company',
                           // focusNode: companyFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.branding_watermark),
                             hintText: 'Company or Brand Name?',
                             labelText: 'Brand/Company',
@@ -280,8 +263,8 @@ class _AddItemState extends State<AddItem> {
                     ),
                   ),
                   Step(
-                    isActive: currentStep == 1 ? true : false,
-                    title: Text('Optional'),
+                    isActive: currentStep == 1,
+                    title: const Text('Optional'),
                     content: Column(
                       key: UniqueKey(),
                       children: <Widget>[
@@ -289,7 +272,7 @@ class _AddItemState extends State<AddItem> {
                           name: 'category',
                           // focusNode: categoryFocus,
 
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.category),
                             hintText: 'Product Category',
                             labelText: 'Category',
@@ -297,14 +280,14 @@ class _AddItemState extends State<AddItem> {
                           initialValue: 'Other',
                           items: categoryList
                               .map((category) => DropdownMenuItem(
-                                  value: category, child: Text("$category")))
+                                  value: category, child: Text(category)))
                               .toList(),
                         ),
                         FormBuilderTextField(
                           name: 'purchasedAt',
                           // focusNode: purchasedAtFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.add_location),
                             hintText: 'Where did you purchase?',
                             labelText: 'Purchased At',
@@ -317,7 +300,7 @@ class _AddItemState extends State<AddItem> {
                           name: 'salesPerson',
                           // focusNode: salesPersonFocus,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.people),
                             hintText: 'Do you remember sales person name?',
                             labelText: 'Sales Person Name',
@@ -332,7 +315,7 @@ class _AddItemState extends State<AddItem> {
                           // focusNode: phoneFocus,
                           textInputAction: TextInputAction.next,
                           initialValue: '',
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.phone),
                             hintText:
                                 'Contact number, i.e customer care number',
@@ -346,7 +329,7 @@ class _AddItemState extends State<AddItem> {
                           // focusNode: emailFocus,
                           textInputAction: TextInputAction.next,
                           initialValue: '',
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.email),
                             hintText: 'Customer Service E-Mail Address',
                             labelText: 'Email Addresss',
@@ -361,7 +344,7 @@ class _AddItemState extends State<AddItem> {
                           name: 'notes',
                           initialValue: '',
                           textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.note_add),
                             hintText: 'Any other additional information',
                             labelText: 'Quick Note',
@@ -371,8 +354,8 @@ class _AddItemState extends State<AddItem> {
                     ),
                   ),
                   Step(
-                    isActive: currentStep == 2 ? true : false,
-                    title: Text('Attachments'),
+                    isActive: currentStep == 2,
+                    title: const Text('Attachments'),
                     content: Column(
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       // mainAxisAlignment: MainAxisAlignment.start,
@@ -380,9 +363,8 @@ class _AddItemState extends State<AddItem> {
                       children: [
                         // Text(
                         //     'Image Path is ${widget.product.productImagePath}'),
-                        (widget.isUpdate == true &&
-                                widget.product!.productImagePath != null)
-                            ? Row(
+                        if (widget.isUpdate == true &&
+                                widget.product!.productImagePath != null) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -394,7 +376,7 @@ class _AddItemState extends State<AddItem> {
                                   ),
                                   IconButton(
                                     iconSize: 32,
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.delete,
                                       color: Colors.redAccent,
                                     ),
@@ -404,18 +386,16 @@ class _AddItemState extends State<AddItem> {
                                         Toast.show(
                                           "Image Removed.",
                                           duration: Toast.lengthLong,
-                                          gravity: Toast.bottom,
                                         );
                                       })
                                     },
                                   )
                                 ],
-                              )
-                            : SizedBox(),
+                              ) else const SizedBox(),
                         FormBuilderImagePicker(
-                          bottomSheetPadding: EdgeInsets.only(bottom: 50),
+                          bottomSheetPadding: const EdgeInsets.only(bottom: 50),
                           name: 'productImage',
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Upload Product Image',
                           ),
                           maxImages: 1,
@@ -423,9 +403,8 @@ class _AddItemState extends State<AddItem> {
                           maxHeight: 720,
                           maxWidth: 720,
                         ),
-                        (widget.isUpdate == true &&
-                                widget.product!.purchaseCopyPath != null)
-                            ? Row(
+                        if (widget.isUpdate == true &&
+                                widget.product!.purchaseCopyPath != null) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -437,7 +416,7 @@ class _AddItemState extends State<AddItem> {
                                   ),
                                   IconButton(
                                     iconSize: 32,
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.delete,
                                       color: Colors.redAccent,
                                     ),
@@ -447,17 +426,15 @@ class _AddItemState extends State<AddItem> {
                                         Toast.show(
                                           "Image Removed.",
                                           duration: Toast.lengthLong,
-                                          gravity: Toast.bottom,
                                         );
                                       })
                                     },
                                   )
                                 ],
-                              )
-                            : SizedBox(),
+                              ) else const SizedBox(),
                         FormBuilderImagePicker(
                           name: 'imgBill',
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Upload Purchased Bill/Receipt',
                           ),
                           maxImages: 1,
@@ -465,9 +442,8 @@ class _AddItemState extends State<AddItem> {
                           maxHeight: 720,
                           maxWidth: 720,
                         ),
-                        (widget.isUpdate == true &&
-                                widget.product!.warrantyCopyPath != null)
-                            ? Row(
+                        if (widget.isUpdate == true &&
+                                widget.product!.warrantyCopyPath != null) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -479,7 +455,7 @@ class _AddItemState extends State<AddItem> {
                                   ),
                                   IconButton(
                                     iconSize: 32,
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.delete,
                                       color: Colors.redAccent,
                                     ),
@@ -489,25 +465,22 @@ class _AddItemState extends State<AddItem> {
                                         Toast.show(
                                           "Image Removed.",
                                           duration: Toast.lengthLong,
-                                          gravity: Toast.bottom,
                                         );
                                       }),
                                       setState(() {}),
                                     },
                                   )
                                 ],
-                              )
-                            : SizedBox(),
+                              ) else const SizedBox(),
                         FormBuilderImagePicker(
                           name: 'imgWarranty',
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Upload Warraty Copy',
                           ),
                           maxImages: 1,
                         ),
-                        (widget.isUpdate == true &&
-                                widget.product!.additionalImagePath != null)
-                            ? Row(
+                        if (widget.isUpdate == true &&
+                                widget.product!.additionalImagePath != null) Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -519,7 +492,7 @@ class _AddItemState extends State<AddItem> {
                                   ),
                                   IconButton(
                                     iconSize: 32,
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.delete,
                                       color: Colors.redAccent,
                                     ),
@@ -530,18 +503,16 @@ class _AddItemState extends State<AddItem> {
                                         Toast.show(
                                           "Image Removed.",
                                           duration: Toast.lengthLong,
-                                          gravity: Toast.bottom,
                                         );
                                       }),
                                       setState(() {}),
                                     },
                                   )
                                 ],
-                              )
-                            : SizedBox(),
+                              ) else const SizedBox(),
                         FormBuilderImagePicker(
                           name: 'imgAdditional',
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Upload Any Other Additional Image',
                           ),
                           maxImages: 1,
@@ -553,7 +524,7 @@ class _AddItemState extends State<AddItem> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20.0,
           ),
           Row(
@@ -562,7 +533,7 @@ class _AddItemState extends State<AddItem> {
               MaterialButton(
                 color: primaryColor,
                 textColor: Colors.white,
-                child: Text("Reset"),
+                child: const Text("Reset"),
                 onPressed: () {
                   _fbKey.currentState!.reset();
                 },
@@ -570,19 +541,19 @@ class _AddItemState extends State<AddItem> {
               MaterialButton(
                 color: secondaryColor,
                 textColor: Colors.white,
-                child: Text("Submit"),
+                child: const Text("Submit"),
                 onPressed: () async {
                   if (_fbKey.currentState!.saveAndValidate()) {
-                    String prodImgPath = await saveFileAsImagePath(
+                    final String prodImgPath = await saveFileAsImagePath(
                         _fbKey.currentState!.value['productImage']);
 
-                    String purBillPath = await saveFileAsImagePath(
+                    final String purBillPath = await saveFileAsImagePath(
                         _fbKey.currentState!.value['imgBill']);
 
-                    String warrImgPath = await saveFileAsImagePath(
+                    final String warrImgPath = await saveFileAsImagePath(
                         _fbKey.currentState!.value['imgWarranty']);
 
-                    String addImgPath = await saveFileAsImagePath(
+                    final String addImgPath = await saveFileAsImagePath(
                         _fbKey.currentState!.value['imgAdditional']);
 
                     if (widget.isUpdate == true) {
@@ -653,9 +624,9 @@ class _AddItemState extends State<AddItem> {
                       widget.product!.additionalImagePath = addImgPath;
                       widget.product!.updateProduct();
                       Toast.show("Updated Product Successfully!",
-                          duration: Toast.lengthLong, gravity: Toast.bottom);
+                          duration: Toast.lengthLong);
                     } else {
-                      Product newProduct = Product();
+                      final Product newProduct = Product();
                       newProduct.name =                     _fbKey.currentState!.value['product']
                           .toString()
                           .trim();
@@ -714,7 +685,7 @@ class _AddItemState extends State<AddItem> {
                       newProduct.additionalImagePath = addImgPath;
                       newProduct.insertProduct();
                       Toast.show("Saved Product Successfully!",
-                          duration: Toast.lengthLong, gravity: Toast.bottom);
+                          duration: Toast.lengthLong);
                     }
 
                     setState(() {

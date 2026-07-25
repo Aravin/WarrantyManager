@@ -6,7 +6,7 @@ class ProductHighlightWidget extends StatelessWidget {
   final product = Product();
   final Function actionCallback;
 
-  ProductHighlightWidget({Key? key, required this.actionCallback}) : super(key: key);
+  ProductHighlightWidget({super.key, required this.actionCallback});
 
   Future<List<Product>> _products() async {
     return product.getProducts();
@@ -25,15 +25,15 @@ class ProductHighlightWidget extends StatelessWidget {
                   color: primaryColor,
                   borderRadius: BorderRadius.circular(7.5)),
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Expanded(
+                    const Expanded(
                         child: Icon(
                       Icons.security,
                       color: Colors.white60,
                     )),
-                    Expanded(
+                    const Expanded(
                         child: Text(
                       'In Warranty',
                       style: TextStyle(
@@ -60,7 +60,7 @@ class ProductHighlightWidget extends StatelessWidget {
                             }
                             return Text(
                               inWarranty.toString(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white60,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 25.0,
@@ -73,22 +73,22 @@ class ProductHighlightWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
                   color: secondaryColor,
                   borderRadius: BorderRadius.circular(7.5)),
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Expanded(
+                    const Expanded(
                         child: Icon(
                       Icons.timer_off,
                       color: Colors.white60,
                     )),
-                    Expanded(
+                    const Expanded(
                         child: Text(
                       'Out-of Warranty',
                       style: TextStyle(
@@ -115,7 +115,7 @@ class ProductHighlightWidget extends StatelessWidget {
                             }
                             return Text(
                               inWarranty.toString(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white60,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 25.0,

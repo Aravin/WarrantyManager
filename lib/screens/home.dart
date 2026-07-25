@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/about.dart';
 import 'package:warranty_manager/screens/add.dart';
-import 'package:warranty_manager/screens/bulk_upload.dart';
 import 'package:warranty_manager/screens/privacy_policy.dart';
 import 'package:warranty_manager/screens/product_list.dart';
+import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/product_highlight.dart';
 import 'package:warranty_manager/widgets/product_page.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:warranty_manager/shared/contants.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -17,9 +16,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final product = new Product();
+  final product = Product();
 
-  actionCallback(bool rebuild) {
+  void actionCallback(bool rebuild) {
     if (rebuild) {
       setState(() {});
     }
@@ -40,17 +39,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Warranty Manager',
         ),
         actions: [
           IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               onPressed: () => {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) => AddItem(
-                                  isUpdate: false,
+                            builder: (context) => const AddItem(
+                                  
                                 )))
                         .then((value) => setState(() => {}))
                   }).circle(radius: 40, backgroundColor: secondaryColor),
@@ -64,16 +63,16 @@ class _HomeState extends State<Home> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              child: Text('Menu',
-                  style: TextStyle(color: Colors.white, fontSize: 25)),
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: primaryColor,
               ),
+              child: Text('Menu',
+                  style: TextStyle(color: Colors.white, fontSize: 25)),
             ),
             ListTile(
-              title: Text('Saved Items'),
-              leading: Icon(Icons.security),
+              title: const Text('Saved Items'),
+              leading: const Icon(Icons.security),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -94,8 +93,8 @@ class _HomeState extends State<Home> {
             //   },
             // ),
             ListTile(
-              title: Text('Privacy Policy'),
-              leading: Icon(Icons.description),
+              title: const Text('Privacy Policy'),
+              leading: const Icon(Icons.description),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -105,8 +104,8 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: Text('About'),
-              leading: Icon(Icons.info),
+              title: const Text('About'),
+              leading: const Icon(Icons.info),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -116,8 +115,8 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: Text('Rate Us'),
-              leading: Icon(Icons.thumbs_up_down),
+              title: const Text('Rate Us'),
+              leading: const Icon(Icons.thumbs_up_down),
               onTap: () async {
                 Navigator.pop(context);
                 final InAppReview inAppReview = InAppReview.instance;
@@ -131,7 +130,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: <Widget>[
           ProductHighlightWidget(actionCallback: actionCallback),
-          SizedBox(
+          const SizedBox(
             height: 7.0,
           ),
           ProductListWidget(actionCallback: actionCallback),

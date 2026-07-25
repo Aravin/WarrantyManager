@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:warranty_manager/screens/add.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/product_page.dart';
-import 'package:warranty_manager/screens/add.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class ProductListScreen extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
-  actionCallback(bool rebuild) {
+  void actionCallback(bool rebuild) {
     if (rebuild) {
       setState(() {});
     }
@@ -20,17 +20,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Saved Items',
         ),
         actions: [
           IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               onPressed: () => {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) => AddItem(
-                                  isUpdate: false,
+                            builder: (context) => const AddItem(
+                                  
                                 )))
                         .then((value) => setState(() => {}))
                   }).circle(radius: 40, backgroundColor: secondaryColor),

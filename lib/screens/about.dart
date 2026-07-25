@@ -6,7 +6,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Saved Items',
         ),
       ),
@@ -15,7 +15,7 @@ class AboutScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              child: Text(
+              child: const Text(
                 'Warranty Manager',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -23,11 +23,11 @@ class AboutScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
-              child: Text(
+              child: const Text(
                 'This is Free to use Application. You can store the warranty information of any of your product / service. All your information are stored in your device locally.',
               ),
             )

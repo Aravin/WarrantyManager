@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/screens/image_viewer.dart';
+import 'package:warranty_manager/shared/contants.dart';
 
 class ProductImagePreview extends StatelessWidget {
   const ProductImagePreview({
@@ -21,14 +21,14 @@ class ProductImagePreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 2.5),
+          const SizedBox(height: 2.5),
           Text(
-            this.previewTitle,
-            style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+            previewTitle,
+            style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 2.5),
+          const SizedBox(height: 2.5),
           Image.file(
-            File(this.image),
+            File(image),
             height: 150,
             width: 150,
             alignment: Alignment.bottomLeft,
@@ -40,8 +40,8 @@ class ProductImagePreview extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (ctxt) => DisplayImage(
-              imagePath: this.image,
-              imageName: this.imageTitle,
+              imagePath: image,
+              imageName: imageTitle,
             ),
           ),
         ),

@@ -1,17 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/home.dart';
 import 'package:warranty_manager/shared/ads.dart';
 import 'package:warranty_manager/shared/contants.dart';
 import 'package:warranty_manager/widgets/bulk_actions.dart';
-import 'dart:io';
-import 'package:toast/toast.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class BulkUploadScreen extends StatefulWidget {
   @override
@@ -27,7 +27,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
   int lineCount = 0;
   List<int> failureRows = [];
 
-  void _openFileExplorer() async {
+  Future<void> _openFileExplorer() async {
     productList = [];
     datarow = [];
     lineCount = 0;
@@ -37,12 +37,11 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
       _directoryPath = null;
       _paths = (await FilePicker.pickFiles(
         type: FileType.custom,
-        allowMultiple: false,
         allowedExtensions: ['txt'],
       ))
           ?.files;
     } on PlatformException catch (e) {
-      print("Unsupported operation" + e.toString());
+      print("Unsupported operation$e");
     } catch (ex) {
       print(ex);
     }
@@ -53,22 +52,22 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
         _paths != null ? _paths!.map((e) => e.name).toString() : '...';
 
         // if file selected
-        if (_paths != null && _paths!.length > 0) {
-          Stream<List> inputStream = File(_paths![0].path!).openRead();
+        if (_paths != null && _paths!.isNotEmpty) {
+          final Stream<List> inputStream = File(_paths![0].path!).openRead();
 
           inputStream
               .transform(utf8.decoder) // Decode bytes to UTF-8.
-              .transform(LineSplitter()) // Convert stream to individual lines.
+              .transform(const LineSplitter()) // Convert stream to individual lines.
               .listen((String line) {
             // Process results.
             lineCount++;
             if (lineCount > 1) {
-              List<String> row = line.split(','); // split by comma
-              Product tempProduct = Product();
+              final List<String> row = line.split(','); // split by comma
+              final Product tempProduct = Product();
               tempProduct.name = row[0].trim();
               tempProduct.price = double.parse(row[1].trim());
               tempProduct.purchaseDate = DateTime.parse(row[2].trim());
-              tempProduct.warrantyPeriod = row[3].trim() + ' Year';
+              tempProduct.warrantyPeriod = '${row[3].trim()} Year';
               tempProduct.company = row[4].trim();
               tempProduct.category = row[5].trim();
               tempProduct.purchasedAt = row[6].trim();
@@ -79,12 +78,12 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
 
               productList.add(tempProduct);
 
-              List<DataCell> datacell = [];
+              final List<DataCell> datacell = [];
               datacell.add(DataCell(Text(tempProduct.name)));
               datacell.add(DataCell(Text(tempProduct.price.toString())));
               datacell.add(DataCell(Text(tempProduct.purchaseDate.toString())));
               datacell
-                  .add(DataCell(Text(tempProduct.warrantyPeriod + ' Year')));
+                  .add(DataCell(Text('${tempProduct.warrantyPeriod} Year')));
               datacell.add(DataCell(Text(tempProduct.company)));
               datacell.add(DataCell(Text(tempProduct.category)));
               datacell.add(DataCell(Text(tempProduct.purchasedAt)));
@@ -98,7 +97,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
             setState(() {});
           }, onError: (e) {
             failureRows.add(lineCount);
-            print(e.toString());
+            print(e);
           });
         }
       },
@@ -138,16 +137,16 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
 
   // bulk upload
   Future<void> _processBulkUpload(List<Product> products) async {
-    products.forEach((element) {
+    for (final element in products) {
       element.insertProduct();
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Bulk Upload',
         ),
       ),
@@ -156,16 +155,15 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
         child: ListView(
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 'Download Sample File'.text.xl2.bold.makeCentered(),
-                HeightBox(10),
+                const HeightBox(10),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                   ),
-                  icon: Icon(Icons.download_sharp),
-                  label: Text('Download Sample'),
+                  icon: const Icon(Icons.download_sharp),
+                  label: const Text('Download Sample'),
                   onPressed: () async {
                     const url =
                         'https://drive.google.com/file/d/1koyZ3phMxFdu8AtQbk4lPFmKt1cpc-5H/view?usp=sharing';
@@ -176,9 +174,9 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                     }
                   },
                 ),
-                HeightBox(25),
+                const HeightBox(25),
                 'Bulk Uploader (.txt)'.text.xl2.bold.makeCentered(),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 ElevatedButton.icon(
@@ -186,24 +184,23 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                     backgroundColor: primaryColor,
                   ),
                   onPressed: () => _openFileExplorer(),
-                  icon: Icon(Icons.file_upload),
-                  label: Text("Open File Picker"),
+                  icon: const Icon(Icons.file_upload),
+                  label: const Text("Open File Picker"),
                 ),
-                HeightBox(20),
+                const HeightBox(20),
                 Builder(
                   builder: (BuildContext context) => _loadingPath
-                      ? Padding(
+                      ? const Padding(
                           padding: EdgeInsets.only(bottom: 10.0),
                           child: CircularProgressIndicator(),
                         )
                       : _directoryPath != null
                           ? ListTile(
-                              title: Text('Directory path'),
+                              title: const Text('Directory path'),
                               subtitle: Text(_directoryPath ?? ''),
                             )
                           : _paths != null
                               ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Container(
                                       child: 'Data Preview'
@@ -215,7 +212,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                     SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: DataTable(
-                                        columns: <DataColumn>[
+                                        columns: const <DataColumn>[
                                           DataColumn(
                                             label: Text(
                                               'Name',
@@ -275,7 +272,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                         rows: datarow,
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 20,
                                     ),
                                     Container(
@@ -287,7 +284,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                     Container(
                                         child: Text(
                                             'Number of Rows Failed : ${lineCount - 1 - datarow.length}')),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 20,
                                     ),
                                     Container(
@@ -304,7 +301,6 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                                       "Bulk Import Successfully!",
                                                       duration:
                                                           Toast.lengthLong,
-                                                      gravity: Toast.bottom,
                                                       backgroundColor:
                                                           Colors.green,
                                                     ),
@@ -326,7 +322,6 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                                       "Failed to import!",
                                                       duration:
                                                           Toast.lengthLong,
-                                                      gravity: Toast.bottom,
                                                       backgroundColor:
                                                           Colors.green,
                                                     ),
@@ -342,9 +337,9 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                                     ),
                                                   },
                                                 ),
-                                        icon: Icon(Icons.save,
+                                        icon: const Icon(Icons.save,
                                             color: Colors.white),
-                                        label: Text(
+                                        label: const Text(
                                           'Complete Bulk Import',
                                           style: TextStyle(color: Colors.white),
                                         ),
@@ -352,18 +347,18 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                     ),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
               ],
             ),
-            AdBannerWidget(),
+            const AdBannerWidget(),
           ],
         ),
       ),
-      bottomNavigationBar: BulkActionScreen(currentIndex: 0),
+      bottomNavigationBar: const BulkActionScreen(currentIndex: 0),
     );
   }
 }

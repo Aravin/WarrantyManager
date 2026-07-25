@@ -33,7 +33,7 @@ class Product {
       final dt = purchaseDate!;
       if (warrantyPeriod.toLowerCase().indexOf('month') > 0) {
         final monthToAdd = int.parse(
-            warrantyPeriod.replaceAll(RegExp(r'[^0-9]'), ''));
+            warrantyPeriod.replaceAll(RegExp('[^0-9]'), ''));
         warrantyEndDate = DateTime(
           dt.year,
           dt.month + monthToAdd,
@@ -42,7 +42,7 @@ class Product {
         );
       } else if (warrantyPeriod.toLowerCase().indexOf('year') > 0) {
         final yearToAdd = int.parse(
-            warrantyPeriod.replaceAll(RegExp(r'[^0-9]'), ''));
+            warrantyPeriod.replaceAll(RegExp('[^0-9]'), ''));
         warrantyEndDate = DateTime(
           dt.year + yearToAdd,
           dt.month,
@@ -221,7 +221,7 @@ class Product {
 
     if (productToUpdate.warrantyPeriod.toLowerCase().indexOf('month') > 0) {
       final monthToAdd = int.parse(
-          productToUpdate.warrantyPeriod.replaceAll(RegExp(r'[^0-9]'), ''));
+          productToUpdate.warrantyPeriod.replaceAll(RegExp('[^0-9]'), ''));
       final tempDate = productToUpdate.purchaseDate!;
       productToUpdate.warrantyEndDate = DateTime(
         tempDate.year,
@@ -232,7 +232,7 @@ class Product {
     } else if (productToUpdate.warrantyPeriod.toLowerCase().indexOf('year') >
         0) {
       final yearToAdd = int.parse(
-          productToUpdate.warrantyPeriod.replaceAll(RegExp(r'[^0-9]'), ''));
+          productToUpdate.warrantyPeriod.replaceAll(RegExp('[^0-9]'), ''));
       final tempDate = productToUpdate.purchaseDate!;
       productToUpdate.warrantyEndDate = DateTime(
         tempDate.year + yearToAdd,
@@ -269,8 +269,8 @@ class Product {
   Future<int> getProductCount() async {
     final db = await database;
 
-    return (Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(1) FROM product')) ?? 0);
+    return Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(1) FROM product')) ?? 0;
   }
 
   Future<List<Map<String, dynamic>>> getProductColumn(
@@ -301,7 +301,7 @@ class Product {
 
   Future<void> reproduceIssue(int columnId) async {
     final db = await database;
-    final String imagePath =
+    const String imagePath =
         '/data/user/0/io.epix.warranty_manager/app_flutter/products/1620546857245.jpg';
     final Uint8List? blob = _fileToBlob(File(imagePath));
 

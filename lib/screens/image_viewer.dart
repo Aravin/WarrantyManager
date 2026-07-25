@@ -1,11 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:toast/toast.dart';
-import 'package:warranty_manager/shared/contants.dart';
-import 'package:warranty_manager/shared/file.dart';
-import 'package:warranty_manager/shared/remove_space_in_string.dart';
 
 class DisplayImage extends StatelessWidget {
   final String imagePath;
@@ -15,21 +10,20 @@ class DisplayImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('epix - path ${imagePath} - ${imageName}');
+    print('epix - path $imagePath - $imageName');
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          imageName ?? 'Image Viewer',
+          imageName,
         ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             flex: 11,
             child: InteractiveViewer(
-              child: Image.file(File(this.imagePath)),
+              child: Image.file(File(imagePath)),
             ),
           ),
           // Expanded(

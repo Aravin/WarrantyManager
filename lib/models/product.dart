@@ -141,20 +141,24 @@ class Product {
           id: maps[i]['id'],
           name: maps[i]['name'],
           price: maps[i]['price'],
-          purchaseDate: DateTime.parse(maps[i]['purchaseDate']),
-          warrantyPeriod: maps[i]['warrantyPeriod'],
-          warrantyEndDate: DateTime.parse(maps[i]['warrantyEndDate']),
-          purchasedAt: maps[i]['purchasedAt'],
-          company: maps[i]['company'],
-          salesPerson: maps[i]['salesPerson'],
-          phone: maps[i]['phone'],
-          email: maps[i]['email'],
-          notes: maps[i]['notes'],
+          purchaseDate: maps[i]['purchaseDate'] != null
+              ? DateTime.parse(maps[i]['purchaseDate'])
+              : null,
+          warrantyPeriod: maps[i]['warrantyPeriod'] ?? '',
+          warrantyEndDate: maps[i]['warrantyEndDate'] != null
+              ? DateTime.parse(maps[i]['warrantyEndDate'])
+              : null,
+          purchasedAt: maps[i]['purchasedAt'] ?? '',
+          company: maps[i]['company'] ?? '',
+          salesPerson: maps[i]['salesPerson'] ?? '',
+          phone: maps[i]['phone'] ?? '',
+          email: maps[i]['email'] ?? '',
+          notes: maps[i]['notes'] ?? '',
           productImage: maps[i]['productImage'],
           purchaseCopy: maps[i]['purchaseCopy'],
           warrantyCopy: maps[i]['warrantyCopy'],
           additionalImage: maps[i]['additionalImage'],
-          category: maps[i]['category'],
+          category: maps[i]['category'] ?? '',
           productImagePath: maps[i]['productImagePath'],
           purchaseCopyPath: maps[i]['purchaseCopyPath'],
           warrantyCopyPath: maps[i]['warrantyCopyPath'],
@@ -162,7 +166,7 @@ class Product {
         );
       });
     } catch (err) {
-      // debugPrint('epix - retry called - $err');
+      if (retry) return [];
       return await getProducts(retry: true);
     }
   }
@@ -218,6 +222,8 @@ class Product {
       warrantyCopyPath: warrantyCopyPath,
       additionalImagePath: additionalImagePath,
     );
+
+    if (productToUpdate.purchaseDate == null) return;
 
     if (productToUpdate.warrantyPeriod.toLowerCase().indexOf('month') > 0) {
       final monthToAdd = int.parse(

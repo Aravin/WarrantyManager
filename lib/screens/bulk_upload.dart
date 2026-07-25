@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/models/product.dart';
@@ -138,7 +137,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
   // bulk upload
   Future<void> _processBulkUpload(List<Product> products) async {
     for (final element in products) {
-      element.insertProduct();
+      await element.insertProduct();
     }
   }
 
@@ -297,13 +296,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                                     productList)
                                                 .then(
                                                   (value) => {
-                                                    Toast.show(
-                                                      "Bulk Import Successfully!",
-                                                      duration:
-                                                          Toast.lengthLong,
-                                                      backgroundColor:
-                                                          Colors.green,
-                                                    ),
+                                                    context.showToast(msg: "Bulk Import Successfully!"),
                                                     _clearCachedFiles(),
                                                     Navigator.pop(context),
                                                     Navigator.pushReplacement(
@@ -318,13 +311,7 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                                                 )
                                                 .catchError(
                                                   (err) => {
-                                                    Toast.show(
-                                                      "Failed to import!",
-                                                      duration:
-                                                          Toast.lengthLong,
-                                                      backgroundColor:
-                                                          Colors.green,
-                                                    ),
+                                                    context.showToast(msg: "Failed to import!"),
                                                     _clearCachedFiles(),
                                                     Navigator.pop(context),
                                                     Navigator.pushReplacement(

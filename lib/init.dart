@@ -44,24 +44,22 @@ class AppInitialization {
     }
 
     // step 3: Convert to blob / save to new column / del existing col
-    for (var i = 0; i <= productCount; i++) {
+    for (var i = 0; i < productCount; i++) {
       await _updateAndSaveImage('productImage', 'productImagePath', i);
       await _updateAndSaveImage('purchaseCopy', 'purchaseCopyPath', i);
       await _updateAndSaveImage('warrantyCopy', 'warrantyCopyPath', i);
       await _updateAndSaveImage('additionalImage', 'additionalImagePath', i);
     }
 
-    _prefs.setBool('epix - migratedBlobToPath', true);
+    _prefs.setBool('migratedBlobToPath', true);
   }
 
   static Future<void> _updateAndSaveImage(
       String oldColumn, String newCOlumn, int row) async {
-    // product image
     final List<Map<String, dynamic>> img =
         await _product.getProductColumn(['id', oldColumn], row);
 
-    if (img.isNotEmpty) {
-      // debugPrint('epix blob len - ${img.length}');
+    if (img.isNotEmpty && img[0][oldColumn] != null) {
       final Uint8List blob = img[0][oldColumn] as Uint8List;
       final int columnId = img[0]['id'] as int;
 

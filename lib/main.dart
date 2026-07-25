@@ -1,14 +1,17 @@
 import 'dart:async';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:warranty_manager/init.dart';
 import 'package:warranty_manager/screens/home.dart';
 import 'package:warranty_manager/shared/contants.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runZonedGuarded(() {
     runApp(Main());
   }, (error, stackTrace) {
@@ -18,7 +21,7 @@ void main() {
 }
 
 class Main extends StatelessWidget {
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   @override
   Widget build(BuildContext context) {

@@ -20,19 +20,6 @@ class ProductListWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // AdmobBanner(
-          //   adUnitId: AdManager.bannerAdUnitId,
-          //   adSize: AdmobBannerSize.BANNER,
-          //   listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-          //     print([event, args, 'Banner']);
-          //   },
-          //   onBannerCreated: (AdmobBannerController controller) {
-          //     // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-          //     // Normally you don't need to worry about disposing this yourself, it's handled.
-          //     // If you need direct access to dispose, this is your guy!
-          //     // controller.dispose();
-          //   },
-          // ),
           Expanded(
               child: DefaultTabController(
             length: 3,
@@ -47,16 +34,10 @@ class ProductListWidget extends StatelessWidget {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Text('ACTIVE (${snapshot.data!
-                                    .map((product) => product)
-                                    .where((element) => DateTime.parse(
-                                            element.warrantyEndDate.toString())
-                                        .isAfter(DateTime.now()))
-                                    .where(
-                                      (element) => DateTime.parse(element
-                                              .warrantyEndDate
-                                              .toString())
-                                          .isAfter(DateTime.now()),
-                                    )
+                                    .where((element) =>
+                                        element.warrantyEndDate != null &&
+                                        element.warrantyEndDate!
+                                            .isAfter(DateTime.now()))
                                     .toList()
                                     .length})');
                           }
@@ -69,14 +50,12 @@ class ProductListWidget extends StatelessWidget {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Text('EXPIRING (${snapshot.data!
-                                    .map((product) => product)
-                                    .where((element) => DateTime.parse(
-                                            element.warrantyEndDate.toString())
-                                        .isAfter(DateTime.now()))
+                                    .where((element) =>
+                                        element.warrantyEndDate != null &&
+                                        element.warrantyEndDate!
+                                            .isAfter(DateTime.now()))
                                     .where(
-                                      (element) => DateTime.parse(element
-                                              .warrantyEndDate
-                                              .toString())
+                                      (element) => element.warrantyEndDate!
                                           .isBefore(
                                         DateTime(tempDate.year,
                                             tempDate.month + 1, tempDate.day),
@@ -94,13 +73,10 @@ class ProductListWidget extends StatelessWidget {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Text('EXPIRED (${snapshot.data!
-                                    .map((product) => product)
-                                    .where(
-                                      (element) => DateTime.parse(element
-                                              .warrantyEndDate
-                                              .toString())
-                                          .isBefore(DateTime.now()),
-                                    )
+                                    .where((element) =>
+                                        element.warrantyEndDate != null &&
+                                        element.warrantyEndDate!
+                                            .isBefore(DateTime.now()))
                                     .toList()
                                     .length})');
                           }
@@ -150,17 +126,14 @@ class ProductListWidget extends StatelessWidget {
                           );
                         }
 
-                        if (snapshot.data!
-                                .map((product) => product)
-                                .where((element) => DateTime.parse(
-                                        element.warrantyEndDate.toString())
+                        final activeProducts = snapshot.data!
+                            .where((element) =>
+                                element.warrantyEndDate != null &&
+                                element.warrantyEndDate!
                                     .isAfter(DateTime.now()))
-                                .where(
-                                  (element) => DateTime.parse(
-                                          element.warrantyEndDate.toString())
-                                      .isAfter(DateTime.now()),
-                                )
-                                .toList().isEmpty) {
+                            .toList();
+
+                        if (activeProducts.isEmpty) {
                           return Container(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: const Padding(
@@ -178,18 +151,12 @@ class ProductListWidget extends StatelessWidget {
 
                         return ListView(
                           shrinkWrap: true,
-                          children: snapshot.data!
+                          children: activeProducts
                               .map((product) => ProductListItemWidget(
                                     product: product,
                                     actionCallback: actionCallback,
                                     cardColor: Colors.green[100],
                                   ))
-                              .where(
-                                (element) => DateTime.parse(element
-                                        .product.warrantyEndDate
-                                        .toString())
-                                    .isAfter(DateTime.now()),
-                              )
                               .toList(),
                         );
                       }
@@ -234,20 +201,20 @@ class ProductListWidget extends StatelessWidget {
                           );
                         }
 
-                        if (snapshot.data!
-                                .map((product) => product)
-                                .where((element) => DateTime.parse(
-                                        element.warrantyEndDate.toString())
+                        final expiringProducts = snapshot.data!
+                            .where((element) =>
+                                element.warrantyEndDate != null &&
+                                element.warrantyEndDate!
                                     .isAfter(DateTime.now()))
-                                .where(
-                                  (element) => DateTime.parse(
-                                          element.warrantyEndDate.toString())
-                                      .isBefore(
-                                    DateTime(tempDate.year,
-                                        tempDate.month + 1, tempDate.day),
-                                  ),
-                                )
-                                .toList().isEmpty) {
+                            .where(
+                              (element) => element.warrantyEndDate!.isBefore(
+                                DateTime(tempDate.year,
+                                    tempDate.month + 1, tempDate.day),
+                              ),
+                            )
+                            .toList();
+
+                        if (expiringProducts.isEmpty) {
                           return Container(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: const Padding(
@@ -265,25 +232,12 @@ class ProductListWidget extends StatelessWidget {
 
                         return ListView(
                           shrinkWrap: true,
-                          children: snapshot.data!
+                          children: expiringProducts
                               .map((product) => ProductListItemWidget(
                                     product: product,
                                     actionCallback: actionCallback,
                                     cardColor: Colors.orange[100],
                                   ))
-                              .where((element) => DateTime.parse(element
-                                      .product.warrantyEndDate
-                                      .toString())
-                                  .isAfter(DateTime.now()))
-                              .where(
-                                (element) => DateTime.parse(element
-                                        .product.warrantyEndDate
-                                        .toString())
-                                    .isBefore(
-                                  DateTime(tempDate.year,
-                                      tempDate.month + 1, tempDate.day),
-                                ),
-                              )
                               .toList(),
                         );
                       }
@@ -328,16 +282,14 @@ class ProductListWidget extends StatelessWidget {
                           );
                         }
 
-                        if (!snapshot.hasError &&
-                            snapshot.data!
-                                    .map((product) => product)
-                                    .where(
-                                      (element) => DateTime.parse(element
-                                              .warrantyEndDate
-                                              .toString())
-                                          .isBefore(DateTime.now()),
-                                    )
-                                    .toList().isEmpty) {
+                        final expiredProducts = snapshot.data!
+                            .where((element) =>
+                                element.warrantyEndDate != null &&
+                                element.warrantyEndDate!
+                                    .isBefore(DateTime.now()))
+                            .toList();
+
+                        if (expiredProducts.isEmpty) {
                           return Container(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: const Padding(
@@ -352,24 +304,18 @@ class ProductListWidget extends StatelessWidget {
                             ),
                           );
                         }
-                      }
 
-                      return ListView(
-                        shrinkWrap: true,
-                        children: snapshot.data!
-                            .map((product) => ProductListItemWidget(
-                                  product: product,
-                                  actionCallback: actionCallback,
-                                  cardColor: Colors.red[100],
-                                ))
-                            .where(
-                              (element) => DateTime.parse(element
-                                      .product.warrantyEndDate
-                                      .toString())
-                                  .isBefore(DateTime.now()),
-                            )
-                            .toList(),
-                      );
+                        return ListView(
+                          shrinkWrap: true,
+                          children: expiredProducts
+                              .map((product) => ProductListItemWidget(
+                                    product: product,
+                                    actionCallback: actionCallback,
+                                    cardColor: Colors.red[100],
+                                  ))
+                              .toList(),
+                        );
+                      }
                     },
                   ),
                 ],

@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
-import 'package:toast/toast.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/shared/category.dart';
 import 'package:warranty_manager/shared/contants.dart';
@@ -17,7 +17,7 @@ class AddItem extends StatefulWidget {
 
   final Product? product;
   final bool isUpdate;
-  final Function? actionCallback;
+  final void Function(bool)? actionCallback;
 
   const AddItem({super.key, this.product, this.isUpdate = false, this.actionCallback});
 }
@@ -175,8 +175,7 @@ class _AddItemState extends State<AddItem> {
                     content: Column(
                       key: UniqueKey(),
                       children: [
-                        Container(
-                          child: FormBuilderDateTimePicker(
+                        FormBuilderDateTimePicker(
                             name: "purchaseDate",
                             textInputAction: TextInputAction.next,
                             validator: FormBuilderValidators.compose(
@@ -191,7 +190,6 @@ class _AddItemState extends State<AddItem> {
                             // onEditingComplete: () => FocusScope.of(context)
                             //     .requestFocus(warrantyFocus),
                           ),
-                        ),
                         FormBuilderDropdown(
                           name: "warranty",
                           decoration: const InputDecoration(
@@ -383,10 +381,7 @@ class _AddItemState extends State<AddItem> {
                                     onPressed: () => {
                                       setState(() {
                                         widget.product!.productImagePath = null;
-                                        Toast.show(
-                                          "Image Removed.",
-                                          duration: Toast.lengthLong,
-                                        );
+                                        context.showToast(msg: "Image Removed.");
                                       })
                                     },
                                   )
@@ -423,10 +418,7 @@ class _AddItemState extends State<AddItem> {
                                     onPressed: () => {
                                       setState(() {
                                         widget.product!.purchaseCopyPath = null;
-                                        Toast.show(
-                                          "Image Removed.",
-                                          duration: Toast.lengthLong,
-                                        );
+                                        context.showToast(msg: "Image Removed.");
                                       })
                                     },
                                   )
@@ -460,12 +452,9 @@ class _AddItemState extends State<AddItem> {
                                       color: Colors.redAccent,
                                     ),
                                     onPressed: () => {
-                                      setState(() {
+                                        setState(() {
                                         widget.product!.warrantyCopyPath = null;
-                                        Toast.show(
-                                          "Image Removed.",
-                                          duration: Toast.lengthLong,
-                                        );
+                                        context.showToast(msg: "Image Removed.");
                                       }),
                                       setState(() {}),
                                     },
@@ -500,10 +489,7 @@ class _AddItemState extends State<AddItem> {
                                       setState(() {
                                         widget.product!.additionalImagePath =
                                             null;
-                                        Toast.show(
-                                          "Image Removed.",
-                                          duration: Toast.lengthLong,
-                                        );
+                                        context.showToast(msg: "Image Removed.");
                                       }),
                                       setState(() {}),
                                     },
@@ -622,9 +608,9 @@ class _AddItemState extends State<AddItem> {
                       widget.product!.purchaseCopyPath = purBillPath;
                       widget.product!.warrantyCopyPath = warrImgPath;
                       widget.product!.additionalImagePath = addImgPath;
-                      widget.product!.updateProduct();
-                      Toast.show("Updated Product Successfully!",
-                          duration: Toast.lengthLong);
+                      await widget.product!.updateProduct();
+                      if (!mounted) return;
+                      context.showToast(msg: "Updated Product Successfully!");
                     } else {
                       final Product newProduct = Product();
                       newProduct.name =                     _fbKey.currentState!.value['product']
@@ -683,9 +669,9 @@ class _AddItemState extends State<AddItem> {
                       newProduct.purchaseCopyPath = purBillPath;
                       newProduct.warrantyCopyPath = warrImgPath;
                       newProduct.additionalImagePath = addImgPath;
-                      newProduct.insertProduct();
-                      Toast.show("Saved Product Successfully!",
-                          duration: Toast.lengthLong);
+                      await newProduct.insertProduct();
+                      if (!mounted) return;
+                      context.showToast(msg: "Saved Product Successfully!");
                     }
 
                     setState(() {

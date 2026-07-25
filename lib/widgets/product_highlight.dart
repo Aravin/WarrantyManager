@@ -50,10 +50,9 @@ class ProductHighlightWidget extends StatelessWidget {
                             var inWarranty = 0;
                             if (snapshot.hasData) {
                               for (var i = 0; i < snapshot.data!.length; i++) {
-                                if (DateTime.parse(snapshot
-                                        .data![i].warrantyEndDate
-                                        .toString())
-                                    .isAfter(DateTime.now())) {
+                                if (snapshot.data![i].warrantyEndDate != null &&
+                                    snapshot.data![i].warrantyEndDate!
+                                        .isAfter(DateTime.now())) {
                                   inWarranty++;
                                 }
                               }
@@ -105,10 +104,9 @@ class ProductHighlightWidget extends StatelessWidget {
                             var inWarranty = 0;
                             if (snapshot.hasData) {
                               for (var i = 0; i < snapshot.data!.length; i++) {
-                                if (DateTime.parse(snapshot
-                                        .data![i].warrantyEndDate
-                                        .toString())
-                                    .isBefore(DateTime.now())) {
+                                if (snapshot.data![i].warrantyEndDate != null &&
+                                    snapshot.data![i].warrantyEndDate!
+                                        .isBefore(DateTime.now())) {
                                   inWarranty++;
                                 }
                               }

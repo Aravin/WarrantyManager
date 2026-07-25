@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:toast/toast.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:warranty_manager/models/product.dart';
 import 'package:warranty_manager/screens/add.dart';
 import 'package:warranty_manager/screens/product_details.dart';
@@ -98,10 +98,9 @@ class ProductListItemWidget extends StatelessWidget {
                       onSelected: (List<String> result) {
                         if (result[0] == 'delete') {
                           product
-                              .deleteProduct(int.parse(result[1], radix: 10));
-                          actionCallback(true);
-                          Toast.show("Product Deleted Successfully!",
-                              duration: Toast.lengthLong);
+                               .deleteProduct(int.parse(result[1], radix: 10));
+                           actionCallback(true);
+                           context.showToast(msg: "Product Deleted Successfully!");
                         } else if (result[0] == 'edit') {
                           Navigator.of(context).push(
                             MaterialPageRoute(

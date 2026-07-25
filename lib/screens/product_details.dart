@@ -31,7 +31,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         },
         child: const Icon(Icons.keyboard_backspace),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: appPaddingLarge,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

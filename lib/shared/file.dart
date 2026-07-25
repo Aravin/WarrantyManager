@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 
 // imgFullPath can be name.jpg or path/name.jpg
-Future<File> saveBolbAsImage(Uint8List bolb, String imgFullPath) async {
+Future<File> saveBolbAsImage(Uint8List bolb, String imgFullPath) {
   return File(imgFullPath).writeAsBytes(bolb);
 }
 
@@ -23,12 +23,12 @@ Future<String> saveBolbAsImagePath(Uint8List bolb) async {
 }
 
 // imgFullPath can be name.jpg or path/name.jpg
-Future<File> saveFilebAsImage(File file, String imgFullPath) async {
+Future<File> saveFilebAsImage(File file, String imgFullPath) {
   return file.copy(imgFullPath);
 }
 
-Future<String> saveFileAsImagePath(dynamic file) async {
-  if (file == null || (file is List && file.isEmpty)) return '';
+Future<String> saveFileAsImagePath(List<dynamic> file) async {
+  if (file.isEmpty) return '';
 
   final directory = await getApplicationDocumentsDirectory();
 
@@ -36,8 +36,7 @@ Future<String> saveFileAsImagePath(dynamic file) async {
 
   final String img =
       '${directory.path}/products/${DateTime.now().millisecondsSinceEpoch}.jpg';
-  final File source = file is File ? file : file[0] as File;
-  await saveFilebAsImage(source, img);
+  await saveFilebAsImage(file[0] as File, img);
 
   return img;
 }
